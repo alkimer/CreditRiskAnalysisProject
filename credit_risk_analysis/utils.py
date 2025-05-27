@@ -4,7 +4,7 @@ import os
 def descargar_credit_data():
     bucket_name = "anyoneai-datasets"
     prefix = "credit-data-2010/"
-    local_folder = "./external"
+    local_folder = "./raw"
 
     aws_access_key_id = "COMPLETAR CON LA INFO DEL ACADEMY"
     aws_secret_access_key = "COMPLETAR CON LA INFO DEL ACADEMY"

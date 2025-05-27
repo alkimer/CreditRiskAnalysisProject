@@ -59,10 +59,10 @@ The main goal of this project is to deploy a service capable of predicting the c
 
 
 ### How download training data?
-1- MODIFICAR def descargar_credit_data() y agregar las dos key_id y access_key que faltan.
+1- MODIFICAR  descargar_credit_data() y agregar las dos key_id y access_key que faltan.
 
 luego ejecutar:
 
-`python ./data/download_data.py`
+`python ./modeli/download_data.py`
 --------
 
