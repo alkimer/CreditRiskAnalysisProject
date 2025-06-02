@@ -63,6 +63,13 @@ The main goal of this project is to deploy a service capable of predicting the c
 
 luego ejecutar:
 
-`python ./modeli/download_data.py`
---------
+`python ./modeling/download_data.py`
 
+
+### Running the API Locally
+1- Run script run_api.sh:
+
+`chmod +x run_api.sh && ./run_api.sh`
+
+luego se puede acceder para ver los endpoints:
+'''http://127.0.0.1:8000/docs#/Model/predict_model_predict_post '''''
