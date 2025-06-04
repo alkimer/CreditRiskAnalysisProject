@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis-secure
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - backend
+
+  api:
+    build:
+      context: .
+    container_name: credit-risk-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_IP: redis
+      REDIS_PORT: 6000
+      REDIS_DB_ID: 0
+      REDIS_PASSWORD: redis
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

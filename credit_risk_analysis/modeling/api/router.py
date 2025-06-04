@@ -4,17 +4,12 @@ import sys
 from fastapi import APIRouter, FastAPI
 
 from credit_risk_analysis.modeling.schema import PredictRequest, PredictResponse
+from credit_risk_analysis.modeling.services.services import model_predict
 
 app = FastAPI(
     title="Credit Risk Analysis API",
     version="1.0.0"
 )
-
-
-model_router = APIRouter(tags=["Model"], prefix="/model")
-
-
-
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -23,6 +18,9 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),    # envía logs a stdout (Docker los recoge)
     ]
 )
+
+
+model_router = APIRouter(tags=["Model"], prefix="/model")
 logger = logging.getLogger(__name__)
 logger.info("----INIT CREDIT RISK ANALYSIS ROUTER API SERVICE----")
 
@@ -30,21 +28,15 @@ logger.info("----INIT CREDIT RISK ANALYSIS ROUTER API SERVICE----")
 async def predict(predict_request: PredictRequest):
     logger.debug("→ /predict() invoked: predict_request=%s", predict_request.id_client)
 
-    # response_model.success = False
-    #
-    #
-    # # prediction = await model_predict(image_hash_name)
-    #
-    # # Paso 4: Armar respuesta
-    # response["success"] = True
-    # response["score"] = 1
+
     response = PredictResponse(
-        success=True,
-        prediction=1
+        success=False,
+        score=1
     )
 
-    #
-    # # return PredictResponse(**response)
+
+    response.success, response.score = await model_predict(predict_request.id_client)
+
     return response
 
 

@@ -8,4 +8,4 @@ class PredictRequest(BaseModel):
 
 class PredictResponse(BaseModel):
     success: bool
-    prediction: float
+    score: float
