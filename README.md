@@ -12,6 +12,7 @@ The main goal of this project is to deploy a service capable of predicting the c
 ├── LICENSE            <- Open-source license if one is chosen
 ├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
 ├── README.md          <- The top-level README for developers using this project.
+├── EDA                <- Data and collabs for EDA reference
 ├── data
 │   ├── external       <- Data from third party sources.
 │   ├── interim        <- Intermediate data that has been transformed.
@@ -63,6 +64,6 @@ The main goal of this project is to deploy a service capable of predicting the c
 
 luego ejecutar:
 
-`python ./modeli/download_data.py`
+`python ./modelling/download_data.py`
 --------
 
