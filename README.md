@@ -12,7 +12,7 @@ The main goal of this project is to deploy a service capable of predicting the c
 ├── LICENSE            <- Open-source license if one is chosen
 ├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
 ├── README.md          <- The top-level README for developers using this project.
-├── EDA                <- Data and collabs for EDA reference
+├── EDA                <- Scripts for EDA colabs
 ├── data
 │   ├── external       <- Data from third party sources.
 │   ├── interim        <- Intermediate data that has been transformed.
