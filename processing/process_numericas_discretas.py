@@ -128,7 +128,7 @@ def process_months_in_residence(df, encode=False, binning=True):
     distribución muy sesgada a la izq, y varios nulos.
     Le dejamos el binning en True por default dado que refleja mejor la relación con la morosidad
     imputamos la mediana a los nulos
-
+    CREA COLUMNAS :MONTHS_IN_RESIDENCE_BIN Y MONTHS_IN_RESIDENCE_IMPUTED
     - Imputa nulos con la mediana (6)
     - Si binning=True: agrupa en rangos
     - Si encode=True: aplica target encoding
@@ -370,7 +370,7 @@ def process_education_level(df):
 
 
 
-def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=False, trim_max=6):
+def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=False):
     """
     Abre un archivo CSV y realiza el preprocesamiento completo de variables numéricas/discretas
     usando funciones previamente definidas. Controla encoding, binning, normalización y trimming.
@@ -379,7 +379,7 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
 
     df = process_payment_day(df, encode=encode)
     df = process_marital_status(df, encode=encode)
-    df = process_quant_dependants(df, encode=encode, trim_max=trim_max, binning=binning)
+    df = process_quant_dependants(df, encode=encode, trim_max=6, binning=binning)
     df = process_months_in_residence(df, encode=encode, binning=binning)
     df = process_quant_banking_accounts(df, normalize=normalize)
     df = process_quant_cars(df)
@@ -398,20 +398,16 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
 
     return df
 
-from pathlib import Path
+
 
 if __name__ == "__main__":
+    ###This is just for testing Purposes""""
     # Ruta al archivo CSV
     csv_path = "../data/processed/data-with-columns.csv"
 
     # csv_path = Path("data-with-columns.csv")
 
-    # Ejecutar el preprocesamiento
     df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-
-
-
-
 
 
     # Guardar resultado en archivo
