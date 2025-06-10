@@ -292,49 +292,49 @@ def process_age(df, normalize=False):
     return df
 
 
-# def process_profession_code(df, encode=False, binning=False):
-#     """
-#     15% NULOS, IMPUTAMOS CON LA MODA (EL MÁS FRECUENTE)
-#
-#     Preprocesa PROFESSION_CODE:
-#     - Imputa nulos con la moda
-#     - Si binning=True: agrupa valores poco frecuentes como 'OTROS'
-#     - Si encode=True: aplica target encoding
-#     """
-#     df = df.copy()
-#
-#     # Imputación con la moda
-#     moda = df["PROFESSION_CODE"].mode()[0]
-#     df["PROFESSION_CODE_IMPUTED"] = df["PROFESSION_CODE"].fillna(moda)
-#
-#     if binning:
-#         # Marcar como 'OTROS' los valores poco frecuentes (<100 ocurrencias)
-#         counts = df["PROFESSION_CODE_IMPUTED"].value_counts()
-#         valores_comunes = counts[counts >= 100].index
-#         df["PROFESSION_CODE_BINNED"] = df["PROFESSION_CODE_IMPUTED"].apply(
-#             lambda x: x if x in valores_comunes else "OTROS"
-#         ).astype("category")
-#
-#         if encode:
-#             df["PROFESSION_CODE_TE"] = df["PROFESSION_CODE_BINNED"].map(
-#                 df.groupby("PROFESSION_CODE_BINNED")["TARGET_LABEL_BAD"].mean()
-#             )
-#             print("✅ Target encoding aplicado a PROFESSION_CODE (binned).")
-#         else:
-#             print("ℹ️ PROFESSION_CODE binned aplicada.")
-#
-#     else:
-#         df["PROFESSION_CODE_CAT"] = df["PROFESSION_CODE_IMPUTED"].astype("category")
-#
-#         if encode:
-#             df["PROFESSION_CODE_TE"] = df["PROFESSION_CODE_CAT"].map(
-#                 df.groupby("PROFESSION_CODE_CAT")["TARGET_LABEL_BAD"].mean()
-#             )
-#             print("✅ Target encoding aplicado a PROFESSION_CODE.")
-#         else:
-#             print("ℹ️ PROFESSION_CODE convertida en categórica.")
-#
-#     return df
+def process_profession_code(df, encode=False, binning=False):
+    """
+    15% NULOS, IMPUTAMOS CON LA MODA (EL MÁS FRECUENTE)
+
+    Preprocesa PROFESSION_CODE:
+    - Imputa nulos con la moda
+    - Si binning=True: agrupa valores poco frecuentes como 'OTROS'
+    - Si encode=True: aplica target encoding
+    """
+    df = df.copy()
+
+    # Imputación con la moda
+    moda = df["PROFESSION_CODE"].mode()[0]
+    df["PROFESSION_CODE_IMPUTED"] = df["PROFESSION_CODE"].fillna(moda)
+
+    if binning:
+        # Marcar como 'OTROS' los valores poco frecuentes (<100 ocurrencias)
+        counts = df["PROFESSION_CODE_IMPUTED"].value_counts()
+        valores_comunes = counts[counts >= 100].index
+        df["PROFESSION_CODE_BINNED"] = df["PROFESSION_CODE_IMPUTED"].apply(
+            lambda x: x if x in valores_comunes else "OTROS"
+        ).astype("category")
+
+        if encode:
+            df["PROFESSION_CODE_TE"] = df["PROFESSION_CODE_BINNED"].map(
+                df.groupby("PROFESSION_CODE_BINNED")["TARGET_LABEL_BAD"].mean()
+            )
+            print("✅ Target encoding aplicado a PROFESSION_CODE (binned).")
+        else:
+            print("ℹ️ PROFESSION_CODE binned aplicada.")
+
+    else:
+        df["PROFESSION_CODE_CAT"] = df["PROFESSION_CODE_IMPUTED"].astype("category")
+
+        if encode:
+            df["PROFESSION_CODE_TE"] = df["PROFESSION_CODE_CAT"].map(
+                df.groupby("PROFESSION_CODE_CAT")["TARGET_LABEL_BAD"].mean()
+            )
+            print("✅ Target encoding aplicado a PROFESSION_CODE.")
+        else:
+            print("ℹ️ PROFESSION_CODE convertida en categórica.")
+
+    return df
 
 
 def process_mate_profession_code(df):
@@ -368,6 +368,24 @@ def process_education_level(df):
 
     return df
 
+def process_occupation_type(df, encode=False, binning=False, normalize=False):
+    """
+    14.6% de nulos, imputamos categoría más frecuente.
+    Preprocesamiento para OCCUPATION_TYPE:
+    - Imputa nulos con la categoría más frecuente.
+    - Si encode=True, aplica OneHotEncoding.
+    - binning y normalize están ignorados porque no aplican en este caso.
+    """
+    df = df.copy()
+    most_frequent = df["OCCUPATION_TYPE"].mode()[0]
+    df["OCCUPATION_TYPE"] = df["OCCUPATION_TYPE"].fillna(most_frequent)
+
+    if encode:
+        dummies = pd.get_dummies(df["OCCUPATION_TYPE"], prefix="OCCUPATION_TYPE")
+        df = df.drop("OCCUPATION_TYPE", axis=1)
+        df = pd.concat([df, dummies], axis=1)
+
+    return df
 
 
 def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=False, trim_max=6):
@@ -389,6 +407,8 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
     df = process_quant_special_banking_accounts(df)
     df = process_age(df, normalize=normalize)
     df = process_mate_profession_code(df)
+    df = process_profession_code(df, encode=encode)
+    df = process_occupation_type(df)
 
     # Mostrar todas las columnas en consola
     pd.set_option('display.max_columns', None)
