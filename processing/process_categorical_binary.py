@@ -22,8 +22,9 @@ def start():
     
     return X_train, X_val, var_names
 
+
 def process_APPLICATION_SUBMISSION_TYPE(var_train, var_val):    
-    """There are no comments from the EDA for this variable. 
+    """There is a category called '0' but it remain as it it. 
     There is no process for this variable """
     
     null_or_empty_values(var_train, var_val)
@@ -115,12 +116,16 @@ def bind(df, col):
     return
 
 
-#X_train, X_val, var_names = start()
+if __name__ == "__main__":
+    X_train, X_val, var_names = start()
 
-# train0, val0 = cleaned_train_POSTAL_ADDRESS_TYPE, cleaned_val_POSTAL_ADDRESS_TYPE = process_POSTAL_ADDRESS_TYPE(X_train[0], X_val[0])
-# train1, val1 = cleaned_train_SEX, cleaned_val_SEX = process_SEX(X_train[1], X_val[1])
-# train2, val2 = cleaned_train_FLAG_RESIDENCIAL_PHONE, cleaned_val_FLAG_RESIDENCIAL_PHONE = process_FLAG_RESIDENCIAL_PHONE(X_train[2], X_val[2])
-# train3, val3 = cleaned_train_FLAG_EMAIL, cleaned_val_FLAG_EMAIL = process_FLAG_EMAIL(X_train[3], X_val[3])
-# train3, val4 = cleaned_train_FLAG_VISA, cleaned_val_FLAG_VISA = process_FLAG_VISA(X_train[4], X_val[4])
-# train5, val5 = cleaned_train_FLAG_MASTERCARD, cleaned_val_FLAG_MASTERCARD = process_FLAG_MASTERCARD(X_train[5], X_val[5])
+    cleaned_train_APPLICATION_SUBMISSION_TYPE, cleaned_val_APPLICATION_SUBMISSION_TYPE = process_APPLICATION_SUBMISSION_TYPE(X_train[0], X_val[0])
+    cleaned_train_POSTAL_ADDRESS_TYPE, cleaned_val_POSTAL_ADDRESS_TYPE = process_POSTAL_ADDRESS_TYPE(X_train[1], X_val[1])
+    cleaned_train_SEX, cleaned_val_SEX = process_SEX(X_train[2], X_val[2])
+    cleaned_train_FLAG_RESIDENCIAL_PHONE, cleaned_val_FLAG_RESIDENCIAL_PHONE = process_FLAG_RESIDENCIAL_PHONE(X_train[3], X_val[3])
+    cleaned_train_FLAG_EMAIL, cleaned_val_FLAG_EMAIL = process_FLAG_EMAIL(X_train[4], X_val[4])
+    cleaned_train_FLAG_VISA, cleaned_val_FLAG_VISA = process_FLAG_VISA(X_train[5], X_val[5])
+    cleaned_train_FLAG_MASTERCARD, cleaned_val_FLAG_MASTERCARD = process_FLAG_MASTERCARD(X_train[6], X_val[6])
+    cleaned_train_FLAG_PROFESSIONAL_PHONE, cleaned_val_FLAG_PROFESSIONAL_PHONE = process_FLAG_PROFESSIONAL_PHONE(X_train[7], X_val[7])
+
 
