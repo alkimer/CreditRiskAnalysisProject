@@ -13,10 +13,10 @@ def start(path_train, path_val):
     binary_index.extend(blurry)
     binary_index.sort()
 
-    print("The following are the binary categrorical variables\nin the dataset (first their original indexes):\n")
+    print("\n\nThe following are the binary categrorical variables\nin the dataset (first their original indexes):\n")
 
     print(binary_index)
-    display(var_names[binary_index].tolist())
+    print(var_names[binary_index].tolist())
 
     # Create binary subdatasets
     X_train = X_train_full.iloc[:,binary_index]
@@ -67,6 +67,8 @@ def process_SEX(var_train, var_val):
     print("Cleaned train length:", len(var_train_cleaned))
     print("Original val length:", len(var_val))
     print("Cleaned val length:", len(var_val_cleaned))
+    
+    null_or_empty_values(var_train_cleaned, var_val_cleaned, 'Cleaned variable SEX')
 
     return var_train_cleaned, var_val_cleaned
 
@@ -160,7 +162,7 @@ def clean_all():
     
     X_train, X_val = start(path_X_train, path_X_val)
     
-    print('////////////////////')
+    print('\n////////////////////')
 
     cleaned_train_APPLICATION_SUBMISSION_TYPE, cleaned_val_APPLICATION_SUBMISSION_TYPE = \
         process_APPLICATION_SUBMISSION_TYPE(X_train['APPLICATION_SUBMISSION_TYPE'], X_val['APPLICATION_SUBMISSION_TYPE'])
@@ -200,6 +202,9 @@ def clean_all():
                                cleaned_val_FLAG_MASTERCARD,
                                cleaned_val_FLAG_PROFESSIONAL_PHONE                               
                                ], axis=1)
+    
+    clean_X_train.to_csv("data/processed/clean_X_train.csv", index=False)
+    clean_X_val.to_csv("data/processed/clean_X_val.csv", index=False)
     
     return clean_X_train, clean_X_val
 
