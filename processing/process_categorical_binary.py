@@ -209,7 +209,8 @@ def clean_all():
                                ], axis=1)
     
     clean_X_train.to_csv("data/processed/clean_X_train.csv", index=False)
-    clean_X_val.to_csv("data/processed/clean_X_val.csv", index=False)
+    clean_X_val.to_csv("data/processed/clean_X_val.csv", index=False)    
+    print("\n\n--- End of the variable processing ---\n\n")
     
     return clean_X_train, clean_X_val
 
