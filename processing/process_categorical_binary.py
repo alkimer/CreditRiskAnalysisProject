@@ -182,6 +182,9 @@ def clean_all():
     cleaned_train_FLAG_MASTERCARD, cleaned_val_FLAG_MASTERCARD = \
         process_FLAG_MASTERCARD(X_train['FLAG_MASTERCARD'], X_val['FLAG_MASTERCARD'])
     
+    cleaned_train_FLAG_OTHER_CARDS, cleaned_val_FLAG_OTHER_CARDS = \
+        process_FLAG_OTHER_CARDS(X_train['FLAG_OTHER_CARDS'], X_val['FLAG_OTHER_CARDS'])
+    
     cleaned_train_FLAG_PROFESSIONAL_PHONE, cleaned_val_FLAG_PROFESSIONAL_PHONE = \
         process_FLAG_PROFESSIONAL_PHONE(X_train['FLAG_PROFESSIONAL_PHONE'], X_val['FLAG_PROFESSIONAL_PHONE'])
         
@@ -191,6 +194,7 @@ def clean_all():
                                cleaned_train_FLAG_EMAIL,
                                cleaned_train_FLAG_VISA,
                                cleaned_train_FLAG_MASTERCARD,
+                               cleaned_train_FLAG_OTHER_CARDS,
                                cleaned_train_FLAG_PROFESSIONAL_PHONE                               
                                ], axis=1)
     
@@ -200,6 +204,7 @@ def clean_all():
                                cleaned_val_FLAG_EMAIL,
                                cleaned_val_FLAG_VISA,
                                cleaned_val_FLAG_MASTERCARD,
+                               cleaned_val_FLAG_OTHER_CARDS,
                                cleaned_val_FLAG_PROFESSIONAL_PHONE                               
                                ], axis=1)
     
