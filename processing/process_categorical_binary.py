@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
+from sklearn.preprocessing import OrdinalEncoder
 
 def start(path_train, path_val):
     X_train_full = pd.read_csv(path_train, header=0, encoding='UTF-8')
@@ -155,11 +155,12 @@ def create_balanced_imputations(n):
     return imputations
 
 
-def clean_all_binary(in_X_train, in_X_val,
-                      out_X_train, out_X_val):
+def clean_all_binary(in_X_train, in_X_val):
     """Makes the processing of the binary (categorical) variables.
     The dropped variables directly are not considered.
-    Args:
+    Args: 
+        in_X_train: PATH to X_train datast
+        in_X_val:   PATH to X_val datast
     """
     
     X_train, X_val = start(in_X_train, in_X_val)
@@ -210,12 +211,26 @@ def clean_all_binary(in_X_train, in_X_val,
                                cleaned_val_FLAG_PROFESSIONAL_PHONE                               
                                ], axis=1)
     
-    clean_X_train.to_csv(out_X_train, index=False)
-    clean_X_val.to_csv(out_X_val, index=False)    
-    print("\n\n--- End of the categorical binary variables processing ---\n\n")
+    ordinalEncoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
+    ordinalEncoder.fit(clean_X_train)
+    ordinalEncoder.fit(clean_X_val)
     
-    return
+    encoded_X_train = pd.DataFrame(
+        ordinalEncoder.transform(clean_X_train),
+        columns=clean_X_train.columns,
+        index=clean_X_train.index)
+
+    encoded_X_val = pd.DataFrame(
+        ordinalEncoder.transform(clean_X_val),
+        columns=clean_X_val.columns,
+        index=clean_X_val.index)
+      
+    print("\n\n--- End of the categorical binary variables processing ---\n\n")    
+    return encoded_X_train, encoded_X_val
 
 if __name__ == "__main__":
-    clean_all_binary("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
-                    "data/processed/clean_X_train.csv", "data/processed/clean_X_val.csv")
+    encoded_X_train, encoded_X_val = clean_all_binary("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv")
+    
+    encoded_X_train.to_csv("./data/processed/X_train_review.csv", index=False)
+    encoded_X_train.to_csv("./data/processed/X_val_review.csv", index=False)
+

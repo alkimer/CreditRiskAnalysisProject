@@ -93,7 +93,7 @@ def encode_combined(df_train, df_val):
 
 
 
-def clean_all_multi():
+def clean_all_multi(path_train, path_val):
     # -------------------------------------------------------------
     # Ejecuta toda la pipeline de procesamiento:
     # 1. Carga los datasets
@@ -103,8 +103,6 @@ def clean_all_multi():
     # 5. Guarda resultados como CSV
     # Devuelve los DataFrames codificados.
     # -------------------------------------------------------------
-    path_train = './data/data_splitted/X_train.csv'
-    path_val   = './data/data_splitted/X_val.csv'
 
     X_train, X_val = start(path_train, path_val)
     X_train, X_val = normalize_and_impute(X_train, X_val)
@@ -120,4 +118,4 @@ def clean_all_multi():
 
 
 if __name__ == "__main__":
-    clean_all_multi()
+    clean_all_multi("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv")
