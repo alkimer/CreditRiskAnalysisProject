@@ -30,9 +30,22 @@ def process_all(in_train, in_val, X_train_output, X_val_output):
     
     X_train_out.to_csv(X_train_output, index=False)
     X_val_out.to_csv(X_val_output, index=False)   
+    
+    show_dropped("train", X_train_in, X_train_out)
+    show_dropped("val", X_train_in, X_train_out)
+    return
+
+def show_dropped(var, df_in, df_out):
+    dropped = []
+    for i in df_in.columns:
+        if i not in df_out:
+            dropped.append(i)
+    
+    pd.DataFrame(dropped).to_csv(f"./data/processed/{var}_dropped_variables.txt", index=False, sep='\t')
+
     return
 
 
 if __name__ == "__main__":
     process_all("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
-                "./data/processed/X_train_p.csv",  "./data/processed/data_splitted/X_val_p.csv")
+                "./data/processed/X_train_p.csv",  "./data/processed/X_val_p.csv")

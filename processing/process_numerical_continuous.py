@@ -77,7 +77,7 @@ def process_other_incomes(train, val, use_power):
     val  [feature].fillna(med, inplace=True)
 
     # 2) Winsorización 1%-99%
-    low, high = train[feat].quantile([0.01, 0.99])
+    low, high = train[feature].quantile([0.01, 0.99])
     train[feature + "_CLIPPED"] = train[feature].clip(lower=low, upper=high)
     val  [feature + "_CLIPPED"] = val  [feature].clip(lower=low, upper=high)
 
