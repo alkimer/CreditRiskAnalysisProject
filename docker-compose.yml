@@ -12,6 +12,21 @@ services:
     networks:
       - backend
 
+  postgres:
+    build:
+      context: ./credit_risk_analysis/db
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: CREDIT_RISK
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./credit_risk_analysis/db/volume:/var/lib/postgresql/data
+    networks:
+      - backend
+
   api:
     build:
       context: .
@@ -20,14 +35,19 @@ services:
       - "8000:8000"
     depends_on:
       - redis
+      - postgres
     environment:
       REDIS_IP: redis
       REDIS_PORT: 6000
       REDIS_DB_ID: 0
       REDIS_PASSWORD: redis
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/CREDIT_RISK
     networks:
       - backend
 
 networks:
   backend:
     driver: bridge
+
+volumes:
+  pgdata:

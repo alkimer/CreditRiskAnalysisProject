@@ -7,6 +7,3 @@ ENV POSTGRES_PASSWORD=postgres
 
 # Copiar el script SQL que crea la tabla al directorio de inicializacion
 COPY init.sql /docker-entrypoint-initdb.d/
-
-# Declarar directorio de datos como volumen
-VOLUME ["/var/lib/postgresql/data"]
