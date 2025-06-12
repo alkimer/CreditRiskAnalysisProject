@@ -93,7 +93,7 @@ def encode_combined(df_train, df_val):
 
 
 
-def clean_all():
+def clean_all_multi():
     # -------------------------------------------------------------
     # Ejecuta toda la pipeline de procesamiento:
     # 1. Carga los datasets
@@ -120,4 +120,4 @@ def clean_all():
 
 
 if __name__ == "__main__":
-    clean_all()
+    clean_all_multi()

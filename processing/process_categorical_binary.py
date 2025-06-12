@@ -155,12 +155,14 @@ def create_balanced_imputations(n):
     return imputations
 
 
-def clean_all():
+def clean_all_binary(in_X_train, in_X_val,
+                      out_X_train, out_X_val):
+    """Makes the processing of the binary (categorical) variables.
+    The dropped variables directly are not considered.
+    Args:
+    """
     
-    path_X_train = './data/data_splitted/X_train.csv'
-    path_X_val = './data/data_splitted/X_val.csv'
-    
-    X_train, X_val = start(path_X_train, path_X_val)
+    X_train, X_val = start(in_X_train, in_X_val)
     
     print('\n////////////////////')
 
@@ -208,10 +210,12 @@ def clean_all():
                                cleaned_val_FLAG_PROFESSIONAL_PHONE                               
                                ], axis=1)
     
-    clean_X_train.to_csv("data/processed/clean_X_train.csv", index=False)
-    clean_X_val.to_csv("data/processed/clean_X_val.csv", index=False)    
-    print("\n\n--- End of the variable processing ---\n\n")
+    clean_X_train.to_csv(out_X_train, index=False)
+    clean_X_val.to_csv(out_X_val, index=False)    
+    print("\n\n--- End of the categorical binary variables processing ---\n\n")
     
-    return clean_X_train, clean_X_val
+    return
 
-clean_binary_X_train, clean_binary__X_val = clean_all()
+if __name__ == "__main__":
+    clean_all_binary("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
+                    "data/processed/clean_X_train.csv", "data/processed/clean_X_val.csv")
