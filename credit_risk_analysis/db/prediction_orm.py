@@ -2,6 +2,19 @@ from sqlalchemy import Column, Integer, Text, DECIMAL, TIMESTAMP, String, func, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 Base = declarative_base()
+import logging
+import sys
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout),    # envía logs a stdout (Docker los recoge)
+    ]
+)
+logger = logging.getLogger(__name__)
+logger.info("----INIT PREDICTION ORM----")
 
 class Prediction(Base):
     __tablename__ = "predictions"
@@ -24,6 +37,8 @@ def insert_prediction(session: Session, request_data: dict, score: float, model_
     - score: valor de la predicción (decimal)
     - model_name: nombre del modelo usado
     """
+    logger.info(f"✅ guardando predicción")
+
     nueva_prediccion = Prediction(
         request_json=request_data,
         score=score,
@@ -31,3 +46,4 @@ def insert_prediction(session: Session, request_data: dict, score: float, model_
     )
     session.add(nueva_prediccion)
     session.commit()
+    logger.info(f"✅ predicción guardada")

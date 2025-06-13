@@ -5,6 +5,7 @@ import redis.asyncio as redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from credit_risk_analysis.db.prediction_orm import insert_prediction
 from settings import Settings
 
 db_redis = redis.Redis(
@@ -28,7 +29,7 @@ logger.info("----INIT Model predict service----")
 
 # Setup Postgres DB
 
-db_url = f"postgresql://postgres:postgres@{Settings.POSTGRES_IP}:{Settings.POSTGRES_PORT}/{Settings.POSTGRES_DB_NAME}"
+db_url = f"postgresql://{Settings.POSTGRES_USER}:{Settings.POSTGRES_PASS}@{Settings.POSTGRES_CONTAINER}:{Settings.POSTGRES_PORT}/{Settings.POSTGRES_DB_NAME}"
 
 # Crear el engine
 engine = create_engine(db_url)
@@ -94,7 +95,15 @@ async def model_predict(predict_request):
                     logger.exception(f"[{job_id}] ❌ Error decoding result: {e}")
                     raise
 
-                db_result = output.get("result", None)
+                    # Guardar en PostgreSQL
+
+                insert_prediction(
+                    session=session,
+                    request_data=predict_request.model_dump(),  # ✅ Esto es un dict serializable
+                    score=score,
+                    model_name="MockModel-v1"
+                )
+
                 await db_redis.delete(job_id)
                 break
 
