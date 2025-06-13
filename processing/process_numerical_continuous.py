@@ -5,7 +5,11 @@ from sklearn.preprocessing import StandardScaler, PowerTransformer
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def process_numerical_continuous(X_train, X_val, use_power=False):
+def process_numerical_continuous_split(X_train, X_val, use_power=False):
+    """
+    Preprocesa las variables numéricas continuas usando X_train y X_val y
+    devuelve solo las columnas procesadas (_SCALED).
+    """
     """
     Preprocesa las variables numéricas continuas usando X_train y X_val:
       1) Imputa valores nulos con la mediana de X_train
@@ -19,118 +23,114 @@ def process_numerical_continuous(X_train, X_val, use_power=False):
     train = X_train.copy()
     val   = X_val.copy()
 
-    train, val = process_personal_monthly_income(train, val, use_power)
-    train, val = process_other_incomes       (train, val, use_power)
-    train, val = process_personal_assets_value(train, val, use_power)
+    train, val = _proc_personal_monthly_income(train, val, use_power)
+    train, val = _proc_other_incomes       (train, val, use_power)
+    train, val = _proc_personal_assets_value(train, val, use_power)
 
-    return train, val
+    # Al final, quedarse solo con las columnas *_SCALED
+    cont_feats = [
+        "PERSONAL_MONTHLY_INCOME_SCALED",
+        "OTHER_INCOMES_SCALED",
+        "PERSONAL_ASSETS_VALUE_SCALED"
+    ]
+    return train[cont_feats].copy(), val[cont_feats].copy()
 
-def process_personal_monthly_income(train, val, use_power):
-    """
-    - Imputa PERSONAL_MONTHLY_INCOME con mediana
-    - Trata outliers con IQR
-    - (Opcional) Aplica PowerTransformer (Yeo-Johnson)
-    - Escala con StandardScaler
-    """
-    feature = "PERSONAL_MONTHLY_INCOME"
+
+def _proc_personal_monthly_income(train, val, use_power):
+    feat = "PERSONAL_MONTHLY_INCOME"
     
     # 1. Imputación
-    med = train[feature].median()
-    train[feature].fillna(med, inplace=True)
-    val[feature].fillna(med, inplace=True)
+    med = train[feat].median()
+    train[feat].fillna(med, inplace=True)
+    val  [feat].fillna(med, inplace=True)
     
-    # 2. Outliers IQR
-    Q1, Q3 = train[feature].quantile([0.25, 0.75])
+    # 2. Outliers con IQR
+    Q1, Q3 = train[feat].quantile([0.25, 0.75])
     IQR    = Q3 - Q1
     low, high = Q1 - 1.5*IQR, Q3 + 1.5*IQR
-    train[feature + "_CLIPPED"] = train[feature].clip(lower=low, upper=high)
-    val  [feature + "_CLIPPED"] = val  [feature].clip(lower=low, upper=high)
+    train[feat] = train[feat].clip(lower=low, upper=high)
+    val  [feat] = val  [feat].clip(lower=low, upper=high)
     
-    # 3. PowerTransformer
+    # 3. PowerTransformer opcional
+    source = feat
     if use_power:
         pt = PowerTransformer(method="yeo-johnson", standardize=False)
-        train[feature + "_PT"] = pt.fit_transform(train[[feature + "_CLIPPED"]])
-        val  [feature + "_PT"] = pt.transform   (val  [[feature + "_CLIPPED"]])
-        src = feature + "_PT"
-    else:
-        src = feature + "_CLIPPED"
+        train[feat + "_PT"] = pt.fit_transform(train[[feat]])
+        val  [feat + "_PT"] = pt.transform   (val  [[feat]])
+        source = feat + "_PT"
     
     # 4. Escalado
     scaler = StandardScaler()
-    train[feature + "_SCALED"] = scaler.fit_transform(train[[src]])
-    val  [feature + "_SCALED"] = scaler.transform   (val  [[src]])
-
+    train[feat + "_SCALED"] = scaler.fit_transform(train[[source]])
+    val  [feat + "_SCALED"] = scaler.transform   (val  [[source]])
     return train, val
 
-def process_other_incomes(train, val, use_power):
-    """
-    - Imputa OTHER_INCOMES con mediana
-    - Trata outliers con winsorización (1%-99%)
-    - (Opcional) PowerTransformer
-    - Escala con StandardScaler
-    """
-    feature = "OTHER_INCOMES"
+
+def _proc_other_incomes(train, val, use_power):
+    feat = "OTHER_INCOMES"
     
-    # 1) Imputación
-    med = train[feature].median()
-    train[feature].fillna(med, inplace=True)
-    val  [feature].fillna(med, inplace=True)
-
-    # 2) Winsorización 1%-99%
-    low, high = train[feature].quantile([0.01, 0.99])
-    train[feature + "_CLIPPED"] = train[feature].clip(lower=low, upper=high)
-    val  [feature + "_CLIPPED"] = val  [feature].clip(lower=low, upper=high)
-
-    # 3) PowerTransformer (si aplica)
+    # 1. Imputación
+    med = train[feat].median()
+    train[feat].fillna(med, inplace=True)
+    val  [feat].fillna(med, inplace=True)
+    
+    # 2. Winsorización 1%-99%
+    low, high = train[feat].quantile([0.01, 0.99])
+    train[feat] = train[feat].clip(lower=low, upper=high)
+    val  [feat] = val  [feat].clip(lower=low, upper=high)
+    
+    # 3. PowerTransformer opcional
+    source = feat
     if use_power:
         pt = PowerTransformer(method="yeo-johnson", standardize=False)
-        train[feature + "_PT"] = pt.fit_transform(train[[feature + "_CLIPPED"]])
-        val  [feature + "_PT"] = pt.transform   (val  [[feature + "_CLIPPED"]])
-        src = feature + "_PT"
-    else:
-        src = feature + "_CLIPPED"
-
-    # 4) Escalado
+        train[feat + "_PT"] = pt.fit_transform(train[[feat]])
+        val  [feat + "_PT"] = pt.transform   (val  [[feat]])
+        source = feat + "_PT"
+    
+    # 4. Escalado
     scaler = StandardScaler()
-    train[feature + "_SCALED"] = scaler.fit_transform(train[[src]])
-    val  [feature + "_SCALED"] = scaler.transform   (val  [[src]])
-
+    train[feat + "_SCALED"] = scaler.fit_transform(train[[source]])
+    val  [feat + "_SCALED"] = scaler.transform   (val  [[source]])
     return train, val
 
-def process_personal_assets_value(train, val, use_power):
-    """
-    - Imputa PERSONAL_ASSETS_VALUE con mediana
-    - Trata outliers con IQR
-    - (Opcional) PowerTransformer
-    - Escala con StandardScaler
-    """
-    feature = "PERSONAL_ASSETS_VALUE"
-    
-    # 1) Imputación
-    med = train[feature].median()
-    train[feature].fillna(med, inplace=True)
-    val  [feature].fillna(med, inplace=True)
 
-    # 2) Outliers IQR
-    Q1, Q3 = train[feature].quantile([0.25, 0.75])
+def _proc_personal_assets_value(train, val, use_power):
+    feat = "PERSONAL_ASSETS_VALUE"
+    
+    # 1. Imputación
+    med = train[feat].median()
+    train[feat].fillna(med, inplace=True)
+    val  [feat].fillna(med, inplace=True)
+    
+    # 2. Outliers con IQR
+    Q1, Q3 = train[feat].quantile([0.25, 0.75])
     IQR    = Q3 - Q1
     low, high = Q1 - 1.5*IQR, Q3 + 1.5*IQR
-    train[feature + "_CLIPPED"] = train[feature].clip(lower=low, upper=high)
-    val  [feature + "_CLIPPED"] = val  [feature].clip(lower=low, upper=high)
-
-    # 3) PowerTransformer (si aplica)
+    train[feat] = train[feat].clip(lower=low, upper=high)
+    val  [feat] = val  [feat].clip(lower=low, upper=high)
+    
+    # 3. PowerTransformer opcional
+    source = feat
     if use_power:
         pt = PowerTransformer(method="yeo-johnson", standardize=False)
-        train[feature + "_PT"] = pt.fit_transform(train[[feature + "_CLIPPED"]])
-        val  [feature + "_PT"] = pt.transform   (val  [[feature + "_CLIPPED"]])
-        src = feature + "_PT"
-    else:
-        src = feature + "_CLIPPED"
-
-    # 4) Escalado
+        train[feat + "_PT"] = pt.fit_transform(train[[feat]])
+        val  [feat + "_PT"] = pt.transform   (val  [[feat]])
+        source = feat + "_PT"
+    
+    # 4. Escalado
     scaler = StandardScaler()
-    train[feature + "_SCALED"] = scaler.fit_transform(train[[src]])
-    val  [feature + "_SCALED"] = scaler.transform   (val  [[src]])
-
+    train[feat + "_SCALED"] = scaler.fit_transform(train[[source]])
+    val  [feat + "_SCALED"] = scaler.transform   (val  [[source]])
+    
     return train, val
 
+
+#if __name__ == "__main__":
+    
+    # X_train_in = pd.read_csv("./data/data_splitted/X_train.csv", header=0, encoding='UTF-8')
+    # X_val_in   = pd.read_csv("./data/data_splitted/X_val.csv",   header=0, encoding='UTF-8')
+    
+    # train_cont, val_cont = process_numerical_continuous_split(X_train_in, X_val_in, use_power=False)
+    
+    # train_cont.to_csv("./data/processed/X_train_continous.csv", index=False)
+    # val_cont.to_csv("./data/processed/X_val_continous.csv", index=False)

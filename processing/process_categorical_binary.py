@@ -224,13 +224,17 @@ def clean_all_binary(in_X_train, in_X_val):
         ordinalEncoder.transform(clean_X_val),
         columns=clean_X_val.columns,
         index=clean_X_val.index)
+    
+    encoded_X_train.to_csv('data/processed/interim/X_train_binary.csv', index=False)
+    encoded_X_val.to_csv('data/processed/interim/X_val_binary.csv', index=False)
       
     print("\n\n--- End of the categorical binary variables processing ---\n\n")    
     return encoded_X_train, encoded_X_val
 
+
 if __name__ == "__main__":
     encoded_X_train, encoded_X_val = clean_all_binary("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv")
     
-    encoded_X_train.to_csv("./data/processed/X_train_review.csv", index=False)
-    encoded_X_train.to_csv("./data/processed/X_val_review.csv", index=False)
+    encoded_X_train.to_csv("./data/processed/X_train_binary.csv", index=False)
+    encoded_X_train.to_csv("./data/processed/X_val_binary.csv", index=False)
 
