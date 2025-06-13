@@ -49,8 +49,11 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     X_train_out.to_csv(X_train_output, index=False)
     X_val_out.to_csv(X_val_output, index=False)   
     
+    print(X_train_out.shape)
+    
     show_dropped("train", X_train_in, X_train_out)
     return
+
 
 def show_dropped(df_in, df_out):
     dropped = []
