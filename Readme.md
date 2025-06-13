@@ -12,6 +12,7 @@ after successful execution , you should be able to access the API Gui in `localh
 
 #### This API will orchestrate request back and forth with the REDIS message broker container and Postgres Container.
 
+ALL prediction requests will be stored in te postgres-db container , db CREDIT_RISK, table PREDICTIONS
 
 ## SAMPLE REQUEST TO GET A PREDICTION
 
