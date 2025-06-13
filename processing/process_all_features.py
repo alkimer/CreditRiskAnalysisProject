@@ -29,7 +29,7 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     train_multi,     val_multi =  clean_all_multi(path_train, path_val)    
     train_continuous, val_continuous = process_numerical_continuous_split(X_train_in, X_val_in, use_power=False)
     train_discrete = process_numerical_discrete(path_Xtr, encode=True, binning=True, normalize=True)
-    val_discrete   = process_numerical_discrete(path_Xv, encode=True, binning=True, normalize=True)
+    val_discrete   = process_numerical_discrete(path_Xv,  encode=True, binning=True, normalize=True)
     
     train_continuous.to_csv("./data/processed/interim/X_train_continuous.csv", index=False)
     val_continuous.to_csv("./data/processed/interim/X_val_continuous.csv", index=False)   
@@ -50,19 +50,15 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     X_val_out.to_csv(X_val_output, index=False)   
     
     print(X_train_out.shape)
-    
-    show_dropped("train", X_train_in, X_train_out)
-    return
 
-
-def show_dropped(df_in, df_out):
     dropped = []
-    for i in df_in.columns:
-        if i not in df_out:
+    for i in X_train_in.columns:
+        if i not in X_train_out:
             dropped.append(i)
     
-    pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables.txt", index=False, columns=False, sep='\t')
-
+    pd.DataFrame(X_train_out.columns).to_csv(f"./data/processed/processed_variables_list.txt", index=False, columns=False, sep='\t')
+    pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables_list.txt", index=False, columns=False, sep='\t')
+    
     return
 
 

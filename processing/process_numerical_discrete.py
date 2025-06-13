@@ -2,33 +2,6 @@ import pandas as pd
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=False, trim_max=6):
-    """
-    Abre un archivo CSV y realiza el preprocesamiento completo de variables numéricas/discretas
-    usando funciones previamente definidas. Controla encoding, binning, normalización y trimming.
-    """
-
-    df = pd.read_csv(csv_path)
-
-    df = process_payment_day(df, encode=encode)
-    df = process_marital_status(df, encode=encode)
-    df = process_quant_dependants(df, encode=encode, trim_max=trim_max, binning=binning)
-    df = process_months_in_residence(df, encode=encode, binning=binning)
-    df = process_quant_banking_accounts(df, normalize=normalize)
-    df = process_quant_cars(df)
-    df = process_months_in_the_job(df)
-    df = process_education_level(df)
-    df = process_quant_additional_cards(df)
-    df = process_quant_special_banking_accounts(df)
-    df = process_age(df, normalize=normalize)
-    df = process_mate_profession_code(df)
-
-    print("\n✅ Preprocesamiento finalizado. Vista general del DataFrame:")
-    print(df.head())
-
-    return df
-
-
 def process_payment_day(df, encode=False):
     """
     La proporción de deudores no varía según el payment day, salvo el día 25 que tiene una proporción levemente
@@ -437,7 +410,7 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
 if __name__ == "__main__":
     ###This is just for testing Purposes""""
     # Ruta al archivo CSV
-    csv_path = "./data/data_splitted/X_train.csv"
+    csv_path = "./data/processed/interim/X_tr.csv"
 
     train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
     train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
