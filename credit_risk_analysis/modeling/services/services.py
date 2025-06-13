@@ -1,14 +1,13 @@
-import json
-import time
-from uuid import uuid4
-
-import redis.asyncio as redis
-
-from settings import Settings
 import logging
 import sys
 
-db = redis.Redis(
+import redis.asyncio as redis
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from settings import Settings
+
+db_redis = redis.Redis(
     host=Settings.REDIS_IP,
     port=Settings.REDIS_PORT,
     db=Settings.REDIS_DB_ID,
@@ -27,32 +26,90 @@ logger = logging.getLogger(__name__)
 logger.info("----INIT Model predict service----")
 
 
+# Setup Postgres DB
+
+db_url = f"postgresql://postgres:postgres@{Settings.POSTGRES_IP}:{Settings.POSTGRES_PORT}/{Settings.POSTGRES_DB_NAME}"
+
+# Crear el engine
+engine = create_engine(db_url)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+
+
+import json
 import asyncio
+import logging
+from uuid import uuid4
+from datetime import datetime
 
-async def model_predict(id_client):
-    print(f"Credit Risk Analysis predicting for id_client {id_client}...")
 
+logger = logging.getLogger(__name__)
+
+
+async def model_predict(predict_request):
     job_id = str(uuid4())
-    job_data = {
-        "id": job_id,
-        "id_client": id_client
-    }
+    start_time = datetime.utcnow()
 
-    await db.lpush(Settings.REDIS_PENDING_PREDICTION, json.dumps(job_data))
-    logger.info(f"----Esperando que se complete el job_id  {job_id}")
+    logger.info(f"[{job_id}] ▶️ Starting prediction for request: {predict_request}")
 
-    while True:
-        output = await db.get(job_id)  # <- ahora es await
+    # Preparar datos del trabajo
+    try:
+        job_data = {
+            "id": job_id,
+            "input": predict_request.model_dump(),  # usar dict() si es Pydantic v1
+            "timestamp": start_time.isoformat()
+        }
+    except Exception as e:
+        logger.exception(f"[{job_id}] ❌ Error serializing predict_request: {e}")
+        raise
 
-        if output is not None:
-            logger.info(f"consumido job :  {job_id}")
+    # Encolar solicitud
+    try:
+        await db_redis.lpush(Settings.REDIS_PENDING_PREDICTION, json.dumps(job_data))
+        logger.debug(f"[{job_id}] 📩 Job enqueued")
+    except Exception as e:
+        logger.exception(f"[{job_id}] ❌ Error enqueuing job in Redis: {e}")
+        raise
 
-            output = json.loads(output)
-            score = output["score"]
+    # Esperar respuesta del worker
+    score = None
+    timeout = Settings.API_TIMEOUT  # en segundos
+    sleep_interval = Settings.API_SLEEP
 
-            await db.delete(job_id)  # <- también await
-            break
+    logger.debug(f"[{job_id}] 💤 Waiting for response (timeout={timeout}s)...")
 
-        await asyncio.sleep(Settings.API_SLEEP)  # <- no uses time.sleep en async
+    try:
+        total_wait = 0
+        while total_wait < timeout:
+            output_raw = await db_redis.get(job_id)
+            if output_raw:
+                logger.info(f"[{job_id}] ✅ Job result received")
+                try:
+                    output = json.loads(output_raw)
+                    score = output.get("score", None)
+                    if score is None:
+                        raise ValueError("Missing 'score' field in result")
+                except Exception as e:
+                    logger.exception(f"[{job_id}] ❌ Error decoding result: {e}")
+                    raise
+
+                db_result = output.get("result", None)
+                await db_redis.delete(job_id)
+                break
+
+            await asyncio.sleep(sleep_interval)
+            total_wait += sleep_interval
+
+        if score is None:
+            logger.warning(f"[{job_id}] ⏰ Timeout after {timeout} seconds waiting for result")
+            raise TimeoutError("No prediction result returned in time")
+
+    except Exception as e:
+        logger.exception(f"[{job_id}] ❌ Error while waiting for job result: {e}")
+        raise
+
+    elapsed = (datetime.utcnow() - start_time).total_seconds()
+    logger.info(f"[{job_id}] 🏁 Prediction finished in {elapsed:.2f}s — Score: {score}")
 
     return True, score

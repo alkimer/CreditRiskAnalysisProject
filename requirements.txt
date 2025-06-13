@@ -20,3 +20,5 @@ fastapi
 uvicorn[standard]
 redis
 pydantic
+sqlalchemy
+psycopg2-binary

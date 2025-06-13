@@ -26,19 +26,16 @@ logger.info("----INIT CREDIT RISK ANALYSIS ROUTER API SERVICE----")
 
 @model_router.post("/predict", response_model=PredictResponse)
 async def predict(predict_request: PredictRequest):
-    logger.debug("→ /predict() invoked: predict_request=%s", predict_request.id_client)
-
+    logger.debug("→ /predict() invoked: predict_request=%s", predict_request)
 
     response = PredictResponse(
         success=False,
         score=1
     )
 
-
-    response.success, response.score = await model_predict(predict_request.id_client)
+    response.success, response.score = await model_predict(predict_request)
 
     return response
-
 
 
 app.include_router(model_router)
