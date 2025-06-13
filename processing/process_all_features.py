@@ -122,6 +122,8 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     print(train_continuous.shape, val_continuous.shape)
     print(train_discrete.shape, val_discrete.shape)
     
+    # Call balancing data function
+    
     return
 
 def trim(df):
