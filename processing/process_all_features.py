@@ -49,18 +49,49 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     X_train_out.to_csv(X_train_output, index=False)
     X_val_out.to_csv(X_val_output, index=False)   
     
-    print(X_train_out.shape)
 
-    dropped = []
-    for i in X_train_in.columns:
-        if i not in X_train_out:
-            dropped.append(i)
+    binary_cols = pd.DataFrame(train_binary.columns)
+    multi_cols  = pd.DataFrame(trim(train_multi.columns))
+    conti_cols  = pd.DataFrame(trim(train_continuous.columns))
+    discr_cols  = pd.DataFrame(trim(train_discrete.columns))
     
-    print(X_train_out.columns)
-    pd.DataFrame(X_train_out.columns).to_csv(f"./data/processed/processed_variables_list.txt", index=False, header=False, sep='\t')
+    processed_col_names = pd.concat([binary_cols, multi_cols, conti_cols, discr_cols], axis=0)
+
+    dropped = []    
+    for i in X_train_in.columns:
+        if i not in processed_col_names[0].tolist():
+            dropped.append(i)           
+            
+    print(f"\nOriginal # of columns: {len(X_train_in.columns)}")
+    print(f"Number of processed VARIABLES: {len(processed_col_names)}")
+    print(f"Number of dropped columns: {len(dropped)}")
+    print(f"Number of output columns: {len(X_train_out.columns)}")
+
+    
+    pd.DataFrame(processed_col_names).to_csv(f"./data/processed/processed_variables_list.txt", index=False, header=False, sep='\t')
     pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables_list.txt", index=False, header=False, sep='\t')
     
+    print(f"\nSHAPES OF THE OUTPUT DATASETS\nBinary, Multicategorical, Continuous, Discrete\nTrain | Val")
+    print(f"\n{X_train_out.shape}, {X_val_out.shape}\n")
+    print(train_binary.shape, val_binary.shape)
+    print(train_multi.shape,  val_multi.shape)
+    print(train_continuous.shape, val_continuous.shape)
+    print(train_discrete.shape, val_discrete.shape)
+    
     return
+
+def trim(df):
+    
+    no_sufix = [col.rsplit('_', 1)[0] for col in df]
+    
+    unique_ordered = []
+    seen = set()
+    for col in no_sufix:
+        if col not in seen:
+            unique_ordered.append(col)
+            seen.add(col)
+    
+    return unique_ordered
 
 
 if __name__ == "__main__":
