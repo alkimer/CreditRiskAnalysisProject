@@ -1,30 +1,86 @@
-from pathlib import Path
+import json
+import random
+import asyncio
+import logging
+import sys
 
-from loguru import logger
-from tqdm import tqdm
-import typer
+import redis.asyncio as redis
+from pydantic import BaseModel
 
-from credit_risk_analysis.config import MODELS_DIR, PROCESSED_DATA_DIR
+from credit_risk_analysis.modeling.schema import PredictResponse
+from settings import Settings
 
-app = typer.Typer()
+# ----------------------
+# Configuración del logger
+# ----------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger("async-consumer")
 
+# ----------------------
+# Inicialización Redis async
+# ----------------------
+db = redis.Redis(
+    host=Settings.REDIS_IP,
+    port=Settings.REDIS_PORT,
+    db=Settings.REDIS_DB_ID,
+    password=Settings.REDIS_PASSWORD,
+    decode_responses=True
+)
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "test_features.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
-    predictions_path: Path = PROCESSED_DATA_DIR / "test_predictions.csv",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Performing inference for model...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Inference complete.")
-    # -----------------------------------------
+# ----------------------
+# Loop principal asincrónico
+# ----------------------
+async def consume_predictions():
+    logger.info("🔁 Iniciando consumidor de predicciones (async)...")
+    logger.debug(f"🔌 Conectado a Redis en {Settings.REDIS_IP}:{Settings.REDIS_PORT}, DB={Settings.REDIS_DB_ID}")
 
+    while True:
+        try:
+            logger.debug("⏳ Esperando mensaje con BRPOP...")
+            result = await db.brpop(Settings.REDIS_PENDING_PREDICTION, timeout=0)  # bloqueante async
 
+            if result is None:
+                logger.warning("⏰ Timeout esperando mensajes")
+                continue
+
+            _, job_json = result
+            logger.debug(f"📦 Mensaje recibido crudo: {job_json}")
+
+            try:
+                job_data = json.loads(job_json)
+                job_id = job_data["id"]
+                id_client = job_data["id_client"]
+                logger.info(f"📩 Procesando job_id={job_id}, id_client={id_client}")
+            except (json.JSONDecodeError, KeyError) as e:
+                logger.error(f"❌ Error parseando job: {e} | Payload: {job_json}")
+                continue
+
+            # Simular predicción
+            score = round(random.uniform(0, 1), 4)
+            response = PredictResponse(success=True, score=score)
+
+            try:
+                await db.setex(job_id, 300, json.dumps(response.model_dump()))  # TTL de 5 minutos
+                logger.info(f"✅ Predicción generada y almacenada: job_id={job_id}, score={score}")
+            except Exception as e:
+                logger.error(f"❌ Error guardando resultado en Redis: {e}")
+                continue
+
+            await asyncio.sleep(1)  # simula procesamiento
+
+        except Exception as e:
+            logger.exception(f"🔥 Error inesperado en el loop principal: {e}")
+            await asyncio.sleep(5)  # backoff
+
+# ----------------------
+# Entry point
+# ----------------------
 if __name__ == "__main__":
-    app()
+    try:
+        asyncio.run(consume_predictions())
+    except KeyboardInterrupt:
+        logger.info("🛑 Shutdown solicitado por el usuario")

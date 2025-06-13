@@ -2,9 +2,11 @@ import json
 import time
 from uuid import uuid4
 
-import redis
+import redis.asyncio as redis
 
 from settings import Settings
+import logging
+import sys
 
 db = redis.Redis(
     host=Settings.REDIS_IP,
@@ -14,48 +16,43 @@ db = redis.Redis(
     decode_responses=True
 )
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout),    # envía logs a stdout (Docker los recoge)
+    ]
+)
+logger = logging.getLogger(__name__)
+logger.info("----INIT Model predict service----")
 
+
+import asyncio
 
 async def model_predict(id_client):
     print(f"Credit Risk Analysis predicting for id_client {id_client}...")
-    """
-    Receives and id_client an predicts its Credit Risk.
-    It uses Redis in-between to async prediction.
 
-    Parameters
-    ----------
-    id_client : str
-
-    Returns
-    -------
-    prediction, : float
-    Score for credit.
-    """
-    # Generar un ID único para el trabajo
     job_id = str(uuid4())
-
-    # Crear diccionario con los datos del trabajo
     job_data = {
         "id": job_id,
         "id_client": id_client
     }
 
-    # Enviar el trabajo a Redis (cola)
-    db.lpush(Settings.REDIS_QUEUE, json.dumps(job_data))
+    await db.lpush(Settings.REDIS_PENDING_PREDICTION, json.dumps(job_data))
+    logger.info(f"----Esperando que se complete el job_id  {job_id}")
 
-    # Esperar respuesta del modelo
     while True:
-        # Luego de que el modelo realice la predicción,
-        # volverá a colocar en redis el resutlado con key=job_id
-        output = db.get(job_id)
+        output = await db.get(job_id)  # <- ahora es await
 
         if output is not None:
+            logger.info(f"consumido job :  {job_id}")
+
             output = json.loads(output)
             score = output["score"]
 
-            db.delete(job_id)
+            await db.delete(job_id)  # <- también await
             break
 
-        time.sleep(Settings.API_SLEEP)
+        await asyncio.sleep(Settings.API_SLEEP)  # <- no uses time.sleep en async
 
     return True, score
