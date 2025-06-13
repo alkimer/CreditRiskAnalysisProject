@@ -52,6 +52,8 @@ def process_payment_day(df, encode=False):
     else:
         print("ℹ️ PAYMENT_DAY convertido en categórica.")
 
+    df.drop(columns=["PAYMENT_DAY"], inplace=True)
+
     return df
 
 
@@ -71,6 +73,7 @@ def process_marital_status(df, encode=False):
         print("✅ Target encoding aplicado a MARITAL_STATUS.")
     else:
         print("ℹ️ MARITAL_STATUS convertido en categórica.")
+    df.drop(columns=["MARITAL_STATUS"], inplace=True)
 
     return df
 
@@ -117,6 +120,8 @@ def process_quant_dependants(df, encode=False, trim_max=6, binning=False):
             print(f"✅ Target encoding aplicado a QUANT_DEPENDANTS (truncado a {trim_max}).")
         else:
             print(f"ℹ️ QUANT_DEPENDANTS truncado a máximo {trim_max}.")
+
+    df.drop(columns=["QUANT_DEPENDANTS"], inplace=True)
 
     return df
 
@@ -170,6 +175,7 @@ def process_months_in_residence(df, encode=False, binning=True):
         else:
             print("ℹ️ MONTHS_IN_RESIDENCE imputado sin binning.")
 
+    df.drop(columns=["MONTHS_IN_RESIDENCE"], inplace=True)
 
     return df
 
@@ -191,6 +197,8 @@ def process_quant_banking_accounts(df, normalize=False):
         min_val = df["QUANT_BANKING_ACCOUNTS"].min()
         max_val = df["QUANT_BANKING_ACCOUNTS"].max()
         df["QUANT_BANKING_ACCOUNTS_NORM"] = (df["QUANT_BANKING_ACCOUNTS"] - min_val) / (max_val - min_val)
+        df.drop(columns=["QUANT_BANKING_ACCOUNTS"], inplace=True)
+
         print("✅ QUANT_BANKING_ACCOUNTS normalizada con MinMax.")
     else:
         print("ℹ️ QUANT_BANKING_ACCOUNTS mantenida como cantidad discreta sin normalizar.")
@@ -206,6 +214,8 @@ def process_quant_cars(df):
     df = df.copy()
     df["QUANT_CARS_CLEAN"] = df["QUANT_CARS"].astype(int)
     print("ℹ️ QUANT_CARS válida")
+    df.drop(columns=["QUANT_CARS"], inplace=True)
+
     return df
 
 
@@ -289,6 +299,8 @@ def process_age(df, normalize=False):
         df["AGE_DISCRETE"] = df["AGE"].astype(int)
         print("ℹ️ AGE conservada como numérica discreta.")
 
+    df.drop(columns=["AGE"], inplace=True)
+
     return df
 
 
@@ -334,6 +346,8 @@ def process_profession_code(df, encode=False, binning=False):
         else:
             print("ℹ️ PROFESSION_CODE convertida en categórica.")
 
+    df.drop(columns=["PROFESSION_CODE"], inplace=True)
+
     return df
 
 
@@ -378,10 +392,10 @@ def process_occupation_type(df, encode=False, binning=False, normalize=False):
     """
     df = df.copy()
     most_frequent = df["OCCUPATION_TYPE"].mode()[0]
-    df["OCCUPATION_TYPE"] = df["OCCUPATION_TYPE"].fillna(most_frequent)
+    df["OCCUPATION_TYPE_IMPUTED"] = df["OCCUPATION_TYPE"].fillna(most_frequent)
 
     if encode:
-        dummies = pd.get_dummies(df["OCCUPATION_TYPE"], prefix="OCCUPATION_TYPE")
+        dummies = pd.get_dummies(df["OCCUPATION_TYPE_IMPUTED"], prefix="OCCUPATION_TYPE")
         df = df.drop("OCCUPATION_TYPE", axis=1)
         df = pd.concat([df, dummies], axis=1)
 
@@ -427,8 +441,15 @@ if __name__ == "__main__":
 
     # csv_path = Path("data-with-columns.csv")
 
+
+    df = pd.read_csv(csv_path, low_memory=False)
+    print("\n✅ DATOS ORGINALES:")
+    print(df.shape)
+
     df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
 
+    print("\n✅ DATOS PROCESADOS:")
+    print(df_procesado.shape)
 
     # Guardar resultado en archivo
     df_procesado.to_csv("data-preprocessed.csv", index=False)
