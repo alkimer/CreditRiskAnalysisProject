@@ -56,8 +56,9 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
         if i not in X_train_out:
             dropped.append(i)
     
-    pd.DataFrame(X_train_out.columns).to_csv(f"./data/processed/processed_variables_list.txt", index=False, columns=False, sep='\t')
-    pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables_list.txt", index=False, columns=False, sep='\t')
+    print(X_train_out.columns)
+    pd.DataFrame(X_train_out.columns).to_csv(f"./data/processed/processed_variables_list.txt", index=False, header=False, sep='\t')
+    pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables_list.txt", index=False, header=False, sep='\t')
     
     return
 
