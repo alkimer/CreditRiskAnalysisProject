@@ -2,32 +2,6 @@ import pandas as pd
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=False, trim_max=6):
-    """
-    Abre un archivo CSV y realiza el preprocesamiento completo de variables numéricas/discretas
-    usando funciones previamente definidas. Controla encoding, binning, normalización y trimming.
-    """
-
-    df = pd.read_csv(csv_path)
-
-    df = process_payment_day(df, encode=encode)
-    df = process_marital_status(df, encode=encode)
-    df = process_quant_dependants(df, encode=encode, trim_max=trim_max, binning=binning)
-    df = process_months_in_residence(df, encode=encode, binning=binning)
-    df = process_quant_banking_accounts(df, normalize=normalize)
-    df = process_quant_cars(df)
-    df = process_months_in_the_job(df)
-    df = process_education_level(df)
-    df = process_quant_additional_cards(df)
-    df = process_quant_special_banking_accounts(df)
-    df = process_age(df, normalize=normalize)
-    df = process_mate_profession_code(df)
-
-    print("\n✅ Preprocesamiento finalizado. Vista general del DataFrame:")
-    print(df.head())
-
-    return df
-
 
 def process_payment_day(df, encode=False):
     """
@@ -71,11 +45,12 @@ def process_marital_status(df, encode=False):
         print("✅ Target encoding aplicado a MARITAL_STATUS.")
     else:
         print("ℹ️ MARITAL_STATUS convertido en categórica.")
+    df.drop(columns=["MARITAL_STATUS"], inplace=True)
 
     return df
 
 
-def process_quant_dependants(df, encode=False, trim_max=6, binning=False):
+def process_quant_dependants(df, encode=True, trim_max=6, binning=True):
 
     """
     Luego del trimming y binning se ve claramente que a mayor cantidad de dependientes
@@ -117,6 +92,8 @@ def process_quant_dependants(df, encode=False, trim_max=6, binning=False):
             print(f"✅ Target encoding aplicado a QUANT_DEPENDANTS (truncado a {trim_max}).")
         else:
             print(f"ℹ️ QUANT_DEPENDANTS truncado a máximo {trim_max}.")
+
+    df.drop(columns=["QUANT_DEPENDANTS"], inplace=True)
 
     return df
 
@@ -163,6 +140,8 @@ def process_months_in_residence(df, encode=False, binning=True):
             print("ℹ️ MONTHS_IN_RESIDENCE imputado y binned en categorías.")
     else:
         if encode:
+            df.drop(columns=["MONTHS_IN_RESIDENCE"], inplace=True)
+
             df["MONTHS_IN_RESIDENCE_TE"] = df["MONTHS_IN_RESIDENCE_IMPUTED"].map(
                 df.groupby("MONTHS_IN_RESIDENCE_IMPUTED")["TARGET_LABEL_BAD"].mean()
             )
@@ -191,6 +170,8 @@ def process_quant_banking_accounts(df, normalize=False):
         min_val = df["QUANT_BANKING_ACCOUNTS"].min()
         max_val = df["QUANT_BANKING_ACCOUNTS"].max()
         df["QUANT_BANKING_ACCOUNTS_NORM"] = (df["QUANT_BANKING_ACCOUNTS"] - min_val) / (max_val - min_val)
+        df.drop(columns=["QUANT_BANKING_ACCOUNTS"], inplace=True)
+
         print("✅ QUANT_BANKING_ACCOUNTS normalizada con MinMax.")
     else:
         print("ℹ️ QUANT_BANKING_ACCOUNTS mantenida como cantidad discreta sin normalizar.")
@@ -206,6 +187,8 @@ def process_quant_cars(df):
     df = df.copy()
     df["QUANT_CARS_CLEAN"] = df["QUANT_CARS"].astype(int)
     print("ℹ️ QUANT_CARS válida")
+    df.drop(columns=["QUANT_CARS"], inplace=True)
+
     return df
 
 
@@ -289,6 +272,8 @@ def process_age(df, normalize=False):
         df["AGE_DISCRETE"] = df["AGE"].astype(int)
         print("ℹ️ AGE conservada como numérica discreta.")
 
+    df.drop(columns=["AGE"], inplace=True)
+
     return df
 
 
@@ -334,6 +319,8 @@ def process_profession_code(df, encode=False, binning=False):
         else:
             print("ℹ️ PROFESSION_CODE convertida en categórica.")
 
+    df.drop(columns=["PROFESSION_CODE"], inplace=True)
+
     return df
 
 
@@ -378,12 +365,13 @@ def process_occupation_type(df, encode=False, binning=False, normalize=False):
     """
     df = df.copy()
     most_frequent = df["OCCUPATION_TYPE"].mode()[0]
-    df["OCCUPATION_TYPE"] = df["OCCUPATION_TYPE"].fillna(most_frequent)
+    df["OCCUPATION_TYPE_IMPUTED"] = df["OCCUPATION_TYPE"].fillna(most_frequent)
 
     if encode:
-        dummies = pd.get_dummies(df["OCCUPATION_TYPE"], prefix="OCCUPATION_TYPE")
-        df = df.drop("OCCUPATION_TYPE", axis=1)
+        dummies = pd.get_dummies(df["OCCUPATION_TYPE_IMPUTED"], prefix="OCCUPATION_TYPE")
         df = pd.concat([df, dummies], axis=1)
+
+    df = df.drop("OCCUPATION_TYPE", axis=1)
 
     return df
 
@@ -410,26 +398,90 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
     df = process_profession_code(df, encode=encode)
     df = process_occupation_type(df)
 
-    # Mostrar todas las columnas en consola
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.expand_frame_repr', False)
+
+    df = seleccionar_columnas(df)
     print("\n✅ Preprocesamiento finalizado. Vista general del DataFrame:")
     print(df.head())
 
     return df
+
+def seleccionar_columnas(df):
+    reglas = [
+        ("PAYMENT_DAY_TE", ["PAYMENT_DAY_CAT"]),
+        ("MARITAL_STATUS_TE", ["MARITAL_STATUS_CAT"]),
+        ("QUANT_DEPENDANTS_TE", ["QUANT_DEPENDANTS_BIN", "QUANT_DEPENDANTS_TRIM"]),
+        ("QUANT_CARS_CLEAN", []),
+
+        ("MONTHS_IN_RESIDENCE_TE", ["MONTHS_IN_RESIDENCE_BIN", "MONTHS_IN_RESIDENCE_IMPUTED"]),
+        ("QUANT_BANKING_ACCOUNTS_NORM", ["QUANT_BANKING_ACCOUNTS"]),
+        ("AGE_NORM", ["AGE_DISCRETE"]),
+        ("PROFESSION_CODE_TE", ["PROFESSION_CODE_BINNED", "PROFESSION_CODE_CAT"]),
+        ("OCCUPATION_TYPE_IMPUTED", []),
+    ]
+
+    columnas_finales = []
+    columnas_descartadas = []
+
+    for preferida, alternativas in reglas:
+        if preferida in df.columns:
+            columnas_finales.append(preferida)
+        else:
+            encontrada = False
+            for alt in alternativas:
+                if alt in df.columns:
+                    columnas_finales.append(alt)
+                    encontrada = True
+                    break
+            if not encontrada:
+                print(f"⚠️ Ninguna columna encontrada para regla con preferida '{preferida}'")
+
+    columnas_descartadas = [col for col in df.columns if col not in columnas_finales]
+
+    print("✅ Columnas conservadas:")
+    print(columnas_finales)
+    print("\n🗑️ Columnas eliminadas:")
+    print(columnas_descartadas)
+
+    return df[columnas_finales].copy()
 
 
 
 if __name__ == "__main__":
     ###This is just for testing Purposes""""
     # Ruta al archivo CSV
-    csv_path = "../data/processed/data-with-columns.csv"
+    csv_path = "./data/data_splitted/X_train.csv"
+
+    train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
+    train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
+
 
     # csv_path = Path("data-with-columns.csv")
 
-    df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-
 
     # Guardar resultado en archivo
-    df_procesado.to_csv("data-preprocessed.csv", index=False)
+    #df_procesado.to_csv("data-preprocessed.csv", index=False)
     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
+
+
+
+# if __name__ == "__main__":
+#     # ###This is just for testing Purposes""""
+#     # # Ruta al archivo CSV
+#     # csv_path = "./data/data_splitted/X_train.csv"
+#     #
+#     # train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
+#     # train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
+#     #
+#     # #df_procesado.to_csv("data-preprocessed.csv", index=False)
+#     # print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
+#
+#     csv_path = "../data/processed/data-with-columns.csv"
+#
+#     # csv_path = Path("data-with-columns.csv")
+#
+#     df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
+#     # df_solo_columnas_procesadas = seleccionar_columnas(df_procesado)
+#
+#     # Guardar resultado en archivo
+#     # df_procesado.to_csv("data-preprocessed.csv", index=False)
+#     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
