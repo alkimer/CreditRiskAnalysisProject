@@ -6,6 +6,37 @@ from process_numerical_discrete import process_numerical_discrete
 
 
 def process_all(path_train, path_val, X_train_output, X_val_output):
+    """ 
+    This function takes the raw splitted dataframes and process the variables
+    according to their nature (binary, multicategorical, continous, discrerte) using
+    the 4 scripts dedicated to each group, and outputs the processed dataFrames,
+    delivering the data ready to use in the pipeline.
+    
+    Args:
+        path_train: a string with the path to the raw splitted X_train
+        path_val:   a string with the path to the raw splitted X_val
+        X_train_output: a string with the path to the processed output X_train_p
+        X_val_output:   a string with the path to the processed output X_train_p
+        
+    output: 
+        (in ./data/processed/interim)
+            X_tr.csv
+            X_train_binary.csv
+            X_train_continuous.csv
+            X_train_discrete.csv
+            X_train_multi.csv
+            X_v.csv
+            X_val_binary.csv
+            X_val_continuous.csv
+            X_val_discrete.csv
+            X_val_multi.csv
+        (in ./data/processed/)
+            dropped_variables_list.txt    
+            processed_variables_list.txt
+            X_train_p.csv : output processed train dataset
+            X_val_p.csv   : output processed val dataset
+    
+    return: None """
         
     path_y_train = "./data/data_splitted/y_train.csv"
     path_y_val   = "./data/data_splitted/y_val.csv"
@@ -55,6 +86,17 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     conti_cols  = pd.DataFrame(trim(train_continuous.columns))
     discr_cols  = pd.DataFrame(trim(train_discrete.columns))
     
+    
+    print("\n\n--- END OF THE WHOLE VARIABLES PROCESSING ---")
+    print("\n\n\nBinary Variables Kept//\n")
+    print(binary_cols.to_string(index=False, header=False))
+    print("\n\nMulticategorical Variables Kept//\n")
+    print(multi_cols.to_string(index=False, header=False))
+    print("\n\nContinuous Variables Kept//\n")
+    print(conti_cols.to_string(index=False, header=False))
+    print("\n\nDiscrete Variables Kept//\n")
+    print(discr_cols.to_string(index=False, header=False))
+    
     processed_col_names = pd.concat([binary_cols, multi_cols, conti_cols, discr_cols], axis=0)
 
     dropped = []    
@@ -71,8 +113,10 @@ def process_all(path_train, path_val, X_train_output, X_val_output):
     pd.DataFrame(processed_col_names).to_csv(f"./data/processed/processed_variables_list.txt", index=False, header=False, sep='\t')
     pd.DataFrame(dropped).to_csv(f"./data/processed/dropped_variables_list.txt", index=False, header=False, sep='\t')
     
-    print(f"\nSHAPES OF THE OUTPUT DATASETS\nBinary, Multicategorical, Continuous, Discrete\nTrain | Val")
+    print(f"\n//  SHAPES OF THE OUTPUT DATASETS  //\n")
+    print("(X_train_p), (X_val_p)")
     print(f"\n{X_train_out.shape}, {X_val_out.shape}\n")
+    print("Binary, Multicategorical, Continuous, Discrete\nTrain | Val")
     print(train_binary.shape, val_binary.shape)
     print(train_multi.shape,  val_multi.shape)
     print(train_continuous.shape, val_continuous.shape)

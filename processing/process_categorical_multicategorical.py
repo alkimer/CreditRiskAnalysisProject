@@ -13,7 +13,8 @@ def start(path_train, path_val):
     location_cols = [
         'STATE_OF_BIRTH', 'CITY_OF_BIRTH',
         'RESIDENCIAL_STATE', 'RESIDENCIAL_CITY', 'RESIDENCIAL_BOROUGH', 'RESIDENCIAL_PHONE_AREA_CODE',
-        'PROFESSIONAL_STATE', 'PROFESSIONAL_PHONE_AREA_CODE'
+        'RESIDENCE_TYPE', 'PROFESSIONAL_STATE', 'PROFESSIONAL_PHONE_AREA_CODE', 'NACIONALITY', 
+        'PRODUCT', 'RESIDENCIAL_ZIP_3', 'PROFESSIONAL_ZIP_3'
     ]
     return X_train_full[location_cols], X_val_full[location_cols]
 
