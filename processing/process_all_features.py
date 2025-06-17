@@ -63,10 +63,10 @@ def process_all(path_train, path_val):
     train_discrete = process_numerical_discrete(path_Xtr, encode=True, binning=True, normalize=True)
     val_discrete   = process_numerical_discrete(path_Xv,  encode=True, binning=True, normalize=True)
     
-    train_continuous.to_csv("./data/processed/interim/X_train_continuous.csv", index=False)
-    val_continuous.to_csv("./data/processed/interim/X_val_continuous.csv", index=False)   
-    train_discrete.to_csv("./data/processed/interim/X_train_discrete.csv", index=False)   
-    val_discrete.to_csv  ("./data/processed/interim/X_val_discrete.csv", index=False)   
+    #train_continuous.to_csv("./data/processed/interim/X_train_continuous.csv", index=False)
+    #val_continuous.to_csv("./data/processed/interim/X_val_continuous.csv", index=False)   
+    #train_discrete.to_csv("./data/processed/interim/X_train_discrete.csv", index=False)   
+    #val_discrete.to_csv  ("./data/processed/interim/X_val_discrete.csv", index=False)   
     
     X_train_out = pd.concat([train_binary, 
                              train_multi, 
