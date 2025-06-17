@@ -166,11 +166,12 @@ def apply_smote(X, y, random_state=42):
 
     
 
-def final_processing(path_train, path_val, X_train_output, y_train_output, X_val_output, smote=True):
+def final_processing(path_train, path_val, X_train_output, y_train_output, X_val_output, y_val_output, smote=True):
     
     X_train_out, X_val_out, y_train, y_val = process_all(path_train, path_val)
     
     X_val_out.to_csv(X_val_output, index=False)
+    y_val.to_csv(y_val_output, index=False)
     
     if smote:
         xtrain_balanced, ytrain_balanced = apply_smote(X_train_out, y_train)
@@ -189,4 +190,4 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, X_val
 if __name__ == "__main__":
     final_processing("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
                 "./data/processed/X_train_p.csv",  "./data/processed/y_train_p.csv",
-                "./data/processed/X_val_p.csv", smote=True)
+                "./data/processed/X_val_p.csv", "./data/processed/y_val.csv", smote=True)
