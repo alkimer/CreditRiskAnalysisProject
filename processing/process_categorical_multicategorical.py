@@ -111,8 +111,8 @@ def clean_all_multi(path_train, path_val):
     X_train_enc, X_val_enc = encode_combined(X_train, X_val)
 
     # Guardar resultados
-    #X_train_enc.to_csv('data/processed/interim/X_train_multi.csv', index=False)
-    #X_val_enc.to_csv('data/processed/interim/X_val_multi.csv', index=False)
+    X_train_enc.to_csv('data/processed/interim/X_train_multi.csv', index=False)
+    X_val_enc.to_csv('data/processed/interim/X_val_multi.csv', index=False)
 
     print("✅ Variables de ubicación multicategóricas procesadas correctamente.")
     return X_train_enc, X_val_enc

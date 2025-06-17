@@ -63,10 +63,10 @@ def process_all(path_train, path_val):
     train_discrete = process_numerical_discrete(path_Xtr, encode=True, binning=True, normalize=True)
     val_discrete   = process_numerical_discrete(path_Xv,  encode=True, binning=True, normalize=True)
     
-    #train_continuous.to_csv("./data/processed/interim/X_train_continuous.csv", index=False)
-    #val_continuous.to_csv("./data/processed/interim/X_val_continuous.csv", index=False)   
-    #train_discrete.to_csv("./data/processed/interim/X_train_discrete.csv", index=False)   
-    #val_discrete.to_csv  ("./data/processed/interim/X_val_discrete.csv", index=False)   
+    train_continuous.to_csv("./data/processed/interim/X_train_continuous.csv", index=False)
+    val_continuous.to_csv("./data/processed/interim/X_val_continuous.csv", index=False)   
+    train_discrete.to_csv("./data/processed/interim/X_train_discrete.csv", index=False)   
+    val_discrete.to_csv  ("./data/processed/interim/X_val_discrete.csv", index=False)   
     
     X_train_out = pd.concat([train_binary, 
                              train_multi, 
@@ -126,6 +126,9 @@ def process_all(path_train, path_val):
     
     return X_train_out, X_val_out, y_train_in, y_val_in
 
+
+
+
 def trim(df):
     
     no_sufix = [col.rsplit('_', 1)[0] for col in df]
@@ -139,21 +142,6 @@ def trim(df):
     
     return unique_ordered
 
-
-def smote_balance(X_train, y_train):
-    
-        smote = SMOTE(random_state=42, sampling_strategy=0.5)
-
-        # Apply SMOTE only to train data
-        xtrain_balanced, ytrain_balanced = smote.fit_resample(X_train, y_train.values.ravel())
-
-        print("ytrain original dimensions:")
-        print(y_train.value_counts())
-        print("\nDimensiones de ytrain después de SMOTE:")
-        print(ytrain_balanced.value_counts())
-        
-        return xtrain_balanced, ytrain_balanced
-    
     
 def apply_smote(X, y, random_state=42):
     """
@@ -167,7 +155,9 @@ def apply_smote(X, y, random_state=42):
     Returns:
         X_resampled (pd.DataFrame), y_resampled (pd.Series)
     """
+    
     sm = SMOTE(random_state=random_state)    # sampling_strategy=0.5)
+    
     X_res, y_res = sm.fit_resample(X, y.values.ravel())
     X_resampled = pd.DataFrame(X_res, columns=X.columns)
     y_resampled = pd.Series(y_res, name="target")
@@ -176,9 +166,11 @@ def apply_smote(X, y, random_state=42):
 
     
 
-def final_processing(path_train, path_val, X_train_output, y_train_output, smote=True):
+def final_processing(path_train, path_val, X_train_output, y_train_output, X_val_output, smote=True):
     
     X_train_out, X_val_out, y_train, y_val = process_all(path_train, path_val)
+    
+    X_val_out.to_csv(X_val_output, index=False)
     
     if smote:
         xtrain_balanced, ytrain_balanced = apply_smote(X_train_out, y_train)
@@ -187,12 +179,14 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, smote
         
         return xtrain_balanced, ytrain_balanced
 
-    X_train_out.to_csv(X_train_output, index=False)
+    X_train_out.to_csv(X_train_output, index=False)    
     y_train.to_csv(y_train_output, index=False)
+    
     
     return
 
 
 if __name__ == "__main__":
     final_processing("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
-                "./data/processed/X_train_p.csv",  "./data/processed/y_train_p.csv", smote=True)
+                "./data/processed/X_train_p.csv",  "./data/processed/y_train_p.csv",
+                "./data/processed/X_val_p.csv", smote=True)

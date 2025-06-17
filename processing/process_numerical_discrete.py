@@ -2,7 +2,6 @@ import pandas as pd
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-
 def process_payment_day(df, encode=False):
     """
     La proporción de deudores no varía según el payment day, salvo el día 25 que tiene una proporción levemente
@@ -25,6 +24,8 @@ def process_payment_day(df, encode=False):
         print("✅ Target encoding aplicado a PAYMENT_DAY_CAT.")
     else:
         print("ℹ️ PAYMENT_DAY convertido en categórica.")
+
+    df.drop(columns=["PAYMENT_DAY"], inplace=True)
 
     return df
 
@@ -50,7 +51,7 @@ def process_marital_status(df, encode=False):
     return df
 
 
-def process_quant_dependants(df, encode=True, trim_max=6, binning=True):
+def process_quant_dependants(df, encode=False, trim_max=6, binning=False):
 
     """
     Luego del trimming y binning se ve claramente que a mayor cantidad de dependientes
@@ -140,8 +141,6 @@ def process_months_in_residence(df, encode=False, binning=True):
             print("ℹ️ MONTHS_IN_RESIDENCE imputado y binned en categorías.")
     else:
         if encode:
-            df.drop(columns=["MONTHS_IN_RESIDENCE"], inplace=True)
-
             df["MONTHS_IN_RESIDENCE_TE"] = df["MONTHS_IN_RESIDENCE_IMPUTED"].map(
                 df.groupby("MONTHS_IN_RESIDENCE_IMPUTED")["TARGET_LABEL_BAD"].mean()
             )
@@ -149,6 +148,7 @@ def process_months_in_residence(df, encode=False, binning=True):
         else:
             print("ℹ️ MONTHS_IN_RESIDENCE imputado sin binning.")
 
+    df.drop(columns=["MONTHS_IN_RESIDENCE"], inplace=True)
 
     return df
 
@@ -369,9 +369,8 @@ def process_occupation_type(df, encode=False, binning=False, normalize=False):
 
     if encode:
         dummies = pd.get_dummies(df["OCCUPATION_TYPE_IMPUTED"], prefix="OCCUPATION_TYPE")
+        df = df.drop("OCCUPATION_TYPE", axis=1)
         df = pd.concat([df, dummies], axis=1)
-
-    df = df.drop("OCCUPATION_TYPE", axis=1)
 
     return df
 
@@ -398,61 +397,31 @@ def process_numerical_discrete(csv_path, encode=False, binning=True, normalize=F
     df = process_profession_code(df, encode=encode)
     df = process_occupation_type(df)
 
-
-    df = seleccionar_columnas(df)
+    # Mostrar todas las columnas en consola
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.expand_frame_repr', False)
     print("\n✅ Preprocesamiento finalizado. Vista general del DataFrame:")
     print(df.head())
 
     return df
-
-def seleccionar_columnas(df):
-    reglas = [
-        ("PAYMENT_DAY_TE", ["PAYMENT_DAY_CAT"]),
-        ("MARITAL_STATUS_TE", ["MARITAL_STATUS_CAT"]),
-        ("QUANT_DEPENDANTS_TE", ["QUANT_DEPENDANTS_BIN", "QUANT_DEPENDANTS_TRIM"]),
-        ("QUANT_CARS_CLEAN", []),
-
-        ("MONTHS_IN_RESIDENCE_TE", ["MONTHS_IN_RESIDENCE_BIN", "MONTHS_IN_RESIDENCE_IMPUTED"]),
-        ("QUANT_BANKING_ACCOUNTS_NORM", ["QUANT_BANKING_ACCOUNTS"]),
-        ("AGE_NORM", ["AGE_DISCRETE"]),
-        ("PROFESSION_CODE_TE", ["PROFESSION_CODE_BINNED", "PROFESSION_CODE_CAT"]),
-        ("OCCUPATION_TYPE_IMPUTED", []),
-    ]
-
-    columnas_finales = []
-    columnas_descartadas = []
-
-    for preferida, alternativas in reglas:
-        if preferida in df.columns:
-            columnas_finales.append(preferida)
-        else:
-            encontrada = False
-            for alt in alternativas:
-                if alt in df.columns:
-                    columnas_finales.append(alt)
-                    encontrada = True
-                    break
-            if not encontrada:
-                print(f"⚠️ Ninguna columna encontrada para regla con preferida '{preferida}'")
-
-    columnas_descartadas = [col for col in df.columns if col not in columnas_finales]
-
-    print("✅ Columnas conservadas:")
-    print(columnas_finales)
-    print("\n🗑️ Columnas eliminadas:")
-    print(columnas_descartadas)
-
-    return df[columnas_finales].copy()
 
 
 
 if __name__ == "__main__":
     ###This is just for testing Purposes""""
     # Ruta al archivo CSV
-    csv_path = "./data/data_splitted/X_train.csv"
+    csv_path = "./data/processed/interim/X_tr.csv"
+    
 
-    train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-    train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
+    df = pd.read_csv(csv_path, low_memory=False)
+    print("\n✅ DATOS ORGINALES:")
+    print(df.shape)
+
+    df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
+
+    print("\n✅ DATOS PROCESADOS:")
+    print(df_procesado.shape)
+    
 
 
     # csv_path = Path("data-with-columns.csv")
@@ -461,27 +430,3 @@ if __name__ == "__main__":
     # Guardar resultado en archivo
     #df_procesado.to_csv("data-preprocessed.csv", index=False)
     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
-
-
-
-# if __name__ == "__main__":
-#     # ###This is just for testing Purposes""""
-#     # # Ruta al archivo CSV
-#     # csv_path = "./data/data_splitted/X_train.csv"
-#     #
-#     # train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-#     # train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
-#     #
-#     # #df_procesado.to_csv("data-preprocessed.csv", index=False)
-#     # print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
-#
-#     csv_path = "../data/processed/data-with-columns.csv"
-#
-#     # csv_path = Path("data-with-columns.csv")
-#
-#     df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-#     # df_solo_columnas_procesadas = seleccionar_columnas(df_procesado)
-#
-#     # Guardar resultado en archivo
-#     # df_procesado.to_csv("data-preprocessed.csv", index=False)
-#     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
