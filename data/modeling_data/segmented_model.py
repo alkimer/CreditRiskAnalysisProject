@@ -33,13 +33,16 @@ def kmeans_segmentation(n_clusters_kmeans, X_train, y_train):
 
     kmeans = KMeans(n_clusters=n_clusters_kmeans, random_state=42, n_init=10) # n_init to suppress warning
     X_train['kmeans_segment'] = kmeans.fit_predict(X_train)
+    
+    kmeans_segmented_counts = X_train['kmeans_segment'].value_counts()
 
     print(f"K-Means segments distribution (N = {n_clusters_kmeans}):")
-    print(X_train['kmeans_segment'].value_counts())
+    print()
     
     # Merge X_train, y_train
     df_kmeans_segmented = X_train.copy()
     df_kmeans_segmented['target'] = y_train.iloc[:, 0] 
+    
     
     print("\nTarget variable distribution within K-Means segments:")
     for segment_id in sorted(df_kmeans_segmented['kmeans_segment'].unique()):
@@ -157,6 +160,54 @@ def logistic_regression():
             print(f"  Train samples: {len(segment_X_train)}, Validation samples: {len(segment_X_val)}")
             continue
 
+    return
+
+def correlation_by_segment(df_segmented):
+    
+    # Ensure the segment column exists
+    if 'kmeans_segment' not in df_segmented.columns:
+        raise ValueError("The DataFrame must contain a 'kmeans_segment' column.")
+    
+    # Identify numeric columns for statistics and plotting (excluding the segment column)
+    # numeric_cols = df_segmented.select_dtypes(include='number').drop(columns=['kmeans_segment'], errors='ignore').columns
+
+    segments = sorted(df_segmented['kmeans_segment'].unique())
+    
+    for segment_label in segments:
+        
+        segment_data = df_segmented[df_segmented['kmeans_segment'] == segment_label]
+        # Correlation heatmap
+        plt.figure(figsize=(10, 6))
+        sns.heatmap(segment_data.corr(), annot=False, cmap='coolwarm', fmt=".2f")        
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8) 
+        plt.title(f"Correlation Heatmap - Segment '{segment_label}'")
+        plt.tight_layout()
+        plt.show()
+    return
+
+def frecuency_by_segment(df_segmented):
+    
+    # Ensure the segment column exists
+    if 'kmeans_segment' not in df_segmented.columns:
+        raise ValueError("The DataFrame must contain a 'kmeans_segment' column.")
+    
+    segments = sorted(df_segmented['kmeans_segment'].unique())
+    
+    for segment_label in segments:
+        print(f"\n=== Frequency Summary for Segment '{segment_label}' ===")
+        
+        # Filter the dataframe for the current segment
+        segment_data = df_segmented[df_segmented['kmeans_segment'] == segment_label]
+        
+        # Loop through each column except the segment column
+        for col in df_segmented.columns:
+            if col == 'kmeans_segment':
+                continue
+            
+            print(f"\n-- Column: {col} --")
+            freq_table = segment_data[col].value_counts(dropna=False)
+            print(freq_table)
     return
 
 

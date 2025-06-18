@@ -3,6 +3,8 @@ from process_categorical_binary import clean_all_binary
 from process_categorical_multicategorical import clean_all_multi
 from process_numerical_continuous import process_numerical_continuous_split
 from process_numerical_discrete import process_numerical_discrete
+from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTENC
 from imblearn.over_sampling import RandomOverSampler
 
 
@@ -141,7 +143,6 @@ def trim(df):
     return unique_ordered
 
 
-
 def randomOverSample(X, y, random_state=42):
     """
     Applies RandomOverSampler to balance the dataset with categorical features.
@@ -169,8 +170,8 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, X_val
     y_val.to_csv(y_val_output, index=False)
     
         # Export X_train_out, X_val_out as csv files
-    # X_train_out.to_csv("./data/processed/interim/X_train_X_train_unbalanced.csv", index=False)
-    # X_val_out.to_csv("./data/processed/interim/X_val_X_val_unbalanced.csv", index=False)
+    X_train_out.to_csv("./data/processed/interim/X_train_X_train_unbalanced.csv", index=False)
+    X_val_out.to_csv("./data/processed/interim/X_val_X_val_unbalanced.csv", index=False)
     
     if smote:        
         
