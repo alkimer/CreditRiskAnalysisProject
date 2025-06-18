@@ -3,8 +3,6 @@ from process_categorical_binary import clean_all_binary
 from process_categorical_multicategorical import clean_all_multi
 from process_numerical_continuous import process_numerical_continuous_split
 from process_numerical_discrete import process_numerical_discrete
-from imblearn.over_sampling import SMOTE
-from imblearn.over_sampling import SMOTENC
 from imblearn.over_sampling import RandomOverSampler
 
 
@@ -142,50 +140,6 @@ def trim(df):
     
     return unique_ordered
 
-    
-def apply_smote(X, y, random_state=42):
-    """
-    Applies SMOTE to balance the dataset.
-    
-    Args:
-        X (pd.DataFrame): Features
-        y (pd.Series or array): Target
-        random_state (int): Seed for reproducibility
-        
-    Returns:
-        X_resampled (pd.DataFrame), y_resampled (pd.Series)
-    """
-    
-    sm = SMOTE(random_state=random_state)    # sampling_strategy=0.5)
-    
-    X_res, y_res = sm.fit_resample(X, y.values.ravel())
-    X_resampled = pd.DataFrame(X_res, columns=X.columns)
-    y_resampled = pd.Series(y_res, name="target")
-    
-    return X_resampled, y_resampled
-
-
-def smotenc(X, y, categorical_features, random_state=42):
-    """
-    Applies SMOTENC to balance the dataset with categorical features.
-
-    Args:
-        X (pd.DataFrame): Features
-        y (pd.Series or array): Target
-        categorical_features (list): List of column indices (not names) that are categorical
-        random_state (int): Seed for reproducibility
-
-    Returns:
-        X_resampled (pd.DataFrame), y_resampled (pd.Series)
-    """
-    sm = SMOTENC(categorical_features=categorical_features, random_state=random_state)
-
-    X_res, y_res = sm.fit_resample(X.values, y.values.ravel())
-
-    X_resampled = pd.DataFrame(X_res, columns=X.columns)
-    y_resampled = pd.Series(y_res, name="target")
-
-    return X_resampled, y_resampled
 
 
 def randomOverSample(X, y, random_state=42):
