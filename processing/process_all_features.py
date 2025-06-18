@@ -4,6 +4,8 @@ from process_categorical_multicategorical import clean_all_multi
 from process_numerical_continuous import process_numerical_continuous_split
 from process_numerical_discrete import process_numerical_discrete
 from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTENC
+from imblearn.over_sampling import RandomOverSampler
 
 
 def process_all(path_train, path_val):
@@ -120,9 +122,7 @@ def process_all(path_train, path_val):
     print(train_continuous.shape, val_continuous.shape)
     print(train_discrete.shape, val_discrete.shape)
     
-    # Call balancing data function
-
-        
+            
     
     return X_train_out, X_val_out, y_train_in, y_val_in
 
@@ -164,6 +164,47 @@ def apply_smote(X, y, random_state=42):
     
     return X_resampled, y_resampled
 
+
+def smotenc(X, y, categorical_features, random_state=42):
+    """
+    Applies SMOTENC to balance the dataset with categorical features.
+
+    Args:
+        X (pd.DataFrame): Features
+        y (pd.Series or array): Target
+        categorical_features (list): List of column indices (not names) that are categorical
+        random_state (int): Seed for reproducibility
+
+    Returns:
+        X_resampled (pd.DataFrame), y_resampled (pd.Series)
+    """
+    sm = SMOTENC(categorical_features=categorical_features, random_state=random_state)
+
+    X_res, y_res = sm.fit_resample(X.values, y.values.ravel())
+
+    X_resampled = pd.DataFrame(X_res, columns=X.columns)
+    y_resampled = pd.Series(y_res, name="target")
+
+    return X_resampled, y_resampled
+
+
+def randomOverSample(X, y, random_state=42):
+    """
+    Applies RandomOverSampler to balance the dataset with categorical features.
+
+    Args:
+        X (pd.DataFrame): Features
+        y (pd.Series or array): Target
+        random_state (int): Seed for reproducibility
+
+    Returns:
+        X_resampled (pd.DataFrame), y_resampled (pd.Series)
+    """
+    
+    ros = RandomOverSampler(random_state=random_state)
+    X_resampled, y_resampled = ros.fit_resample(X, y)
+    
+    return X_resampled, y_resampled
     
 
 def final_processing(path_train, path_val, X_train_output, y_train_output, X_val_output, y_val_output, smote=True):
@@ -173,8 +214,16 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, X_val
     X_val_out.to_csv(X_val_output, index=False)
     y_val.to_csv(y_val_output, index=False)
     
-    if smote:
-        xtrain_balanced, ytrain_balanced = apply_smote(X_train_out, y_train)
+        # Export X_train_out, X_val_out as csv files
+    # X_train_out.to_csv("./data/processed/interim/X_train_X_train_unbalanced.csv", index=False)
+    # X_val_out.to_csv("./data/processed/interim/X_val_X_val_unbalanced.csv", index=False)
+    
+    if smote:        
+        
+        #xtrain_balanced, ytrain_balanced = apply_smotenc(X_train_out, y_train)
+        #xtrain_balanced, ytrain_balanced = smotenc(X_train_out, y_train, categorical_cols)
+        xtrain_balanced, ytrain_balanced = randomOverSample(X_train_out, y_train)
+        
         xtrain_balanced.to_csv(f"./data/processed/X_train_balanced.csv", index=False)
         ytrain_balanced.to_csv(f"./data/processed/y_train_balanced.csv", index=False)
         

@@ -450,9 +450,17 @@ if __name__ == "__main__":
     ###This is just for testing Purposes""""
     # Ruta al archivo CSV
     csv_path = "./data/processed/interim/X_tr.csv"
+    
 
-    train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-    train_discrete.to_csv("./data/processed/X_train_discrete2.csv", index=False)
+    df = pd.read_csv(csv_path, low_memory=False)
+    print("\n✅ DATOS ORGINALES:")
+    print(df.shape)
+
+    df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
+
+    print("\n✅ DATOS PROCESADOS:")
+    print(df_procesado.shape)
+    
 
 
     # csv_path = Path("data-with-columns.csv")
@@ -461,27 +469,3 @@ if __name__ == "__main__":
     # Guardar resultado en archivo
     #df_procesado.to_csv("data-preprocessed.csv", index=False)
     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
-
-
-
-# if __name__ == "__main__":
-#     # ###This is just for testing Purposes""""
-#     # # Ruta al archivo CSV
-#     # csv_path = "./data/data_splitted/X_train.csv"
-#     #
-#     # train_discrete = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-#     # train_discrete.to_csv("./data/processed/X_train_discrete.csv", index=False)
-#     #
-#     # #df_procesado.to_csv("data-preprocessed.csv", index=False)
-#     # print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
-#
-#     csv_path = "../data/processed/data-with-columns.csv"
-#
-#     # csv_path = Path("data-with-columns.csv")
-#
-#     df_procesado = process_numerical_discrete(csv_path, encode=True, binning=True, normalize=True)
-#     # df_solo_columnas_procesadas = seleccionar_columnas(df_procesado)
-#
-#     # Guardar resultado en archivo
-#     # df_procesado.to_csv("data-preprocessed.csv", index=False)
-#     print("\n✅ Archivo preprocesado guardado como data-preprocessed.csv")
