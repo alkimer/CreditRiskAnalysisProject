@@ -173,8 +173,7 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, X_val
     X_train_out.to_csv("./data/processed/interim/X_train_X_train_unbalanced.csv", index=False)
     X_val_out.to_csv("./data/processed/interim/X_val_X_val_unbalanced.csv", index=False)
     
-    if smote:        
-        
+    if smote:             
         #xtrain_balanced, ytrain_balanced = apply_smotenc(X_train_out, y_train)
         #xtrain_balanced, ytrain_balanced = smotenc(X_train_out, y_train, categorical_cols)
         xtrain_balanced, ytrain_balanced = randomOverSample(X_train_out, y_train)
@@ -191,7 +190,20 @@ def final_processing(path_train, path_val, X_train_output, y_train_output, X_val
     return
 
 
+def balance_data(X_train_out, y_train):
+           
+    #xtrain_balanced, ytrain_balanced = apply_smotenc(X_train_out, y_train)
+    #xtrain_balanced, ytrain_balanced = smotenc(X_train_out, y_train, categorical_cols)
+    xtrain_balanced, ytrain_balanced = randomOverSample(X_train_out, y_train)
+    
+    #xtrain_balanced.to_csv(f"./data/processed/X_train_balanced.csv", index=False)
+    #ytrain_balanced.to_csv(f"./data/processed/y_train_balanced.csv", index=False)    
+    
+    return xtrain_balanced, ytrain_balanced
+
+
+
 if __name__ == "__main__":
     final_processing("./data/data_splitted/X_train.csv", "./data/data_splitted/X_val.csv",
                 "./data/processed/X_train_p.csv",  "./data/processed/y_train_p.csv",
-                "./data/processed/X_val_p.csv", "./data/processed/y_val.csv", smote=True)
+                "./data/processed/X_val_p.csv", "./data/processed/y_val.csv", smote=False)

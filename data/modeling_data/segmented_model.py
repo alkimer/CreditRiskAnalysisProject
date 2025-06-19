@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report
+from imblearn.over_sampling import RandomOverSampler
+from scipy.stats import mode
 import warnings
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -55,16 +57,16 @@ def kmeans_segmentation(n_clusters_kmeans, X_train, y_train):
     
     return df_kmeans_segmented
     
-def decision_trees_segmentation(n_min_leaf_nodes, X_train, y_train):
+def decision_trees_segmentation(n_max_leaf_nodes, X_train, y_train):
     
     print("\n--- Decision Tree Segmentation ---")
     
-    dt_segmenter = DecisionTreeClassifier(random_state=42, max_leaf_nodes=n_min_leaf_nodes * 2)
+    dt_segmenter = DecisionTreeClassifier(random_state=42, max_leaf_nodes=n_max_leaf_nodes)
     dt_segmenter.fit(X_train.drop('kmeans_segment', axis=1, errors='ignore'), y_train.iloc[:, 0]) # Ensure no kmeans_segment column
     
     X_train['dt_segment'] = dt_segmenter.apply(X_train.drop('kmeans_segment', axis=1, errors='ignore'))
         
-    print(f"\nDecision Tree segments distribution (Min leaf nodes aimed: {n_min_leaf_nodes}):")
+    print(f"\nDecision Tree segments distribution (Max leaf nodes aimed: {n_max_leaf_nodes}):")
     print(X_train['dt_segment'].value_counts())    
     
     # Check homogeneity within Decision Tree segments using the target variable (y_train)
@@ -162,29 +164,25 @@ def logistic_regression():
 
     return
 
-def correlation_by_segment(df_segmented):
-    
-    # Ensure the segment column exists
-    if 'kmeans_segment' not in df_segmented.columns:
-        raise ValueError("The DataFrame must contain a 'kmeans_segment' column.")
-    
-    # Identify numeric columns for statistics and plotting (excluding the segment column)
-    # numeric_cols = df_segmented.select_dtypes(include='number').drop(columns=['kmeans_segment'], errors='ignore').columns
 
-    segments = sorted(df_segmented['kmeans_segment'].unique())
+def randomOverSample(X, y, random_state=42):
+    """
+    Applies RandomOverSampler to balance the dataset with categorical features.
+
+    Args:
+        X (pd.DataFrame): Features
+        y (pd.Series or array): Target
+        random_state (int): Seed for reproducibility
+
+    Returns:
+        X_resampled (pd.DataFrame), y_resampled (pd.Series)
+    """
     
-    for segment_label in segments:
-        
-        segment_data = df_segmented[df_segmented['kmeans_segment'] == segment_label]
-        # Correlation heatmap
-        plt.figure(figsize=(10, 6))
-        sns.heatmap(segment_data.corr(), annot=False, cmap='coolwarm', fmt=".2f")        
-        plt.xticks(fontsize=8)
-        plt.yticks(fontsize=8) 
-        plt.title(f"Correlation Heatmap - Segment '{segment_label}'")
-        plt.tight_layout()
-        plt.show()
-    return
+    ros = RandomOverSampler(random_state=random_state)
+    X_resampled, y_resampled = ros.fit_resample(X, y)
+    
+    return X_resampled, y_resampled
+
 
 def frecuency_by_segment(df_segmented):
     
@@ -209,6 +207,130 @@ def frecuency_by_segment(df_segmented):
             freq_table = segment_data[col].value_counts(dropna=False)
             print(freq_table)
     return
+
+def correlation_by_segment(df_segmented):
+    
+    # Ensure the segment column exists
+    if 'kmeans_segment' not in df_segmented.columns:
+        raise ValueError("The DataFrame must contain a 'kmeans_segment' column.")
+    
+    # Identify numeric columns for statistics and plotting (excluding the segment column)
+    # numeric_cols = df_segmented.select_dtypes(include='number').drop(columns=['kmeans_segment'], errors='ignore').columns
+
+    segments = sorted(df_segmented['kmeans_segment'].unique())
+    
+    for segment_label in segments:
+        
+        segment_data = df_segmented[df_segmented['kmeans_segment'] == segment_label]
+        # Correlation heatmap
+        plt.figure(figsize=(10, 6))
+        sns.heatmap(segment_data.corr(), annot=False, cmap='coolwarm', fmt=".2f")        
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8) 
+        plt.title(f"Correlation Heatmap - Segment '{segment_label}'")
+        plt.tight_layout()
+        plt.show()
+    return
+
+def elbow_method():
+    
+
+
+    inertias = []
+    K = range(1, 8)  # puedes ajustar este rango
+
+    for k in K:
+        kmeans = KMeans(n_clusters=k, random_state=42)
+        kmeans.fit(X)
+        inertias.append(kmeans.inertia_)
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(K, inertias, 'bo-')
+    plt.xlabel('Número de clusters (k)')
+    plt.ylabel('Inercia')
+    plt.title('Método del Codo')
+    plt.grid(True)
+    plt.show()
+    
+    return
+
+def calculate_segment_homogeneity(df, segment_col='dt_segment'):
+    """
+    Calcula la homogeneidad de los segmentos en un DataFrame.
+    La homogeneidad se mide por la varianza para columnas numéricas
+    y por la proporción de la moda para columnas categóricas.
+
+    Args:
+        df (pd.DataFrame): El DataFrame con los datos y la columna de segmento.
+        segment_col (str): El nombre de la columna que indica el segmento.
+
+    Returns:
+        pd.DataFrame: Un DataFrame con la homogeneidad promedio para cada segmento
+                      y la homogeneidad global del dataset.
+    """
+    if segment_col not in df.columns:
+        raise ValueError(f"La columna de segmento '{segment_col}' no se encuentra en el DataFrame.")
+
+    homogeneity_results = {}
+    numerical_cols = df.select_dtypes(include=np.number).columns.drop(segment_col, errors='ignore')
+    categorical_cols = df.select_dtypes(exclude=np.number).columns.drop(segment_col, errors='ignore')
+
+    # Calcula la homogeneidad para cada segmento
+    for segment_id in df[segment_col].unique():
+        segment_df = df[df[segment_col] == segment_id]
+        segment_homogeneity = {}
+
+        # Homogeneidad para columnas numéricas (usando varianza)
+        if not numerical_cols.empty:
+            # Reemplazar NaN con la media del segmento para evitar que la varianza sea NaN
+            for col in numerical_cols:
+                if segment_df[col].isnull().any():
+                    segment_df.loc[:, col] = segment_df[col].fillna(segment_df[col].mean())
+            segment_homogeneity['numerical_variance_avg'] = segment_df[numerical_cols].var().mean()
+
+        # Homogeneidad para columnas categóricas (usando proporción de la moda)
+        if not categorical_cols.empty:
+            mode_proportions = []
+            for col in categorical_cols:
+                if not segment_df[col].empty:
+                    # Calcula la moda y su frecuencia
+                    current_mode, current_count = mode(segment_df[col].dropna())
+                    if len(current_mode) > 0: # Si se encuentra una moda
+                        mode_proportion = current_count[0] / len(segment_df[col].dropna()) if len(segment_df[col].dropna()) > 0 else 0
+                        mode_proportions.append(mode_proportion)
+            if mode_proportions:
+                segment_homogeneity['categorical_mode_proportion_avg'] = np.mean(mode_proportions)
+            else:
+                segment_homogeneity['categorical_mode_proportion_avg'] = np.nan # No hay columnas categóricas o están vacías
+
+        homogeneity_results[f'Segment_{segment_id}'] = segment_homogeneity
+
+    # Calcula la homogeneidad global del dataset (promedio ponderado por el tamaño del segmento)
+    global_homogeneity = {'numerical_variance_global_avg': 0, 'categorical_mode_proportion_global_avg': 0}
+    total_rows = len(df)
+    
+    for segment_id in df[segment_col].unique():
+        segment_df = df[df[segment_col] == segment_id]
+        segment_size = len(segment_df)
+        weight = segment_size / total_rows
+        
+        segment_result = homogeneity_results[f'Segment_{segment_id}']
+        
+        if 'numerical_variance_avg' in segment_result and not pd.isna(segment_result['numerical_variance_avg']):
+            global_homogeneity['numerical_variance_global_avg'] += segment_result['numerical_variance_avg'] * weight
+        
+        if 'categorical_mode_proportion_avg' in segment_result and not pd.isna(segment_result['categorical_mode_proportion_avg']):
+            global_homogeneity['categorical_mode_proportion_global_avg'] += segment_result['categorical_mode_proportion_avg'] * weight
+
+    results_df = pd.DataFrame(homogeneity_results).T
+    
+    # Agrega la fila de homogeneidad global
+    global_homogeneity_series = pd.Series(global_homogeneity, name='Global_Homogeneity')
+    results_df = pd.concat([results_df, pd.DataFrame([global_homogeneity_series])])
+
+    return results_df
+
+
 
 
 if __name__ == '__main__':
