@@ -1,0 +1,83 @@
+/* ===== FONDO Y FUENTE GENERAL ===== */
+body {
+    background-color: #111217;body, .main {
+    background-color: #111217;
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #34C759;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.stButton>button {
+    background-color: #34C759;
+    color: white;
+    border-radius: 8px;
+    padding: 0.5em 1em;
+}
+
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== ESTRUCTURA GENERAL DE APP ===== */
+.stApp {
+    background-color: #111217;
+}
+
+/* ===== TÍTULOS ===== */
+h1, h2, h3, h4, h5, h6 {
+    color: #EAEAEA;
+    font-weight: 600;
+}
+
+/* ===== BOTONES ===== */
+.stButton > button {
+    background-color: #34C759;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6em 1.4em;
+    transition: background-color 0.3s ease;
+}
+.stButton > button:hover {
+    background-color: #28A745;
+}
+
+/* ===== INPUTS / SELECTORES ===== */
+input, select, textarea {
+    background-color: #1E1F24 !important;
+    color: white !important;
+    border: 1px solid #3C3C3C !important;
+    border-radius: 4px;
+    padding: 0.4em;
+}
+
+/* ===== ALERTAS / MENSAJES ===== */
+.stAlert {
+    background-color: #1E1F24 !important;
+    border-left: 0.25rem solid #34C759 !important;
+    color: white !important;
+}
+
+/* ===== ENLACES ===== */
+a {
+    color: #34C759;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* ===== GRÁFICOS PLOTLY ===== */
+svg text {
+    fill: white !important;
+}
+
+/* ===== INDICADORES STREAMLIT (ej. st.metric) ===== */
+[data-testid="stMetricValue"] {
+    color: #34C759;
+    font-weight: bold;
+}
