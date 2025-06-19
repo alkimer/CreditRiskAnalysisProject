@@ -31,13 +31,14 @@ with col1:
         }
 
         try:
-            response = requests.post("http://localhost:8000/predict", json=input_data)
+            response = requests.post("http://localhost:8000/model/predict", json=input_data)
             result = response.json()
+
 
             if "error" in result:
                 st.error(f"❌ Error en el backend: {result['error']}")
             else:
-                risk_score = result["risk_score"]
+                risk_score = result["score"]
                 risk_label = result["risk_label"]
 
                 with col2:
@@ -93,3 +94,4 @@ with col1:
         except requests.exceptions.RequestException as e:
             st.error("❌ No se pudo conectar con el backend.")
             st.code(str(e))
+            

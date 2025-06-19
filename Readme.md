@@ -1,4 +1,4 @@
-# Credit Risk Evaluation App 💼📊
+git push -u origin# Credit Risk Evaluation App 💼📊
 
 Este proyecto es una aplicación de evaluación de riesgo crediticio que permite:
 
