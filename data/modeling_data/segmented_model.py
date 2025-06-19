@@ -1,13 +1,18 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from imblearn.over_sampling import RandomOverSampler
 from scipy.stats import mode
-import warnings
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
+# ----
+# First phase
 
 def segmentation(km_clusters, dt_leafs, path_X_train, path_y_train):
 
@@ -31,18 +36,19 @@ def segmentation(km_clusters, dt_leafs, path_X_train, path_y_train):
 def kmeans_segmentation(n_clusters_kmeans, X_train, y_train):
     
     print("\n--- K-Means Segmentation ---\n")
+    
+    df_kmeans_segmented = X_train.copy()
 
 
     kmeans = KMeans(n_clusters=n_clusters_kmeans, random_state=42, n_init=10) # n_init to suppress warning
-    X_train['kmeans_segment'] = kmeans.fit_predict(X_train)
+    df_kmeans_segmented['kmeans_segment'] = kmeans.fit_predict(X_train)
     
-    kmeans_segmented_counts = X_train['kmeans_segment'].value_counts()
+    #kmeans_segmented_counts = X_train['kmeans_segment'].value_counts()
 
     print(f"K-Means segments distribution (N = {n_clusters_kmeans}):")
     print()
     
     # Merge X_train, y_train
-    df_kmeans_segmented = X_train.copy()
     df_kmeans_segmented['target'] = y_train.iloc[:, 0] 
     
     
@@ -61,17 +67,19 @@ def decision_trees_segmentation(n_max_leaf_nodes, X_train, y_train):
     
     print("\n--- Decision Tree Segmentation ---")
     
-    dt_segmenter = DecisionTreeClassifier(random_state=42, max_leaf_nodes=n_max_leaf_nodes)
-    dt_segmenter.fit(X_train.drop('kmeans_segment', axis=1, errors='ignore'), y_train.iloc[:, 0]) # Ensure no kmeans_segment column
+    df_dt_segmented = X_train.drop('kmeans_segment',axis=1, errors = 'ignore')
     
-    X_train['dt_segment'] = dt_segmenter.apply(X_train.drop('kmeans_segment', axis=1, errors='ignore'))
+    dt_segmenter = DecisionTreeClassifier(random_state=42, max_leaf_nodes=n_max_leaf_nodes)
+    dt_segmenter.fit(df_dt_segmented, y_train.iloc[:, 0]) #.drop('kmeans_segment', axis=1, errors='ignore'), y_train.iloc[:, 0])
+    
+    df_dt_segmented['dt_segment'] = dt_segmenter.apply(df_dt_segmented) #.drop('kmeans_segment', axis=1, errors='ignore'))
         
     print(f"\nDecision Tree segments distribution (Max leaf nodes aimed: {n_max_leaf_nodes}):")
-    print(X_train['dt_segment'].value_counts())    
+    print(df_dt_segmented['dt_segment'].value_counts())    
     
     # Check homogeneity within Decision Tree segments using the target variable (y_train)
-    df_dt_segmented = X_train.copy()
     df_dt_segmented['target'] = y_train.iloc[:, 0]
+    
     
     print("\nTarget variable distribution within Decision Tree segments:")
     for segment_id in sorted(df_dt_segmented['dt_segment'].unique()):
@@ -84,11 +92,11 @@ def decision_trees_segmentation(n_max_leaf_nodes, X_train, y_train):
         
     return df_dt_segmented
         
-def visualize(model, X_train, dataframe, n_segments):
+def visualize(model, dataframe, n_segments):
     
     # Visualize K-Means/ Decision Tree segment balance (by segment size)
     plt.figure(figsize=(8, 5))
-    ax = sns.countplot(x=model, data=X_train)    # 'kmeans_segment'  #'dt_segment'
+    ax = sns.countplot(x=model, data=dataframe)    # 'kmeans_segment'  #'dt_segment'
     plt.title(f'{model} Sizes (N={n_segments})') #n_clusters_kmeans     #n_min_leaf_nodes
     plt.xlabel('Segment ID')
     plt.ylabel('Number of Samples')
@@ -115,55 +123,61 @@ def visualize(model, X_train, dataframe, n_segments):
     
     return
 
-def logistic_regression():
+# ----
+# Second phase
+
+def train_logistic_regression(df):
     
-    warnings.filterwarnings('ignore')
+    segment_col = df.columns[-2]  
     
-    try:
-        X_train_balanced = pd.read_csv('./data/processed/X_train_balanced.csv')
-        X_val_p = pd.read_csv('./data/processed/X_val_p.csv')
-        y_train_balanced = pd.read_csv('./data/processed/y_train_balanced.csv')
-        y_val = pd.read_csv('./data/processed/y_val.csv')
+    # Set characteristics apart
+    X_train = df.iloc[:, :-2]  # All columns but the last two
+    y_train = df.iloc[:, -1]   # Last column is 'target' 
+        
+    # X_val = pd.read_csv('../processed/interim/X_val_X_val_unbalanced.csv')
+    # y_val = pd.read_csv('../processed/y_val.csv')   
     
-    except FileNotFoundError:
-        print("Error: Make sure all CSV files (X_train_p.csv, X_val_p.csv, y_train.csv, y_val.csv) are in the same directory.")
-        exit()
+    model = LogisticRegression(max_iter=1000, random_state=42)
+    model.fit(X_train, y_train) 
 
-    print("\n" + "="*50)
-    print("Logistic Regression per K-Means Segment")
-    print("="*50)
+    return model
+
+
+def evaluate_model(model, X_test, y_test):
+    y_pred = model.predict(X_test)
+
+    # Confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:")
+    print(cm)
+
+    # Evaluation metrics
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred))
     
-    kmeans_models = {}
-    kmeans_performance = {}
+    metrics = {
+        "accuracy": accuracy_score(y_test, y_pred),
+    }
 
+    return metrics
 
-    # -----
-
-
-    unique_kmeans_segments_train = X_train_balanced['kmeans_segment'].unique()
-    unique_kmeans_segments_val = X_val_p['kmeans_segment'].unique()
-
-    all_predictions_kmeans = pd.Series(index=y_val.index, dtype=int)
-    all_true_labels_kmeans = pd.Series(index=y_val.index, dtype=int)
-  
-    for segment_id in sorted(unique_kmeans_segments_train):
-        print(f"\n--- Training and Evaluating for K-Means Segment {segment_id} ---")
-
-        # Filter data for the current segment (training)
-        segment_X_train = X_train_balanced[X_train_balanced['kmeans_segment'] == segment_id].drop(['kmeans_segment', 'dt_segment'], axis=1)
-        segment_y_train = y_train_balanced[X_train_balanced['kmeans_segment'] == segment_id]
-
-        # Filter data for the current segment (validation)
-        segment_X_val = X_val_p[X_val_p['kmeans_segment'] == segment_id].drop(['kmeans_segment', 'dt_segment'], axis=1)
-        segment_y_val = y_val[X_val_p['kmeans_segment'] == segment_id]
-
-        if len(segment_X_train) < 2 or len(segment_X_val) < 2: # Need at least 2 samples for LR
-            print(f"  Segment {segment_id} has too few samples for training/validation. Skipping.")
-            print(f"  Train samples: {len(segment_X_train)}, Validation samples: {len(segment_X_val)}")
-            continue
-
+def second_phase(df):
+    
+    
+    X_val = pd.read_csv('../processed/X_val_p.csv')
+    y_val = pd.read_csv('../processed/y_val.csv')
+    
+    # Logistic regression
+    lr_model = train_logistic_regression(df)
+    
+    metrics = evaluate_model(lr_model, X_val, y_val)
+    print(metrics)
+    print("\n")
+    
     return
 
+# ----
+# Utils
 
 def randomOverSample(X, y, random_state=42):
     """
@@ -253,84 +267,6 @@ def elbow_method():
     plt.show()
     
     return
-
-def calculate_segment_homogeneity(df, segment_col='dt_segment'):
-    """
-    Calcula la homogeneidad de los segmentos en un DataFrame.
-    La homogeneidad se mide por la varianza para columnas numéricas
-    y por la proporción de la moda para columnas categóricas.
-
-    Args:
-        df (pd.DataFrame): El DataFrame con los datos y la columna de segmento.
-        segment_col (str): El nombre de la columna que indica el segmento.
-
-    Returns:
-        pd.DataFrame: Un DataFrame con la homogeneidad promedio para cada segmento
-                      y la homogeneidad global del dataset.
-    """
-    if segment_col not in df.columns:
-        raise ValueError(f"La columna de segmento '{segment_col}' no se encuentra en el DataFrame.")
-
-    homogeneity_results = {}
-    numerical_cols = df.select_dtypes(include=np.number).columns.drop(segment_col, errors='ignore')
-    categorical_cols = df.select_dtypes(exclude=np.number).columns.drop(segment_col, errors='ignore')
-
-    # Calcula la homogeneidad para cada segmento
-    for segment_id in df[segment_col].unique():
-        segment_df = df[df[segment_col] == segment_id]
-        segment_homogeneity = {}
-
-        # Homogeneidad para columnas numéricas (usando varianza)
-        if not numerical_cols.empty:
-            # Reemplazar NaN con la media del segmento para evitar que la varianza sea NaN
-            for col in numerical_cols:
-                if segment_df[col].isnull().any():
-                    segment_df.loc[:, col] = segment_df[col].fillna(segment_df[col].mean())
-            segment_homogeneity['numerical_variance_avg'] = segment_df[numerical_cols].var().mean()
-
-        # Homogeneidad para columnas categóricas (usando proporción de la moda)
-        if not categorical_cols.empty:
-            mode_proportions = []
-            for col in categorical_cols:
-                if not segment_df[col].empty:
-                    # Calcula la moda y su frecuencia
-                    current_mode, current_count = mode(segment_df[col].dropna())
-                    if len(current_mode) > 0: # Si se encuentra una moda
-                        mode_proportion = current_count[0] / len(segment_df[col].dropna()) if len(segment_df[col].dropna()) > 0 else 0
-                        mode_proportions.append(mode_proportion)
-            if mode_proportions:
-                segment_homogeneity['categorical_mode_proportion_avg'] = np.mean(mode_proportions)
-            else:
-                segment_homogeneity['categorical_mode_proportion_avg'] = np.nan # No hay columnas categóricas o están vacías
-
-        homogeneity_results[f'Segment_{segment_id}'] = segment_homogeneity
-
-    # Calcula la homogeneidad global del dataset (promedio ponderado por el tamaño del segmento)
-    global_homogeneity = {'numerical_variance_global_avg': 0, 'categorical_mode_proportion_global_avg': 0}
-    total_rows = len(df)
-    
-    for segment_id in df[segment_col].unique():
-        segment_df = df[df[segment_col] == segment_id]
-        segment_size = len(segment_df)
-        weight = segment_size / total_rows
-        
-        segment_result = homogeneity_results[f'Segment_{segment_id}']
-        
-        if 'numerical_variance_avg' in segment_result and not pd.isna(segment_result['numerical_variance_avg']):
-            global_homogeneity['numerical_variance_global_avg'] += segment_result['numerical_variance_avg'] * weight
-        
-        if 'categorical_mode_proportion_avg' in segment_result and not pd.isna(segment_result['categorical_mode_proportion_avg']):
-            global_homogeneity['categorical_mode_proportion_global_avg'] += segment_result['categorical_mode_proportion_avg'] * weight
-
-    results_df = pd.DataFrame(homogeneity_results).T
-    
-    # Agrega la fila de homogeneidad global
-    global_homogeneity_series = pd.Series(global_homogeneity, name='Global_Homogeneity')
-    results_df = pd.concat([results_df, pd.DataFrame([global_homogeneity_series])])
-
-    return results_df
-
-
 
 
 if __name__ == '__main__':
