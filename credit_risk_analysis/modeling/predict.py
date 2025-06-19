@@ -53,8 +53,7 @@ async def consume_predictions():
             try:
                 job_data = json.loads(job_json)
                 job_id = job_data["id"]
-                client_info = job_data["input"]["client_information"]
-                logger.info(f"📩 Procesando job_id={job_id}, client_info={client_info}")
+                logger.info(f"📩 Procesando job_id={job_id}")
             except (json.JSONDecodeError, KeyError) as e:
                 logger.error(f"❌ Error parseando job: {e} | Payload: {job_json}")
                 continue

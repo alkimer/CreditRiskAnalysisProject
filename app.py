@@ -39,7 +39,8 @@ with col1:
                 st.error(f"❌ Error en el backend: {result['error']}")
             else:
                 risk_score = result["score"]
-                risk_label = result["risk_label"]
+                risk_label = "Alto Riesgo" if risk_score > 60 else "Bajo Riesgo"
+
 
                 with col2:
                     st.header("⚠️ Resultado")
