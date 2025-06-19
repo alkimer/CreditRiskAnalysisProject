@@ -31,7 +31,7 @@ with col1:
         }
 
         try:
-            response = requests.post("http://localhost:8000/model/predict", json=input_data)
+            response = requests.post("http://api:8000/model/predict", json=input_data)
             result = response.json()
 
 
@@ -95,4 +95,3 @@ with col1:
         except requests.exceptions.RequestException as e:
             st.error("❌ No se pudo conectar con el backend.")
             st.code(str(e))
-            

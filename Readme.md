@@ -2,15 +2,17 @@
 
 ## Local Run
 
-### Backend
+### Backend & Frontend
 
 For project local running , run in this same path
 
 `docker compose up`
 
-This will start three docker containers:
+This will start four docker containers:
 
-after successful execution , you should be able to access the API Gui in `localhost:8000/docs`
+after successful execution , you should be able to access:
+- the APP FrontEnd in `http://localhost:8501`
+- the API Gui in `localhost:8000/docs`
 
 #### This API will orchestrate request back and forth with the REDIS message broker container and Postgres Container.
 
@@ -60,34 +62,12 @@ credit_risk_app/
 
 ---
 
-## ⚙️ Entorno virtual
+### DEVELOPER TOOlS
 
-1. Crear un entorno virtual:
+For Frontend modifications (app.py File ) to take effect, you have to restart de container with:
 
-python -m venv env
-source env/bin/activate   # Windows: .\env\Scripts\activate
+```docker restart credit-risk-ui```
 
+For backend modifications all the rest containers must be rebuilt:
 
-## ⚙️ Instalar dependencias
-
-2. Instalar:
-
-pip install -r requirements.txt
-
-
-## ⚙️ Levantar Backend  de prueba
-
-
-## ⚙️ Levantar Frontend
-
-4. Bash
-
-streamlit run app.py
-
----
-Si no se ejecuta automatica abrirla en el navegador  en la dirección
-http://localhost:8501.
----
-
-
-
+```docker-compose up --build ```

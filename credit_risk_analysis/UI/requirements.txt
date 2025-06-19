@@ -1,0 +1,7 @@
+streamlit
+uvicorn[standard]
+scikit-learn
+pandas
+numpy
+plotly
+joblib
