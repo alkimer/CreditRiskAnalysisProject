@@ -128,7 +128,7 @@ def visualize(model, dataframe, n_segments):
 
 def train_logistic_regression(df):
     
-    segment_col = df.columns[-2]  
+    #segment_col = df.columns[-2]  
     
     # Set characteristics apart
     X_train = df.iloc[:, :-2]  # All columns but the last two
@@ -146,10 +146,15 @@ def train_logistic_regression(df):
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
 
-    # Confusion matrix
-    cm = confusion_matrix(y_test, y_pred)
+    # Predicciones de probabilidad (para ROC AUC)
+    if hasattr(model, "predict_proba"):
+        y_proba = model.predict_proba(X_test)[:, 1]  # Probabilidad de clase positiva
+    else:
+        y_proba = None
+    
+    # Confusion matrix    
     print("Confusion Matrix:")
-    print(cm)
+    print(confusion_matrix(y_test, y_pred))
 
     # Evaluation metrics
     print("\nClassification Report:")
@@ -158,8 +163,14 @@ def evaluate_model(model, X_test, y_test):
     metrics = {
         "accuracy": accuracy_score(y_test, y_pred),
     }
+    
+    # ROC AUC if there are probabilities available
+    if y_proba is not None:
+        metrics["roc_auc"] = roc_auc_score(y_test, y_proba)
 
     return metrics
+
+
 
 def second_phase(df):
     
