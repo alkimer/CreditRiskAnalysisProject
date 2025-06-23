@@ -2,7 +2,13 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import (classification_report, 
+                             confusion_matrix, 
+                             accuracy_score, 
+                             precision_score, 
+                             recall_score, 
+                             f1_score, 
+                             roc_auc_score)
 from imblearn.over_sampling import RandomOverSampler
 from scipy.stats import mode
 import matplotlib.pyplot as plt
@@ -62,6 +68,7 @@ def kmeans_segmentation(n_clusters_kmeans, X_train, y_train):
         print("-" * 20)
     
     return df_kmeans_segmented
+
     
 def decision_trees_segmentation(n_max_leaf_nodes, X_train, y_train):
     
@@ -91,6 +98,7 @@ def decision_trees_segmentation(n_max_leaf_nodes, X_train, y_train):
         print("-" * 20)
         
     return df_dt_segmented
+
         
 def visualize(model, dataframe, n_segments):
     
@@ -123,8 +131,33 @@ def visualize(model, dataframe, n_segments):
     
     return
 
+
+
+
 # ----
 # Second phase
+
+def second_phase(df):
+    
+    
+    X_val = pd.read_csv('../processed/v2/X_val_processed.csv')
+    y_val = pd.read_csv('../processed/v2/y_val.csv')
+    
+    
+    segmented_dfs = segment_dataframes(df)
+    
+    metrics = []
+    
+    # Logistic regression + metrics
+    for i in range(len(segmented_dfs)):
+        print(f"// Segment # {i+1} //")
+        lr_model = train_logistic_regression(segmented_dfs[i])
+        metrics_current = evaluate_model(lr_model, X_val, y_val)
+        metrics.append(metrics_current)
+        print(metrics_current, "\n")
+    
+    return metrics
+
 
 def train_logistic_regression(df):
     
@@ -162,30 +195,56 @@ def evaluate_model(model, X_test, y_test):
     
     metrics = {
         "accuracy": accuracy_score(y_test, y_pred),
+        "precision": precision_score(y_test, y_pred),
+        "recall": recall_score(y_test, y_pred),
+        "f1_score": f1_score(y_test, y_pred)
     }
     
     # ROC AUC if there are probabilities available
     if y_proba is not None:
-        metrics["roc_auc"] = roc_auc_score(y_test, y_proba)
+        metrics["roc_auc"] = round(float(roc_auc_score(y_test, y_proba)), 4)
 
     return metrics
 
 
+def segment_dataframes(dataframe):
+    
+    segment_column = dataframe.columns[-2]
+    id_segments = dataframe[segment_column].unique()
+    
+    segmented_dfs = []
+    for i in id_segments:
+        segmented_dfs.append(dataframe[dataframe[segment_column] == i])
 
-def second_phase(df):
+    return segmented_dfs
+
+
+def metrics_summary(all_metrics, segmentation_names):
     
+    summary = []
+    for segmentation in all_metrics:
+        avg_accuracy  = sum(d['accuracy'] for d in segmentation) / len(segmentation)
+        avg_precision = sum(d['precision'] for d in segmentation) / len(segmentation)
+        avg_recall    = sum(d['recall'] for d in segmentation) / len(segmentation)
+        avg_f1_score  = sum(d['f1_score'] for d in segmentation) / len(segmentation)
+        avg_roc_auc   = sum(d['roc_auc'] for d in segmentation) / len(segmentation)
+        summary.append({'accuracy': avg_accuracy,
+                        'precision': avg_precision, 
+                        'recall':avg_recall,
+                        'f1_score': avg_f1_score,
+                        'roc_auc': avg_roc_auc})
+
+    # Crear DataFrame
+    df_summary = pd.DataFrame(summary)
+    df_summary.index = segmentation_names
     
-    X_val = pd.read_csv('../processed/X_val_p.csv')
-    y_val = pd.read_csv('../processed/y_val.csv')
-    
-    # Logistic regression
-    lr_model = train_logistic_regression(df)
-    
-    metrics = evaluate_model(lr_model, X_val, y_val)
-    print(metrics)
-    print("\n")
-    
-    return
+    mean_row = df_summary.mean()
+    df_summary.loc['------------------- MEAN'] = mean_row
+
+    return df_summary
+
+
+
 
 # ----
 # Utils
@@ -278,7 +337,6 @@ def elbow_method():
     plt.show()
     
     return
-
 
 if __name__ == '__main__':
     segmentation(3, 3, 
