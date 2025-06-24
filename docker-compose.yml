@@ -12,18 +12,35 @@ services:
     networks:
       - backend
 
-  postgres:
+#  postgres:
+#    build:
+#      context: ./credit_risk_analysis/db
+#    container_name: credit-risk-postgress
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_DB: CREDIT_RISK
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#    volumes:
+#      - ./credit_risk_analysis/db/volume:/var/lib/postgresql/data
+#    networks:
+#      - backend
+
+  worker:
     build:
-      context: ./credit_risk_analysis/db
-    container_name: credit-risk-postgress
-    ports:
-      - "5432:5432"
+      context: .
+    container_name: credit-risk-worker
+    command: python credit_risk_analysis/modeling/predict.py
     environment:
-      POSTGRES_DB: CREDIT_RISK
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      REDIS_IP: redis
+      REDIS_PORT: 6000
+      REDIS_DB_ID: 0
+      REDIS_PASSWORD: redis
+    depends_on:
+      - redis
     volumes:
-      - ./credit_risk_analysis/db/volume:/var/lib/postgresql/data
+      - ./data:/app/data
     networks:
       - backend
 
@@ -35,13 +52,13 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-      - postgres
     environment:
       REDIS_IP: redis
       REDIS_PORT: 6000
       REDIS_DB_ID: 0
       REDIS_PASSWORD: redis
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/CREDIT_RISK
+    volumes:
+      - ./data:/app/data
     networks:
       - backend
 
@@ -58,6 +75,8 @@ services:
       - api
     networks:
       - backend
+
+
 
 networks:
   backend:

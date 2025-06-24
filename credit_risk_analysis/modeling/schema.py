@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 # Using pydantic for static type validation in FASTAPI
-
+from datetime import datetime
 from pydantic import BaseModel
 
 class PredictRequest(BaseModel):
@@ -15,3 +15,14 @@ class PredictRequest(BaseModel):
 class PredictResponse(BaseModel):
     success: bool
     score: float
+
+
+class PredictionRecord(BaseModel):
+    id: int
+    prediction_date: datetime
+    request_json: str
+    score: float
+    model: str
+
+    class Config:
+        orm_mode = True  # 🔑 Esto permite que funcione con SQLAlchemy

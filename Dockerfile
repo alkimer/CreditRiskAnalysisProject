@@ -1,5 +1,6 @@
 # Usa imagen oficial de Python
 FROM python:3.10-slim
+ENV PYTHONPATH=/app
 
 # Crea y entra en el directorio de trabajo
 WORKDIR /app

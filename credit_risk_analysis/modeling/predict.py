@@ -5,7 +5,6 @@ import logging
 import sys
 
 import redis.asyncio as redis
-from pydantic import BaseModel
 
 from credit_risk_analysis.modeling.schema import PredictResponse
 from settings import Settings
