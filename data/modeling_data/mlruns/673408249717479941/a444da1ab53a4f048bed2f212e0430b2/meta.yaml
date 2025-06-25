@@ -1,0 +1,14 @@
+artifact_uri: file:///home/aac/Anyone/FinalProject/CreditRiskAnalysisProject/data/modeling_data/mlruns/673408249717479941/a444da1ab53a4f048bed2f212e0430b2/artifacts
+end_time: 1750804591724
+entry_point_name: ''
+experiment_id: '673408249717479941'
+lifecycle_stage: active
+run_id: a444da1ab53a4f048bed2f212e0430b2
+run_name: kmeans_6_logreg
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750804591609
+status: 3
+tags: []
+user_id: aac

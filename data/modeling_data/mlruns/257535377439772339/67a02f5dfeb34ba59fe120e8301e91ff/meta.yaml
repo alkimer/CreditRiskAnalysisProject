@@ -1,0 +1,14 @@
+artifact_uri: file:///home/aac/Anyone/FinalProject/CreditRiskAnalysisProject/data/modeling_data/mlruns/257535377439772339/67a02f5dfeb34ba59fe120e8301e91ff/artifacts
+end_time: 1750812514471
+entry_point_name: ''
+experiment_id: '257535377439772339'
+lifecycle_stage: active
+run_id: 67a02f5dfeb34ba59fe120e8301e91ff
+run_name: phase2_6-cluster_K-means
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750812514404
+status: 3
+tags: []
+user_id: aac

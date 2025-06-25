@@ -1,0 +1,14 @@
+artifact_uri: file:///home/aac/Anyone/FinalProject/CreditRiskAnalysisProject/data/modeling_data/mlruns/673408249717479941/195f473a70864f4d9f7f12384a3d9073/artifacts
+end_time: 1750807051629
+entry_point_name: ''
+experiment_id: '673408249717479941'
+lifecycle_stage: active
+run_id: 195f473a70864f4d9f7f12384a3d9073
+run_name: phase2_2-cluster_Decision_Trees
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750807051562
+status: 3
+tags: []
+user_id: aac
