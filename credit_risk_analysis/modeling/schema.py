@@ -1,8 +1,8 @@
-from pydantic import BaseModel
-
 # Using pydantic for static type validation in FASTAPI
 from datetime import datetime
+
 from pydantic import BaseModel
+
 
 class PredictRequest(BaseModel):
     age: int
