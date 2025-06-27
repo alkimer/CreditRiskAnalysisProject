@@ -1,12 +1,11 @@
-import json
-import random
 import asyncio
+import json
 import logging
 import sys
 
 import redis.asyncio as redis
 
-from credit_risk_analysis.modeling.model.model import model_predict
+from credit_risk_analysis.modeling.model.predict import predict_credit_risk
 from credit_risk_analysis.modeling.schema import PredictResponse
 from settings import Settings
 
@@ -59,7 +58,7 @@ async def consume_predictions():
                 continue
 
             # Call Real model
-            success, score = await model_predict(job_data)
+            success, score = await predict_credit_risk(job_data)
             response = PredictResponse(success=success, score=score)
 
             try:

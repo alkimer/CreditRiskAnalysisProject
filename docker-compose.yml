@@ -12,21 +12,6 @@ services:
     networks:
       - backend
 
-#  postgres:
-#    build:
-#      context: ./credit_risk_analysis/db
-#    container_name: credit-risk-postgress
-#    ports:
-#      - "5432:5432"
-#    environment:
-#      POSTGRES_DB: CREDIT_RISK
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#    volumes:
-#      - ./credit_risk_analysis/db/volume:/var/lib/postgresql/data
-#    networks:
-#      - backend
-
   worker:
     build:
       context: .

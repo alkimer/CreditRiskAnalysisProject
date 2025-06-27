@@ -39,7 +39,7 @@ session = Session()
 Base.metadata.create_all(bind=engine)
 
 # Función de predicción
-async def model_predict(predict_request):
+async def model_predict(predict_request, model_name):
     job_id = str(uuid4())
     start_time = datetime.utcnow()
 
@@ -86,7 +86,7 @@ async def model_predict(predict_request):
                     session=session,
                     request_data=predict_request.model_dump(),
                     score=score,
-                    model_name="MockModel-v1"
+                    model_name=model_name
                 )
 
                 await db_redis.delete(job_id)

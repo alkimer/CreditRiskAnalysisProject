@@ -1,16 +1,15 @@
-from matplotlib.pyplot import grid
-import pandas as pd
-import numpy as np
 import json
-import os
+
 import joblib
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_is_fitted
+import numpy as np
+import pandas as pd
 from imblearn.over_sampling import SMOTE
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.utils.validation import check_is_fitted
 
 vars_to_drop = [
     'ID_CLIENT', 'CLERK_TYPE', 'QUANT_ADDITIONAL_CARDS', 'POSTAL_ADDRESS_TYPE',
@@ -30,6 +29,15 @@ cat_multi = ['STATE_OF_BIRTH', 'CITY_OF_BIRTH', 'RESIDENCIAL_STATE', 'RESIDENCIA
              'RESIDENCIAL_BOROUGH', 'RESIDENCIAL_PHONE_AREA_CODE', 'RESIDENCE_TYPE',
              'PROFESSIONAL_STATE', 'PROFESSIONAL_PHONE_AREA_CODE', 'NACIONALITY',
              'PRODUCT', 'RESIDENCIAL_ZIP_3', 'PROFESSIONAL_ZIP_3']
+
+
+'''features seleccionadas para la predicción del modelo'''
+feat_select = ['MARITAL_STATUS', 'MONTHS_IN_RESIDENCE', 'AGE', 'OCCUPATION_TYPE',
+               'SEX', 'FLAG_RESIDENCIAL_PHONE', 'STATE_OF_BIRTH',
+               'RESIDENCIAL_STATE', 'RESIDENCE_TYPE', 'PROFESSIONAL_STATE', 'PRODUCT',
+               'RESIDENCIAL_CITY', 'RESIDENCIAL_BOROUGH', 'RESIDENCIAL_PHONE_AREA_CODE',
+               'RESIDENCIAL_ZIP_3', 'PROFESSIONAL_ZIP_3']
+
 
 # Frequency Encoder personalizado
 class FrequencyEncoder(BaseEstimator, TransformerMixin):
@@ -161,28 +169,30 @@ def process_features(X_new_path=None,new_data=False):
         print("✅ Nuevos datos procesados y guardados correctamente.")
 
 
-''' This function process features but accepts a JSON as input data instead of a CSV file path'''
+''' This function process features and resturns the final processed dataframe,
+ but accepts a JSON as input data instead of a CSV file path'''
 def process_features_json(X_new):
+
+
 
     X_new.drop(columns=vars_to_drop, inplace=True, errors='ignore')
     # Separar multicategóricas
-    multi_high_card = [col for col in cat_multi if X_new[col].nunique() > 30]
-    multi_low_card = [col for col in cat_multi if col not in multi_high_card]
+    # multi_high_card = [col for col in cat_multi if X_new[col].nunique() > 30]
+    # multi_low_card = [col for col in cat_multi if col not in multi_high_card]
 
     # cargar preprocessor previamente ajustado
-    preprocessor = joblib.load('models/preprocessor.pkl')
+    preprocessor = joblib.load('credit_risk_analysis/models/preprocessor.pkl')
+
+    # preprocessor = joblib.load('../models/preprocessor.pkl')
     # Procesamiento
     X_new_processed = preprocessor.transform(X_new)
     # Columnas finales
-    with open('data/interim/final_columns.json', 'r') as file:
-        final_columns = json.load(file)
-
-    X_new_final = pd.DataFrame(X_new_processed, columns=final_columns, index=X_new.index)
-    # os.makedirs("data/processed/balanced", exist_ok=True)
+    X_new_final = pd.DataFrame(X_new_processed, columns=feat_select)
 
     # Guardar data procesada
-    X_new_final.to_csv("data/processed/X_new_processed.csv", index=False)
-    print("✅ Nuevos datos procesados y guardados correctamente.")
+    # X_new_final.to_csv("data/processed/X_new_processed.csv", index=False)
+    print("✅ Procesamiento correcto")
+    return X_new_final
 
 
 def main(

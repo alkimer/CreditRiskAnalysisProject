@@ -22,7 +22,7 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),
     ]
 )
-
+model_name = "stacking_model.pkl"
 logger = logging.getLogger(__name__)
 logger.info("----INIT CREDIT RISK ANALYSIS ROUTER API SERVICE----")
 
@@ -31,14 +31,14 @@ model_router = APIRouter(tags=["Model"], prefix="/model")
 
 @model_router.post("/predict", response_model=PredictResponse)
 async def predict(predict_request: PredictRequest):
-    logger.debug("→ /predict() invoked: predict_request=%s", predict_request)
+    logger.debug("→ /predict() invoked: predict_request=%s , model_name:%s", predict_request, model_name)
 
     response = PredictResponse(
         success=False,
         score=1
     )
 
-    response.success, response.score = await model_predict(predict_request)
+    response.success, response.score = await model_predict(predict_request, model_name)
 
     return response
 
