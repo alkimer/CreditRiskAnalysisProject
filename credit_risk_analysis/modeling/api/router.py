@@ -38,9 +38,10 @@ async def predict(predict_request: PredictRequest):
         score=1
     )
 
-    response.success, response.score = await model_predict(predict_request, model_name)
-
-    return response
+    # response.success, response.score = await model_predict(predict_request, model_name)
+    #
+    # return response
+    return True, 0.001
 
 @model_router.get("/predictions", response_model=List[PredictionRecord])
 def get_predictions(db: Session = Depends(get_db)):
