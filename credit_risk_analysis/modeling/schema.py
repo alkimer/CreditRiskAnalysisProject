@@ -23,8 +23,7 @@ class PredictRequest(BaseModel):
 
 
 class PredictResponse(BaseModel):
-    success: bool
-    score: float
+    risk_percentage: float
 
 
 class PredictionRecord(BaseModel):
