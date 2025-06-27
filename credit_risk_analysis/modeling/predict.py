@@ -7,10 +7,11 @@ import pandas as pd
 import joblib
 
 from credit_risk_analysis.config import MODELS_DIR, PROCESSED_DATA_DIR
+from credit_risk_analysis import features
 
-import sys, os
-sys.path.append(os.path.abspath('../'))
-from processing import process_all_features_v2
+#import sys, os
+#sys.path.append(os.path.abspath('./'))
+#from processing import process_all_features_v2
 
 app = typer.Typer()
 
@@ -28,7 +29,7 @@ def predict_credit_risk(model_path, features_path='data/external/X_fake_new_samp
     if use_fake_data:
         create_fake_new_data()
         features_path = 'data/external/X_fake_new_sample.csv'
-    process_all_features_v2.main(X_new_path=features_path, new_data=True)
+    features.main(X_new_path=features_path, new_data=True)
     X_n = pd.read_csv('data/processed/X_new_processed.csv')
     model = joblib.load(model_path)
     predictions = model.predict(X_n)
