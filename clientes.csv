@@ -1,0 +1,101 @@
+AGE,SEX,MARITAL_STATUS,OCCUPATION_TYPE,MONTHS_IN_RESIDENCE,FLAG_RESIDENCIAL_PHONE,STATE_OF_BIRTH,RESIDENCIAL_STATE,RESIDENCE_TYPE,RESIDENCIAL_CITY,RESIDENCIAL_BOROUGH,RESIDENCIAL_PHONE_AREA_CODE,RESIDENCIAL_ZIP_3,PROFESSIONAL_STATE,PROFESSIONAL_ZIP_3,PRODUCT,RISK_LABEL
+57,F,Soltero,Independiente,34,0,Santander,Santander,Empresa,Bucaramanga,Barrio 11,4,912,Santander,586,Crédito Consumo,Bajo
+31,F,Soltero,Comerciante,49,1,Santander,Santander,Empresa,Bucaramanga,Barrio 11,4,424,Santander,142,Crédito Consumo,Alto
+22,F,Soltero,Comerciante,63,1,Tolima,Tolima,Familiar,Ibagué,Barrio 12,4,358,Tolima,309,Crédito Vehicular,Alto
+35,F,Unión libre,Comerciante,108,0,Cundinamarca,Cundinamarca,Arrendada,Soacha,Barrio 9,4,833,Cundinamarca,150,Crédito Vehicular,Bajo
+23,M,Casado,Empleado privado,80,1,Santander,Santander,Arrendada,Bucaramanga,Barrio 10,7,339,Santander,148,Crédito Vehicular,Bajo
+56,F,Unión libre,Independiente,101,0,Atlántico,Atlántico,Familiar,Barranquilla,Barrio 3,5,533,Atlántico,855,Tarjeta de Crédito,Alto
+46,F,Divorciado,Empleado privado,33,1,Atlántico,Atlántico,Empresa,Barranquilla,Barrio 13,5,311,Atlántico,684,Crédito Hipotecario,Bajo
+41,F,Unión libre,Empleado privado,81,0,Santander,Santander,Arrendada,Bucaramanga,Barrio 6,2,879,Santander,171,Crédito Vehicular,Alto
+38,M,Divorciado,Independiente,10,0,Atlántico,Atlántico,Propia,Barranquilla,Barrio 5,5,495,Atlántico,259,Crédito Vehicular,Alto
+31,M,Unión libre,Tecnólogo,86,1,Santander,Santander,Familiar,Bucaramanga,Barrio 1,5,334,Santander,394,Crédito Vehicular,Bajo
+34,F,Divorciado,Empleado privado,34,0,Antioquia,Antioquia,Arrendada,Bello,Barrio 6,2,926,Antioquia,581,Tarjeta de Crédito,Bajo
+25,F,Casado,Independiente,48,1,Tolima,Tolima,Arrendada,Ibagué,Barrio 12,5,840,Tolima,137,Tarjeta de Crédito,Bajo
+27,F,Soltero,Técnico,21,1,Tolima,Tolima,Empresa,Ibagué,Barrio 10,4,580,Tolima,235,Crédito Vehicular,Alto
+24,M,Casado,Empleado privado,88,0,Antioquia,Antioquia,Arrendada,Envigado,Barrio 2,5,716,Antioquia,782,Tarjeta de Crédito,Alto
+29,F,Divorciado,Independiente,42,1,Santander,Santander,Empresa,Bucaramanga,Barrio 5,5,877,Santander,911,Crédito Vehicular,Bajo
+44,F,Unión libre,Empleado público,116,0,Valle del Cauca,Valle del Cauca,Arrendada,Cali,Barrio 12,4,314,Valle del Cauca,618,Crédito Consumo,Bajo
+37,M,Soltero,Empleado privado,57,1,Antioquia,Antioquia,Empresa,Bello,Barrio 15,7,207,Antioquia,992,Tarjeta de Crédito,Alto
+56,M,Unión libre,Tecnólogo,46,1,Bogotá,Bogotá,Arrendada,Suba,Barrio 6,4,675,Bogotá,427,Crédito Vehicular,Bajo
+42,F,Soltero,Tecnólogo,35,0,Bogotá,Bogotá,Empresa,Teusaquillo,Barrio 14,1,408,Bogotá,178,Crédito Hipotecario,Alto
+60,M,Divorciado,Tecnólogo,74,0,Bogotá,Bogotá,Familiar,Chapinero,Barrio 11,1,162,Bogotá,311,Crédito Hipotecario,Alto
+22,F,Divorciado,Comerciante,35,1,Cundinamarca,Cundinamarca,Familiar,Zipaquirá,Barrio 7,5,475,Cundinamarca,699,Crédito Vehicular,Bajo
+51,M,Soltero,Técnico,49,1,Cundinamarca,Cundinamarca,Propia,Zipaquirá,Barrio 4,7,873,Cundinamarca,991,Crédito Vehicular,Bajo
+26,F,Casado,Técnico,11,1,Cundinamarca,Cundinamarca,Empresa,Soacha,Barrio 15,2,332,Cundinamarca,877,Tarjeta de Crédito,Alto
+48,F,Casado,Tecnólogo,47,1,Cundinamarca,Cundinamarca,Familiar,Fusagasugá,Barrio 13,4,433,Cundinamarca,487,Crédito Hipotecario,Alto
+43,M,Soltero,Tecnólogo,90,1,Antioquia,Antioquia,Propia,Medellín,Barrio 13,5,629,Antioquia,722,Crédito Vehicular,Alto
+42,F,Divorciado,Empleado público,6,0,Valle del Cauca,Valle del Cauca,Propia,Cali,Barrio 12,5,826,Valle del Cauca,723,Crédito Consumo,Alto
+57,F,Unión libre,Independiente,26,1,Santander,Santander,Propia,Bucaramanga,Barrio 13,4,199,Santander,555,Crédito Hipotecario,Alto
+58,F,Divorciado,Comerciante,16,1,Cundinamarca,Cundinamarca,Propia,Soacha,Barrio 4,4,387,Cundinamarca,427,Crédito Hipotecario,Alto
+49,F,Divorciado,Empleado privado,89,0,Bogotá,Bogotá,Empresa,Teusaquillo,Barrio 11,4,637,Bogotá,568,Crédito Consumo,Bajo
+33,F,Unión libre,Independiente,100,0,Tolima,Tolima,Propia,Ibagué,Barrio 7,1,535,Tolima,973,Crédito Vehicular,Alto
+59,F,Divorciado,Empleado público,16,0,Atlántico,Atlántico,Propia,Barranquilla,Barrio 11,5,627,Atlántico,162,Tarjeta de Crédito,Bajo
+50,F,Divorciado,Empleado público,61,1,Valle del Cauca,Valle del Cauca,Propia,Palmira,Barrio 7,7,400,Valle del Cauca,331,Crédito Consumo,Alto
+25,F,Soltero,Técnico,47,0,Antioquia,Antioquia,Arrendada,Bello,Barrio 7,2,282,Antioquia,854,Crédito Hipotecario,Bajo
+24,M,Divorciado,Empleado privado,86,1,Antioquia,Antioquia,Arrendada,Envigado,Barrio 1,7,967,Antioquia,183,Crédito Vehicular,Bajo
+56,M,Soltero,Técnico,32,1,Cundinamarca,Cundinamarca,Arrendada,Soacha,Barrio 3,7,543,Cundinamarca,496,Crédito Vehicular,Alto
+56,F,Casado,Comerciante,74,1,Cundinamarca,Cundinamarca,Arrendada,Zipaquirá,Barrio 8,4,942,Cundinamarca,201,Crédito Hipotecario,Alto
+57,F,Soltero,Empleado privado,104,1,Valle del Cauca,Valle del Cauca,Arrendada,Cali,Barrio 9,2,632,Valle del Cauca,700,Crédito Hipotecario,Alto
+34,M,Unión libre,Técnico,94,1,Santander,Santander,Propia,Bucaramanga,Barrio 15,7,748,Santander,980,Tarjeta de Crédito,Alto
+47,M,Divorciado,Comerciante,79,1,Santander,Santander,Empresa,Bucaramanga,Barrio 15,1,980,Santander,912,Crédito Consumo,Alto
+34,F,Unión libre,Comerciante,6,1,Bogotá,Bogotá,Arrendada,Chía,Barrio 13,2,836,Bogotá,541,Crédito Vehicular,Bajo
+36,F,Soltero,Independiente,33,1,Tolima,Tolima,Empresa,Ibagué,Barrio 4,1,560,Tolima,473,Crédito Vehicular,Bajo
+34,M,Unión libre,Independiente,82,1,Bogotá,Bogotá,Empresa,Chía,Barrio 4,2,627,Bogotá,862,Tarjeta de Crédito,Bajo
+36,F,Casado,Técnico,50,0,Tolima,Tolima,Empresa,Ibagué,Barrio 13,4,724,Tolima,671,Crédito Vehicular,Alto
+36,F,Divorciado,Independiente,58,0,Cundinamarca,Cundinamarca,Propia,Soacha,Barrio 4,1,498,Cundinamarca,840,Crédito Vehicular,Bajo
+57,F,Unión libre,Comerciante,119,1,Valle del Cauca,Valle del Cauca,Familiar,Palmira,Barrio 13,2,986,Valle del Cauca,424,Crédito Vehicular,Bajo
+64,M,Divorciado,Tecnólogo,35,1,Valle del Cauca,Valle del Cauca,Familiar,Palmira,Barrio 6,1,927,Valle del Cauca,568,Tarjeta de Crédito,Alto
+34,F,Divorciado,Empleado privado,35,1,Santander,Santander,Propia,Bucaramanga,Barrio 7,1,269,Santander,924,Crédito Vehicular,Alto
+26,M,Casado,Comerciante,33,1,Atlántico,Atlántico,Propia,Barranquilla,Barrio 9,1,313,Atlántico,353,Tarjeta de Crédito,Bajo
+22,F,Soltero,Tecnólogo,9,0,Tolima,Tolima,Arrendada,Ibagué,Barrio 11,1,334,Tolima,120,Crédito Consumo,Bajo
+39,F,Casado,Comerciante,25,0,Cundinamarca,Cundinamarca,Familiar,Zipaquirá,Barrio 7,7,280,Cundinamarca,889,Crédito Consumo,Alto
+54,M,Divorciado,Empleado público,85,1,Tolima,Tolima,Propia,Ibagué,Barrio 2,2,377,Tolima,770,Tarjeta de Crédito,Bajo
+55,F,Unión libre,Tecnólogo,80,1,Cundinamarca,Cundinamarca,Familiar,Fusagasugá,Barrio 5,7,866,Cundinamarca,806,Crédito Hipotecario,Alto
+60,M,Unión libre,Tecnólogo,44,0,Valle del Cauca,Valle del Cauca,Familiar,Cali,Barrio 7,2,800,Valle del Cauca,613,Crédito Consumo,Bajo
+56,M,Soltero,Tecnólogo,14,1,Atlántico,Atlántico,Propia,Barranquilla,Barrio 7,2,573,Atlántico,228,Crédito Vehicular,Bajo
+34,F,Casado,Tecnólogo,25,1,Cundinamarca,Cundinamarca,Propia,Fusagasugá,Barrio 6,5,268,Cundinamarca,996,Crédito Consumo,Bajo
+28,M,Casado,Comerciante,71,1,Santander,Santander,Arrendada,Bucaramanga,Barrio 5,2,319,Santander,118,Tarjeta de Crédito,Alto
+26,F,Soltero,Empleado privado,51,1,Tolima,Tolima,Propia,Ibagué,Barrio 2,1,365,Tolima,783,Crédito Hipotecario,Alto
+27,M,Soltero,Comerciante,93,0,Tolima,Tolima,Familiar,Ibagué,Barrio 8,1,376,Tolima,877,Crédito Hipotecario,Bajo
+41,M,Unión libre,Empleado público,95,1,Bogotá,Bogotá,Arrendada,Chapinero,Barrio 15,4,922,Bogotá,369,Crédito Vehicular,Bajo
+64,M,Unión libre,Tecnólogo,88,1,Bogotá,Bogotá,Arrendada,Chapinero,Barrio 6,7,662,Bogotá,574,Crédito Hipotecario,Bajo
+33,M,Unión libre,Empleado privado,77,0,Santander,Santander,Familiar,Bucaramanga,Barrio 9,2,456,Santander,256,Crédito Consumo,Bajo
+33,F,Divorciado,Tecnólogo,31,0,Atlántico,Atlántico,Arrendada,Barranquilla,Barrio 1,5,762,Atlántico,798,Tarjeta de Crédito,Bajo
+27,F,Divorciado,Comerciante,81,0,Cundinamarca,Cundinamarca,Familiar,Soacha,Barrio 3,5,110,Cundinamarca,120,Tarjeta de Crédito,Bajo
+21,F,Divorciado,Comerciante,94,0,Atlántico,Atlántico,Familiar,Barranquilla,Barrio 9,1,702,Atlántico,901,Crédito Consumo,Bajo
+37,M,Soltero,Técnico,113,0,Antioquia,Antioquia,Empresa,Envigado,Barrio 6,7,624,Antioquia,118,Crédito Consumo,Bajo
+62,M,Casado,Independiente,19,1,Santander,Santander,Familiar,Bucaramanga,Barrio 5,1,423,Santander,946,Crédito Hipotecario,Bajo
+44,F,Unión libre,Comerciante,100,1,Antioquia,Antioquia,Propia,Bello,Barrio 15,5,122,Antioquia,648,Crédito Hipotecario,Alto
+55,F,Divorciado,Independiente,118,0,Santander,Santander,Empresa,Bucaramanga,Barrio 5,2,892,Santander,109,Crédito Hipotecario,Bajo
+52,F,Unión libre,Tecnólogo,12,0,Bogotá,Bogotá,Arrendada,Teusaquillo,Barrio 2,4,231,Bogotá,363,Crédito Vehicular,Bajo
+28,F,Divorciado,Técnico,117,0,Antioquia,Antioquia,Familiar,Medellín,Barrio 2,4,688,Antioquia,870,Crédito Hipotecario,Alto
+21,F,Unión libre,Empleado privado,88,1,Antioquia,Antioquia,Propia,Envigado,Barrio 14,7,420,Antioquia,628,Crédito Hipotecario,Bajo
+40,F,Divorciado,Comerciante,38,0,Bogotá,Bogotá,Arrendada,Chía,Barrio 10,4,646,Bogotá,656,Crédito Hipotecario,Bajo
+59,M,Casado,Empleado privado,76,1,Cundinamarca,Cundinamarca,Arrendada,Soacha,Barrio 14,5,897,Cundinamarca,579,Tarjeta de Crédito,Alto
+63,M,Soltero,Comerciante,31,1,Bogotá,Bogotá,Arrendada,Chapinero,Barrio 11,1,600,Bogotá,140,Tarjeta de Crédito,Alto
+34,F,Divorciado,Técnico,18,0,Tolima,Tolima,Arrendada,Ibagué,Barrio 12,1,141,Tolima,263,Crédito Vehicular,Bajo
+52,M,Divorciado,Independiente,7,0,Santander,Santander,Arrendada,Bucaramanga,Barrio 2,4,353,Santander,961,Crédito Consumo,Bajo
+30,M,Casado,Independiente,70,0,Bogotá,Bogotá,Familiar,Chía,Barrio 2,7,495,Bogotá,265,Crédito Consumo,Bajo
+37,M,Soltero,Empleado público,53,0,Antioquia,Antioquia,Propia,Medellín,Barrio 7,4,821,Antioquia,550,Crédito Consumo,Bajo
+27,M,Casado,Independiente,83,0,Santander,Santander,Arrendada,Bucaramanga,Barrio 4,4,725,Santander,234,Tarjeta de Crédito,Bajo
+49,M,Divorciado,Tecnólogo,63,0,Tolima,Tolima,Familiar,Ibagué,Barrio 12,1,138,Tolima,176,Tarjeta de Crédito,Bajo
+53,M,Divorciado,Técnico,100,1,Valle del Cauca,Valle del Cauca,Empresa,Palmira,Barrio 4,7,892,Valle del Cauca,166,Crédito Hipotecario,Alto
+22,F,Unión libre,Comerciante,86,0,Santander,Santander,Empresa,Bucaramanga,Barrio 7,4,773,Santander,723,Crédito Consumo,Alto
+36,F,Soltero,Tecnólogo,92,1,Tolima,Tolima,Familiar,Ibagué,Barrio 9,1,663,Tolima,598,Tarjeta de Crédito,Bajo
+25,M,Divorciado,Comerciante,55,1,Tolima,Tolima,Propia,Ibagué,Barrio 7,7,594,Tolima,297,Crédito Consumo,Alto
+55,M,Divorciado,Empleado público,23,0,Atlántico,Atlántico,Arrendada,Barranquilla,Barrio 2,2,809,Atlántico,112,Crédito Consumo,Bajo
+42,F,Divorciado,Comerciante,51,1,Santander,Santander,Empresa,Bucaramanga,Barrio 12,5,570,Santander,540,Tarjeta de Crédito,Alto
+52,M,Casado,Técnico,14,0,Atlántico,Atlántico,Familiar,Barranquilla,Barrio 1,5,749,Atlántico,568,Crédito Vehicular,Alto
+35,M,Soltero,Empleado público,111,1,Tolima,Tolima,Familiar,Ibagué,Barrio 14,4,358,Tolima,774,Crédito Vehicular,Alto
+37,M,Divorciado,Independiente,111,1,Antioquia,Antioquia,Familiar,Medellín,Barrio 2,2,722,Antioquia,960,Crédito Hipotecario,Alto
+32,F,Casado,Empleado privado,110,1,Atlántico,Atlántico,Empresa,Barranquilla,Barrio 5,5,858,Atlántico,138,Crédito Consumo,Bajo
+39,M,Divorciado,Empleado público,76,1,Atlántico,Atlántico,Arrendada,Barranquilla,Barrio 13,1,173,Atlántico,979,Crédito Hipotecario,Bajo
+32,M,Unión libre,Empleado público,116,0,Santander,Santander,Familiar,Bucaramanga,Barrio 1,4,173,Santander,439,Crédito Vehicular,Bajo
+37,F,Unión libre,Empleado privado,13,0,Atlántico,Atlántico,Propia,Barranquilla,Barrio 8,4,408,Atlántico,853,Crédito Hipotecario,Bajo
+49,F,Soltero,Comerciante,89,1,Valle del Cauca,Valle del Cauca,Arrendada,Palmira,Barrio 15,4,322,Valle del Cauca,744,Crédito Consumo,Bajo
+65,M,Casado,Técnico,85,1,Cundinamarca,Cundinamarca,Familiar,Soacha,Barrio 12,1,317,Cundinamarca,734,Crédito Hipotecario,Alto
+45,F,Divorciado,Independiente,30,0,Atlántico,Atlántico,Familiar,Barranquilla,Barrio 1,1,641,Atlántico,656,Crédito Vehicular,Alto
+24,F,Casado,Técnico,31,1,Antioquia,Antioquia,Empresa,Envigado,Barrio 1,7,988,Antioquia,542,Crédito Vehicular,Bajo
+26,M,Casado,Técnico,115,1,Bogotá,Bogotá,Arrendada,Chapinero,Barrio 1,2,387,Bogotá,204,Crédito Consumo,Bajo
+39,F,Unión libre,Comerciante,110,1,Antioquia,Antioquia,Propia,Medellín,Barrio 4,7,523,Antioquia,421,Crédito Hipotecario,Bajo
+50,F,Divorciado,Tecnólogo,111,0,Atlántico,Atlántico,Propia,Barranquilla,Barrio 9,2,526,Atlántico,594,Tarjeta de Crédito,Bajo

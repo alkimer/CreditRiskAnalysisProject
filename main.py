@@ -1,73 +1,88 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import Literal
+import pandas as pd
 import joblib
-import numpy as np
-import shap
 
-# Cargar modelo y escalador juntos
-model, scaler = joblib.load("model.pkl")  # 👈 Ambos elementos
-
-# Inicializar SHAP
-try:
-    explainer = shap.TreeExplainer(model)
-    shap_enabled = True
-except Exception as e:
-    explainer = None
-    shap_enabled = False
-    print(f"SHAP deshabilitado: {e}")
-
-# Iniciar la API
+# 🚀 Initialize FastAPI
 app = FastAPI()
 
-# Clase para recibir datos del usuario
-class UserData(BaseModel):
-    age: int
-    income: float
-    loan_debt: float
-    education: Literal["Bachillerato", "Universitario", "Postgrado", "Otro"]
-    credit_type: Literal["Auto", "Casa", "Educación", "Tarjeta de Crédito"]
+# 💾 Load the trained model (pipeline)
+model = joblib.load("model.pkl")
 
-# Funciones de codificación
-def encode_education(level):
-    return {"Bachillerato": 0, "Universitario": 1, "Postgrado": 2, "Otro": 3}[level]
+# 🧾 Input schema with all variables
+class Applicant(BaseModel):
+    AGE: int
+    SEX: str
+    MARITAL_STATUS: str
+    OCCUPATION_TYPE: str
+    MONTHS_IN_RESIDENCE: int
+    FLAG_RESIDENCIAL_PHONE: int
+    STATE_OF_BIRTH: str
+    RESIDENCIAL_STATE: str
+    RESIDENCE_TYPE: str
+    RESIDENCIAL_CITY: str
+    RESIDENCIAL_BOROUGH: str
+    RESIDENCIAL_PHONE_AREA_CODE: int
+    RESIDENCIAL_ZIP_3: int
+    PROFESSIONAL_STATE: str
+    PROFESSIONAL_ZIP_3: int
+    PRODUCT: str
 
-def encode_credit_type(tipo):
-    return {"Auto": 0, "Casa": 1, "Educación": 2, "Tarjeta de Crédito": 3}[tipo]
-
-# Ruta principal
-@app.post("/predict")
-def predict_risk(data: UserData):
-    try:
-        raw_features = [
-            data.age,
-            data.income,
-            data.loan_debt,
-            encode_education(data.education),
-            encode_credit_type(data.credit_type)
-        ]
-
-        scaled_features = scaler.transform([raw_features])  # 👈 Aplicar escalado
-        prob = model.predict_proba(scaled_features)[0][1] * 100
-        label = "Alto Riesgo" if prob > 60 else "Bajo Riesgo"
-
-        response = {
-            "risk_score": round(prob, 2),
-            "risk_label": label
+# 🔁 Optional: English → Spanish mapping if needed
+def map_english_to_spanish(df):
+    replacements = {
+        "SEX": {"Male": "M", "Female": "F"},
+        "MARITAL_STATUS": {
+            "Single": "Soltero",
+            "Married": "Casado",
+            "Common-Law Union": "Unión libre",
+            "Divorced": "Divorciado"
+        },
+        "OCCUPATION_TYPE": {
+            "Public Employee": "Empleado público",
+            "Private Employee": "Empleado privado",
+            "Self-Employed": "Independiente",
+            "Merchant": "Comerciante",
+            "Technician": "Técnico",
+            "Technologist": "Tecnólogo"
+        },
+        "RESIDENCE_TYPE": {
+            "Owned": "Propia",
+            "Rented": "Arrendada",
+            "Family": "Familiar",
+            "Company-Provided": "Empresa"
+        },
+        "PRODUCT": {
+            "Mortgage Loan": "Crédito Hipotecario",
+            "Consumer Credit": "Crédito Consumo",
+            "Vehicle Loan": "Crédito Vehicular",
+            "Credit Card": "Tarjeta de Crédito"
         }
+    }
 
-        # Explicaciones SHAP
-        if shap_enabled:
-            shap_result = explainer.shap_values(scaled_features)
-            shap_values = shap_result[0][0].tolist() if isinstance(shap_result, list) else shap_result[0].tolist()
-            feature_names = ["Edad", "Ingresos", "Deuda", "Educación", "Tipo Crédito"]
-            response["shap_values"] = shap_values
-            response["feature_names"] = feature_names
-        else:
-            response["shap_values"] = []
-            response["feature_names"] = []
+    for col, mapping in replacements.items():
+        if col in df.columns:
+            df[col] = df[col].map(mapping)
+    return df
 
-        return response
+# 🧠 Prediction endpoint
+@app.post("/predict")
+def predict_risk(data: Applicant):
+    df_input = pd.DataFrame([data.dict()])
+    df_input = map_english_to_spanish(df_input)
 
-    except Exception as e:
-        return {"error": str(e)}
+    pred_proba = model.predict_proba(df_input)[0][1] * 100  # Score: 0–100
+    pred_proba = round(pred_proba, 2)
+
+    # ⬇️ Definir clase de riesgo según escala personalizada
+    if pred_proba <= 35:
+        risk_class = "Low"
+    elif 36 <= pred_proba <= 69:
+        risk_class = "Medium"
+    else:
+        risk_class = "High"
+
+    return {
+        "risk_class": risk_class,
+        "risk_percentage": pred_proba
+    }

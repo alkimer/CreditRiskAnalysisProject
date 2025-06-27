@@ -1,0 +1,136 @@
+/* 🔷 Encabezado animado */
+#header-branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0 2rem;
+  position: relative;
+  animation: breathing 6s ease-in-out infinite;
+}
+
+#header-branding .logo {
+  width: 100px;
+  height: auto;
+  margin: 0;
+}
+
+#header-branding .app-title-gradient {
+  font-size: 4.4rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  display: inline-block;
+  background: linear-gradient(to right, #27AE60, #F4D03F, #C0392B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 🔮 Halo animado detrás del header */
+#header-branding::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 140%;
+  height: 160%;
+  background: radial-gradient(circle, rgba(39,174,96,0.3), rgba(244,208,63,0.2), rgba(192,57,43,0.2));
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(35px);
+  opacity: 0.6;
+  animation: halo-pulse 4.5s ease-in-out infinite;
+}
+
+@keyframes breathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes halo-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+/* 🎯 Estilo visual para subheaders */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #1E90FF;
+  color: #F8F9FA;
+}
+
+/* 🔘 Contenedor centrado para el botón de evaluación */
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* 🟥 Botón rojo con hover verde (igual al splash) */
+form .stButton > button,
+.center-button .stButton > button,
+div.stButton > button {
+  font-size: 1.1rem !important;
+  padding: 0.5em 1.5em !important;
+  border-radius: 8px !important;
+  background-color: #C0392B !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+  box-shadow: 0 0 8px rgba(192,57,43,0.3);
+}
+
+form .stButton > button:hover,
+.center-button .stButton > button:hover,
+div.stButton > button:hover {
+  background-color: #27AE60 !important;
+  transform: scale(1.03) !important;
+  box-shadow: 0 0 12px rgba(39,174,96,0.5);
+}
+
+/* 🚨 Forzamos el botón "Evaluate Risk" de forma explícita */
+div.row-widget.stButton button {
+  font-size: 1.1rem !important;
+  padding: 0.6em 1.6em !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  background-color: #C0392B !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 0 10px rgba(192,57,43,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+div.row-widget.stButton button:hover {
+  background-color: #27AE60 !important;
+  transform: scale(1.03) !important;
+  box-shadow: 0 0 14px rgba(39,174,96,0.5);
+}
+
+/* 🟥 Estilo del botón "Evaluate Risk" a la fuerza */
+div.stButton > button {
+  background-color: #C0392B !important;
+  color: white !important;
+  font-size: 1.1rem !important;
+  padding: 0.6em 1.6em !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+div.stButton > button:hover {
+  background-color: #27AE60 !important;
+  transform: scale(1.03) !important;
+  box-shadow: 0 0 10px rgba(39, 174, 96, 0.4);
+}
+

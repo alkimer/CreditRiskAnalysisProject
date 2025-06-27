@@ -1,83 +1,44 @@
-/* ===== FONDO Y FUENTE GENERAL ===== */
-body {
-    background-color: #111217;body, .main {
-    background-color: #111217;
-    color: white;
+/* 🌑 Splash container centered */
+#intro-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 92vh;
+  background-color: #0e1117;
+  transition: all 0.8s ease-in-out;
+  flex-direction: column;
 }
 
-h1, h2, h3 {
-    color: #34C759;
-    font-family: 'Segoe UI', sans-serif;
+/* 🫁 Breathing logo animation */
+#intro-logo {
+  width: 200px;
+  max-width: 60vw;
+  animation: breathe 2.5s ease-in-out infinite;
+  transition: transform 0.5s ease-in-out;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.08));
 }
 
-.stButton>button {
-    background-color: #34C759;
-    color: white;
-    border-radius: 8px;
-    padding: 0.5em 1em;
+/* 🚀 Splash button style */
+#intro-logo-container button {
+  margin-top: 20px;
+  font-size: 1.1em;
+  padding: 0.5em 1.5em;
+  border-radius: 8px;
+  background-color: #C0392B;
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
+#intro-logo-container button:hover {
+  background-color: #27AE60;
 }
 
-/* ===== ESTRUCTURA GENERAL DE APP ===== */
-.stApp {
-    background-color: #111217;
-}
-
-/* ===== TÍTULOS ===== */
-h1, h2, h3, h4, h5, h6 {
-    color: #EAEAEA;
-    font-weight: 600;
-}
-
-/* ===== BOTONES ===== */
-.stButton > button {
-    background-color: #34C759;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    padding: 0.6em 1.4em;
-    transition: background-color 0.3s ease;
-}
-.stButton > button:hover {
-    background-color: #28A745;
-}
-
-/* ===== INPUTS / SELECTORES ===== */
-input, select, textarea {
-    background-color: #1E1F24 !important;
-    color: white !important;
-    border: 1px solid #3C3C3C !important;
-    border-radius: 4px;
-    padding: 0.4em;
-}
-
-/* ===== ALERTAS / MENSAJES ===== */
-.stAlert {
-    background-color: #1E1F24 !important;
-    border-left: 0.25rem solid #34C759 !important;
-    color: white !important;
-}
-
-/* ===== ENLACES ===== */
-a {
-    color: #34C759;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-/* ===== GRÁFICOS PLOTLY ===== */
-svg text {
-    fill: white !important;
-}
-
-/* ===== INDICADORES STREAMLIT (ej. st.metric) ===== */
-[data-testid="stMetricValue"] {
-    color: #34C759;
-    font-weight: bold;
+/* ✨ Breathe animation */
+@keyframes breathe {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
