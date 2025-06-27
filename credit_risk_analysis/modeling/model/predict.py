@@ -3,6 +3,7 @@ import os
 import sys
 
 import joblib
+import numpy as np
 import typer
 
 sys.path.append(os.path.abspath('../'))
@@ -55,15 +56,15 @@ DEFAULTS = {
     'EDUCATION_LEVEL': 1,
     'CITY_OF_BIRTH': 'unknown',
     'NACIONALITY': 'BR',
-    'FLAG_MOBILE_PHONE': True,
-    'FLAG_EMAIL': True,
+    'FLAG_MOBILE_PHONE': "N",
+    'FLAG_EMAIL': 0,
     'PERSONAL_MONTHLY_INCOME': 0.0,
     'OTHER_INCOMES': 0.0,
-    'FLAG_VISA': False,
-    'FLAG_MASTERCARD': False,
-    'FLAG_DINERS': False,
-    'FLAG_AMERICAN_EXPRESS': False,
-    'FLAG_OTHER_CARDS': False,
+    'FLAG_VISA': 0,
+    'FLAG_MASTERCARD': 0,
+    'FLAG_DINERS': 0,
+    'FLAG_AMERICAN_EXPRESS': 0,
+    'FLAG_OTHER_CARDS': 0,
     'QUANT_BANKING_ACCOUNTS': 1,
     'QUANT_SPECIAL_BANKING_ACCOUNTS': 1,
     'PERSONAL_ASSETS_VALUE': 0.0,
@@ -71,17 +72,17 @@ DEFAULTS = {
     'COMPANY': 'Y',
     'PROFESSIONAL_CITY': 'unknown',
     'PROFESSIONAL_BOROUGH': 'unknown',
-    'FLAG_PROFESSIONAL_PHONE': False,
+    'FLAG_PROFESSIONAL_PHONE': "N",
     'PROFESSIONAL_PHONE_AREA_CODE': '000',
     'MONTHS_IN_THE_JOB': 0,
-    'PROFESSION_CODE': 'none',
-    'MATE_PROFESSION_CODE': 'none',
-    'EDUCATION_LEVEL.1': 'unknown',
-    'FLAG_HOME_ADDRESS_DOCUMENT': True,
-    'FLAG_RG': True,
-    'FLAG_CPF': True,
-    'FLAG_INCOME_PROOF': True,
-    'FLAG_ACSP_RECORD': False,
+    'PROFESSION_CODE': 1,
+    'MATE_PROFESSION_CODE': 1,
+    'EDUCATION_LEVEL.1': 1,
+    'FLAG_HOME_ADDRESS_DOCUMENT': 0,
+    'FLAG_RG': 0,
+    'FLAG_CPF': 0,
+    'FLAG_INCOME_PROOF': 0,
+    'FLAG_ACSP_RECORD': "N",
 }
 #
 # async def model_predict(data) -> Tuple[bool, float]:

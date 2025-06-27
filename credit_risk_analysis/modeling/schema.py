@@ -4,15 +4,15 @@ from datetime import datetime
 from pydantic import BaseModel
 
 class PredictRequest(BaseModel):
-    MARITAL_STATUS: str
+    MARITAL_STATUS: int
     MONTHS_IN_RESIDENCE: int
     AGE: int
-    OCCUPATION_TYPE: str
+    OCCUPATION_TYPE: int
     SEX: str
-    FLAG_RESIDENCIAL_PHONE: bool
+    FLAG_RESIDENCIAL_PHONE: str
     STATE_OF_BIRTH: str
     RESIDENCIAL_STATE: str
-    RESIDENCE_TYPE: str
+    RESIDENCE_TYPE: int
     PROFESSIONAL_STATE: str
     PRODUCT: str
     RESIDENCIAL_CITY: str

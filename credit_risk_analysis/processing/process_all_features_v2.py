@@ -187,7 +187,11 @@ def process_features_json(X_new):
     # Procesamiento
     X_new_processed = preprocessor.transform(X_new)
     # Columnas finales
-    X_new_final = pd.DataFrame(X_new_processed, columns=feat_select)
+    df = pd.DataFrame(X_new_processed)
+    print("🧪 df.columns:", df.columns.tolist())
+    print("🧪 feat_select:", feat_select)
+
+    X_new_final = df[feat_select]
 
     # Guardar data procesada
     # X_new_final.to_csv("data/processed/X_new_processed.csv", index=False)
