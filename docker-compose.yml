@@ -31,7 +31,7 @@ services:
     build:
       context: .
     container_name: credit-risk-worker
-    command: python credit_risk_analysis/modeling/model/predict.py
+    command: python credit_risk_analysis/modeling/services/prediction_job_consumer.py
     environment:
       REDIS_IP: redis
       REDIS_PORT: 6000
