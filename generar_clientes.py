@@ -1,48 +1,45 @@
 import pandas as pd
 import random
 
-# 🔁 Parámetros posibles
-sexos = ["M", "F"]
-estados_civiles = ["Casado", "Soltero", "Unión libre", "Divorciado"]
-ocupaciones = ["Empleado público", "Empleado privado", "Independiente", "Comerciante", "Técnico", "Tecnólogo"]
-residencias = ["Propia", "Arrendada", "Familiar", "Empresa"]
-estados = ["Bogotá", "Antioquia", "Cundinamarca", "Valle del Cauca", "Santander", "Tolima", "Atlántico"]
-ciudades = {
-    "Bogotá": ["Chía", "Teusaquillo", "Chapinero", "Suba"],
-    "Antioquia": ["Medellín", "Envigado", "Bello"],
-    "Cundinamarca": ["Soacha", "Zipaquirá", "Fusagasugá"],
-    "Valle del Cauca": ["Cali", "Palmira"],
-    "Santander": ["Bucaramanga"],
-    "Atlántico": ["Barranquilla"],
-    "Tolima": ["Ibagué"]
-}
-productos = ["Crédito Hipotecario", "Crédito Consumo", "Crédito Vehicular", "Tarjeta de Crédito"]
+# Posibles valores codificados
+sex_options = ["Male", "Female"]
+marital_options = list(range(1, 8))  # 1–7
+occupation_options = list(range(1, 6))  # 1–5
+residence_options = list(range(1, 6))
+flag_phone_options = ["Y", "N"]
+product_options = ["Mortgage Loan", "Consumer Credit", "Vehicle Loan", "Credit Card"]
+risk_labels = ["Low", "Medium", "High"]
 
-def generar_cliente():
-    state = random.choice(estados)
-    ciudad = random.choice(ciudades[state])
+# Ciudades y estados comunes en EE. UU.
+cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "San Antonio", "Philadelphia", "San Diego"]
+states = ["NY", "CA", "IL", "TX", "AZ", "PA"]
 
-    return {
-        "AGE": random.randint(21, 65),
-        "SEX": random.choice(sexos),
-        "MARITAL_STATUS": random.choice(estados_civiles),
-        "OCCUPATION_TYPE": random.choice(ocupaciones),
-        "MONTHS_IN_RESIDENCE": random.randint(6, 120),
-        "FLAG_RESIDENCIAL_PHONE": random.randint(0, 1),
-        "STATE_OF_BIRTH": state,
-        "RESIDENCIAL_STATE": state,
-        "RESIDENCE_TYPE": random.choice(residencias),
-        "RESIDENCIAL_CITY": ciudad,
-        "RESIDENCIAL_BOROUGH": f"Barrio {random.randint(1, 15)}",
-        "RESIDENCIAL_PHONE_AREA_CODE": random.choice([1, 2, 4, 5, 7]),
+# Lista de registros sintéticos
+records = []
+
+for _ in range(200):
+    record = {
+        "AGE": random.randint(18, 80),
+        "SEX": random.choice(sex_options),
+        "MARITAL_STATUS": random.choice(marital_options),
+        "OCCUPATION_TYPE": random.choice(occupation_options),
+        "MONTHS_IN_RESIDENCE": random.randint(1, 240),
+        "FLAG_RESIDENCIAL_PHONE": random.choice(flag_phone_options),
+        "STATE_OF_BIRTH": random.choice(states),
+        "RESIDENCIAL_STATE": random.choice(states),
+        "RESIDENCE_TYPE": random.choice(residence_options),
+        "RESIDENCIAL_CITY": random.choice(cities),
+        "RESIDENCIAL_BOROUGH": f"Borough-{random.randint(1, 99)}",
+        "RESIDENCIAL_PHONE_AREA_CODE": random.choice([212, 213, 312, 713, 602, 215]),
         "RESIDENCIAL_ZIP_3": random.randint(100, 999),
-        "PROFESSIONAL_STATE": state,
+        "PROFESSIONAL_STATE": random.choice(states),
         "PROFESSIONAL_ZIP_3": random.randint(100, 999),
-        "PRODUCT": random.choice(productos),
-        "RISK_LABEL": random.choice(["Bajo", "Alto"])
+        "PRODUCT": random.choice(product_options),
+        "RISK_LABEL": random.choice(risk_labels)
     }
+    records.append(record)
 
-# 🧠 Generar 100 filas
-clientes = pd.DataFrame([generar_cliente() for _ in range(100)])
-clientes.to_csv("clientes.csv", index=False)
-print("✅ Archivo clientes.csv generado con 100 registros")
+# Guardar en CSV
+df = pd.DataFrame(records)
+df.to_csv("clientes_clean.csv", index=False)
+print("✅ Archivo clientes_clean.csv generado con 200 registros sintéticos.")

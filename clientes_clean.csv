@@ -1,0 +1,201 @@
+AGE,SEX,MARITAL_STATUS,OCCUPATION_TYPE,MONTHS_IN_RESIDENCE,FLAG_RESIDENCIAL_PHONE,STATE_OF_BIRTH,RESIDENCIAL_STATE,RESIDENCE_TYPE,RESIDENCIAL_CITY,RESIDENCIAL_BOROUGH,RESIDENCIAL_PHONE_AREA_CODE,RESIDENCIAL_ZIP_3,PROFESSIONAL_STATE,PROFESSIONAL_ZIP_3,PRODUCT,RISK_LABEL
+66,Male,3,4,63,Y,AZ,NY,3,Los Angeles,Borough-63,215,418,NY,214,Vehicle Loan,Low
+47,Female,3,4,108,Y,NY,NY,3,Chicago,Borough-20,312,308,PA,894,Mortgage Loan,High
+77,Male,5,4,51,N,AZ,IL,2,Phoenix,Borough-64,312,789,CA,545,Consumer Credit,Medium
+21,Male,7,1,163,Y,PA,TX,2,Houston,Borough-33,602,701,PA,831,Vehicle Loan,Medium
+74,Male,2,2,128,Y,AZ,TX,1,Phoenix,Borough-30,602,124,NY,861,Consumer Credit,Medium
+59,Female,1,2,122,Y,CA,TX,1,New York,Borough-92,713,955,AZ,357,Credit Card,High
+40,Male,1,1,132,N,IL,AZ,3,Chicago,Borough-52,602,652,CA,862,Credit Card,High
+75,Male,7,2,179,Y,NY,AZ,5,Houston,Borough-26,213,154,PA,664,Credit Card,High
+36,Female,1,5,186,Y,TX,CA,2,Philadelphia,Borough-92,212,485,CA,564,Vehicle Loan,Low
+58,Male,2,4,82,N,CA,NY,4,San Antonio,Borough-41,713,757,PA,379,Vehicle Loan,Medium
+75,Female,7,2,51,Y,TX,PA,4,Philadelphia,Borough-79,312,878,CA,235,Credit Card,High
+67,Male,4,5,75,N,PA,IL,2,Phoenix,Borough-58,602,751,CA,310,Credit Card,Low
+54,Female,6,5,81,Y,TX,PA,2,New York,Borough-82,602,110,AZ,175,Credit Card,Medium
+76,Male,2,2,75,Y,NY,IL,5,Houston,Borough-51,312,535,PA,827,Vehicle Loan,Low
+18,Male,2,4,37,N,NY,TX,2,San Diego,Borough-7,312,488,AZ,147,Mortgage Loan,High
+43,Female,3,4,43,N,TX,IL,2,Los Angeles,Borough-1,215,876,IL,668,Vehicle Loan,Medium
+78,Male,2,2,41,Y,CA,IL,5,San Antonio,Borough-64,212,275,NY,127,Consumer Credit,High
+53,Male,4,1,114,N,PA,CA,2,Chicago,Borough-12,713,334,AZ,871,Consumer Credit,High
+47,Male,3,2,106,Y,TX,IL,5,San Antonio,Borough-19,213,257,CA,408,Vehicle Loan,Low
+63,Female,3,3,118,N,CA,CA,2,Phoenix,Borough-60,213,702,NY,663,Consumer Credit,Medium
+73,Male,7,4,179,Y,PA,IL,1,San Diego,Borough-39,215,133,CA,827,Consumer Credit,Medium
+32,Female,2,2,183,N,PA,TX,5,Philadelphia,Borough-13,215,676,CA,663,Consumer Credit,Low
+32,Male,4,3,121,Y,NY,AZ,2,Houston,Borough-98,215,307,AZ,424,Mortgage Loan,Low
+59,Male,5,1,131,N,AZ,PA,5,Chicago,Borough-81,602,504,AZ,210,Credit Card,High
+74,Male,2,3,119,Y,AZ,AZ,1,Chicago,Borough-34,213,396,IL,915,Consumer Credit,Low
+44,Male,5,1,41,N,CA,TX,4,San Antonio,Borough-80,602,362,AZ,359,Consumer Credit,Medium
+41,Female,3,5,31,N,PA,NY,2,San Diego,Borough-2,213,704,PA,811,Mortgage Loan,High
+62,Female,4,2,91,N,PA,PA,5,Chicago,Borough-27,213,248,CA,838,Credit Card,Low
+19,Female,4,4,74,Y,PA,TX,1,San Diego,Borough-8,713,546,PA,106,Consumer Credit,Medium
+68,Male,3,3,183,Y,NY,CA,2,San Antonio,Borough-56,312,386,IL,629,Consumer Credit,Low
+47,Male,3,2,146,Y,NY,CA,3,New York,Borough-51,312,752,NY,897,Credit Card,Medium
+40,Female,3,3,145,Y,NY,CA,2,New York,Borough-94,312,786,IL,695,Credit Card,Medium
+42,Female,7,1,180,Y,NY,CA,3,Phoenix,Borough-56,713,146,AZ,832,Vehicle Loan,High
+33,Male,6,1,105,Y,AZ,NY,5,San Diego,Borough-6,212,742,TX,662,Credit Card,Low
+62,Male,1,5,176,N,IL,PA,5,Los Angeles,Borough-69,212,455,CA,463,Vehicle Loan,Medium
+51,Male,2,3,217,N,AZ,CA,1,San Antonio,Borough-40,212,333,NY,405,Vehicle Loan,High
+28,Male,5,1,16,Y,TX,PA,5,Houston,Borough-27,215,755,AZ,861,Vehicle Loan,Low
+24,Female,7,1,212,Y,CA,IL,5,Houston,Borough-76,212,764,PA,629,Consumer Credit,Medium
+74,Female,7,2,9,Y,IL,PA,2,San Diego,Borough-38,213,713,CA,200,Mortgage Loan,High
+77,Female,3,4,145,Y,TX,CA,4,Phoenix,Borough-45,602,674,NY,249,Credit Card,Medium
+51,Male,7,5,68,Y,TX,CA,4,Chicago,Borough-75,215,122,PA,994,Vehicle Loan,Low
+41,Female,7,4,59,N,IL,AZ,3,Chicago,Borough-22,215,905,PA,267,Mortgage Loan,Low
+60,Male,3,2,47,N,AZ,NY,3,Houston,Borough-55,602,249,PA,835,Vehicle Loan,High
+18,Male,5,4,62,N,AZ,IL,4,San Diego,Borough-71,713,799,TX,454,Mortgage Loan,Medium
+20,Female,2,5,237,N,AZ,CA,1,Los Angeles,Borough-26,213,981,TX,635,Consumer Credit,Low
+19,Female,4,4,47,Y,NY,IL,2,San Antonio,Borough-19,602,223,TX,635,Vehicle Loan,High
+76,Female,5,4,159,N,IL,NY,2,San Antonio,Borough-52,213,967,AZ,546,Mortgage Loan,Low
+35,Male,1,2,26,N,NY,AZ,4,Houston,Borough-92,215,585,TX,917,Vehicle Loan,High
+52,Female,5,1,138,N,NY,NY,5,San Antonio,Borough-4,213,129,TX,109,Vehicle Loan,High
+73,Female,1,4,19,N,AZ,AZ,4,San Diego,Borough-6,215,725,AZ,658,Vehicle Loan,Low
+58,Female,7,3,101,Y,IL,NY,5,Houston,Borough-44,602,631,CA,151,Vehicle Loan,Medium
+64,Male,5,3,82,N,AZ,IL,5,Phoenix,Borough-82,215,472,PA,135,Vehicle Loan,High
+44,Male,3,1,78,Y,PA,PA,1,New York,Borough-47,602,476,NY,468,Mortgage Loan,Medium
+52,Female,3,4,222,N,AZ,CA,1,San Antonio,Borough-53,213,808,CA,721,Credit Card,Low
+43,Male,7,5,67,N,NY,PA,4,Chicago,Borough-92,212,884,IL,896,Vehicle Loan,Low
+41,Female,2,3,117,N,CA,PA,4,Houston,Borough-83,713,144,TX,210,Mortgage Loan,Low
+41,Male,1,4,29,N,TX,NY,5,Philadelphia,Borough-52,212,152,NY,585,Mortgage Loan,High
+30,Male,1,3,44,N,AZ,PA,5,New York,Borough-91,602,470,NY,742,Vehicle Loan,Low
+64,Male,5,4,200,N,PA,TX,2,Phoenix,Borough-13,713,592,PA,917,Credit Card,Low
+50,Female,3,5,237,Y,AZ,NY,4,Philadelphia,Borough-2,213,235,NY,980,Credit Card,High
+42,Female,4,4,152,N,TX,AZ,1,Philadelphia,Borough-58,312,839,CA,697,Consumer Credit,Low
+53,Female,2,4,112,N,TX,TX,5,San Diego,Borough-10,212,873,TX,944,Vehicle Loan,High
+46,Male,7,4,142,N,AZ,TX,1,San Diego,Borough-68,213,492,CA,471,Consumer Credit,Low
+37,Female,6,2,167,Y,CA,CA,4,Chicago,Borough-7,215,511,TX,848,Vehicle Loan,Low
+64,Male,7,5,53,N,AZ,AZ,3,New York,Borough-93,713,963,IL,505,Mortgage Loan,High
+57,Male,2,3,70,N,AZ,IL,2,San Antonio,Borough-69,312,503,AZ,304,Vehicle Loan,Medium
+49,Male,3,1,158,N,AZ,TX,1,San Diego,Borough-21,213,135,PA,668,Mortgage Loan,Medium
+43,Female,4,2,30,N,AZ,CA,4,Los Angeles,Borough-91,215,645,CA,171,Vehicle Loan,Medium
+51,Male,7,3,20,Y,CA,NY,3,San Diego,Borough-21,312,968,AZ,236,Credit Card,Low
+20,Male,6,5,58,N,AZ,CA,5,San Diego,Borough-3,213,620,IL,412,Mortgage Loan,High
+61,Female,4,3,211,Y,NY,NY,1,Philadelphia,Borough-6,312,288,NY,637,Mortgage Loan,Medium
+59,Male,7,2,69,N,NY,IL,2,Chicago,Borough-63,312,870,IL,992,Vehicle Loan,High
+71,Male,7,5,130,Y,NY,PA,3,San Diego,Borough-55,213,319,PA,236,Consumer Credit,Medium
+56,Female,7,4,8,N,CA,IL,4,Houston,Borough-97,713,572,TX,367,Consumer Credit,High
+79,Male,2,2,25,N,NY,IL,3,San Diego,Borough-2,713,535,AZ,922,Vehicle Loan,High
+79,Female,3,2,97,N,TX,IL,2,New York,Borough-38,212,163,AZ,708,Credit Card,Low
+72,Female,5,2,161,N,PA,IL,4,New York,Borough-4,213,360,NY,295,Vehicle Loan,Medium
+44,Female,2,2,57,Y,PA,NY,1,San Diego,Borough-21,602,542,PA,708,Mortgage Loan,Medium
+70,Female,4,1,215,N,NY,PA,5,San Antonio,Borough-92,212,543,AZ,473,Vehicle Loan,High
+68,Female,1,2,93,N,TX,CA,5,Phoenix,Borough-45,213,509,CA,503,Consumer Credit,Low
+38,Male,3,4,25,Y,TX,AZ,2,Phoenix,Borough-59,215,297,NY,648,Credit Card,High
+77,Female,1,3,26,Y,TX,TX,1,Los Angeles,Borough-83,602,809,IL,284,Mortgage Loan,High
+56,Male,1,1,46,Y,AZ,IL,4,San Antonio,Borough-93,602,938,AZ,828,Consumer Credit,Low
+42,Female,1,4,191,Y,AZ,NY,2,Los Angeles,Borough-13,213,980,PA,891,Vehicle Loan,Medium
+73,Female,1,3,120,Y,AZ,PA,4,Chicago,Borough-99,213,414,NY,595,Mortgage Loan,High
+78,Female,5,1,10,N,TX,AZ,5,Phoenix,Borough-28,213,315,NY,613,Credit Card,Medium
+63,Male,3,1,3,N,TX,AZ,5,Houston,Borough-78,602,215,CA,359,Credit Card,Medium
+73,Female,7,4,32,N,IL,IL,1,Los Angeles,Borough-28,713,780,TX,702,Consumer Credit,High
+56,Male,5,5,228,N,PA,PA,2,San Diego,Borough-71,213,688,AZ,724,Vehicle Loan,High
+35,Male,2,2,208,N,IL,IL,3,San Diego,Borough-87,312,919,CA,924,Vehicle Loan,High
+77,Female,5,5,12,N,AZ,PA,4,Chicago,Borough-63,312,281,IL,785,Mortgage Loan,High
+55,Male,4,4,233,N,PA,IL,4,Phoenix,Borough-92,713,171,IL,493,Mortgage Loan,Low
+18,Male,4,1,235,N,TX,PA,5,Phoenix,Borough-71,602,202,NY,717,Mortgage Loan,High
+26,Female,3,2,234,Y,TX,CA,5,Phoenix,Borough-68,602,659,AZ,118,Consumer Credit,High
+27,Female,4,2,71,N,IL,PA,3,New York,Borough-86,213,874,PA,186,Mortgage Loan,Low
+27,Male,1,5,168,N,CA,IL,1,Phoenix,Borough-75,602,722,CA,473,Consumer Credit,High
+18,Male,3,5,168,N,TX,IL,4,San Antonio,Borough-40,602,279,TX,658,Credit Card,High
+77,Female,4,3,141,Y,TX,IL,2,Los Angeles,Borough-4,713,610,AZ,813,Mortgage Loan,High
+58,Female,3,4,143,N,CA,TX,5,Houston,Borough-58,312,798,NY,738,Credit Card,Medium
+40,Male,5,3,103,N,PA,PA,5,San Antonio,Borough-75,212,626,TX,929,Credit Card,Low
+38,Male,1,3,193,Y,PA,NY,1,New York,Borough-78,213,600,CA,404,Consumer Credit,High
+62,Female,5,2,12,Y,CA,PA,2,Los Angeles,Borough-82,602,405,AZ,393,Mortgage Loan,Low
+30,Female,4,3,228,Y,CA,IL,2,San Diego,Borough-85,213,644,NY,356,Credit Card,Low
+67,Male,5,5,23,N,IL,CA,3,Phoenix,Borough-79,212,753,NY,305,Mortgage Loan,Low
+69,Male,1,3,239,N,AZ,TX,5,San Antonio,Borough-73,312,110,TX,525,Mortgage Loan,High
+54,Male,6,4,96,Y,CA,IL,4,Houston,Borough-22,215,963,NY,660,Mortgage Loan,Medium
+46,Male,7,5,7,N,IL,CA,5,San Antonio,Borough-37,212,802,TX,400,Mortgage Loan,High
+28,Female,7,2,58,N,AZ,PA,3,Houston,Borough-77,215,164,PA,290,Vehicle Loan,Medium
+74,Male,1,5,49,N,TX,CA,1,Phoenix,Borough-71,312,186,TX,370,Vehicle Loan,Low
+78,Female,5,3,228,N,PA,TX,1,Los Angeles,Borough-45,713,125,NY,527,Mortgage Loan,Low
+61,Male,7,4,33,Y,PA,PA,4,Houston,Borough-84,213,574,PA,724,Credit Card,Low
+54,Male,2,3,160,Y,CA,IL,3,New York,Borough-39,212,463,IL,284,Consumer Credit,Low
+36,Female,4,5,236,N,PA,NY,2,Phoenix,Borough-11,212,838,CA,391,Consumer Credit,Medium
+39,Female,5,3,85,N,NY,AZ,5,Houston,Borough-94,602,583,PA,968,Vehicle Loan,Low
+45,Female,7,3,141,Y,IL,NY,2,San Diego,Borough-4,312,540,PA,588,Credit Card,Low
+30,Male,7,3,52,N,PA,CA,4,Philadelphia,Borough-15,212,384,PA,502,Mortgage Loan,High
+51,Female,5,2,52,Y,PA,AZ,3,San Antonio,Borough-93,212,251,AZ,553,Mortgage Loan,Medium
+37,Male,6,5,230,N,CA,IL,5,Los Angeles,Borough-54,212,850,NY,839,Consumer Credit,Medium
+46,Male,5,2,34,N,CA,IL,4,Phoenix,Borough-36,713,923,IL,250,Vehicle Loan,High
+74,Male,1,3,66,Y,TX,TX,2,Chicago,Borough-30,312,710,IL,746,Consumer Credit,Low
+79,Male,6,2,41,N,IL,CA,2,San Antonio,Borough-54,215,187,TX,859,Consumer Credit,High
+19,Male,2,3,155,Y,PA,AZ,5,San Antonio,Borough-75,213,353,AZ,809,Mortgage Loan,Medium
+33,Male,1,2,74,N,IL,TX,5,Los Angeles,Borough-57,215,694,TX,832,Credit Card,Low
+55,Male,3,1,228,N,CA,PA,4,Philadelphia,Borough-62,312,470,AZ,823,Mortgage Loan,Low
+54,Female,1,1,96,N,PA,AZ,2,San Antonio,Borough-83,215,231,IL,640,Mortgage Loan,Medium
+47,Female,2,5,227,Y,PA,CA,3,Los Angeles,Borough-80,312,139,TX,434,Credit Card,Medium
+75,Female,7,5,67,Y,IL,IL,2,San Diego,Borough-5,212,976,IL,734,Credit Card,Low
+42,Male,2,2,108,N,PA,AZ,5,New York,Borough-64,713,476,NY,747,Consumer Credit,Medium
+44,Male,1,2,37,N,NY,AZ,5,Houston,Borough-49,602,974,AZ,350,Vehicle Loan,Low
+51,Female,5,2,239,Y,CA,IL,3,San Antonio,Borough-31,213,216,AZ,877,Mortgage Loan,Medium
+44,Male,3,3,198,Y,TX,NY,4,New York,Borough-18,602,171,PA,245,Vehicle Loan,Medium
+56,Female,1,1,178,Y,TX,TX,5,New York,Borough-73,312,326,NY,494,Credit Card,Medium
+64,Male,3,1,18,N,TX,CA,4,Philadelphia,Borough-76,602,689,NY,325,Consumer Credit,Medium
+59,Female,2,3,53,N,PA,PA,1,San Antonio,Borough-91,213,889,AZ,901,Consumer Credit,High
+23,Female,3,4,136,N,CA,AZ,2,San Diego,Borough-77,213,658,AZ,998,Consumer Credit,High
+20,Male,3,3,186,N,AZ,TX,3,Chicago,Borough-52,215,120,PA,887,Mortgage Loan,Medium
+61,Female,2,3,32,Y,NY,NY,5,San Diego,Borough-13,713,529,NY,914,Vehicle Loan,Low
+24,Male,5,2,72,Y,NY,CA,2,Philadelphia,Borough-44,312,703,TX,428,Mortgage Loan,High
+57,Female,4,4,15,Y,PA,NY,3,Chicago,Borough-54,312,705,AZ,261,Credit Card,Medium
+25,Male,3,1,210,Y,IL,CA,2,San Diego,Borough-29,215,964,PA,203,Consumer Credit,Medium
+64,Female,5,1,2,Y,CA,PA,3,Philadelphia,Borough-1,713,110,TX,283,Vehicle Loan,Medium
+44,Male,6,2,230,N,TX,AZ,1,San Diego,Borough-8,602,260,TX,779,Credit Card,Low
+63,Female,7,2,35,Y,TX,AZ,4,Houston,Borough-80,213,874,PA,524,Consumer Credit,High
+71,Male,7,5,88,N,PA,PA,1,Philadelphia,Borough-61,312,322,TX,124,Credit Card,Medium
+29,Male,5,2,53,Y,AZ,CA,1,Los Angeles,Borough-25,215,460,AZ,579,Credit Card,Low
+52,Female,4,5,236,Y,CA,AZ,3,Houston,Borough-37,602,789,CA,982,Mortgage Loan,Low
+74,Female,3,3,8,N,NY,CA,5,Phoenix,Borough-2,713,101,CA,420,Consumer Credit,Medium
+39,Female,6,4,83,Y,PA,PA,3,Chicago,Borough-32,713,801,NY,416,Mortgage Loan,Medium
+27,Female,5,5,226,N,PA,CA,3,San Diego,Borough-39,212,992,TX,603,Mortgage Loan,Low
+39,Female,7,2,101,N,TX,TX,4,Phoenix,Borough-89,602,642,IL,704,Mortgage Loan,Medium
+65,Female,6,4,157,N,PA,CA,2,Philadelphia,Borough-57,212,198,IL,305,Credit Card,High
+33,Female,5,3,87,N,PA,TX,1,Los Angeles,Borough-2,212,488,CA,288,Vehicle Loan,Medium
+42,Female,3,3,216,Y,CA,TX,2,San Antonio,Borough-40,602,893,AZ,389,Credit Card,Low
+67,Female,4,4,219,N,AZ,NY,2,New York,Borough-58,713,412,AZ,680,Credit Card,High
+25,Female,2,5,65,Y,AZ,PA,5,Philadelphia,Borough-72,312,963,TX,146,Consumer Credit,High
+40,Female,3,4,189,N,IL,AZ,3,Los Angeles,Borough-11,212,603,CA,494,Credit Card,Medium
+44,Female,6,4,157,Y,NY,NY,5,San Diego,Borough-48,312,303,AZ,338,Vehicle Loan,Low
+19,Female,1,2,190,N,TX,IL,4,Phoenix,Borough-74,602,992,PA,341,Credit Card,Medium
+37,Male,3,1,69,Y,PA,AZ,4,Chicago,Borough-60,713,126,PA,170,Credit Card,Medium
+22,Male,6,5,207,N,IL,NY,2,Houston,Borough-70,212,230,TX,782,Credit Card,High
+67,Male,5,4,182,N,AZ,TX,3,Philadelphia,Borough-25,213,118,CA,662,Mortgage Loan,Low
+44,Female,7,3,105,N,PA,AZ,1,San Diego,Borough-60,215,225,CA,714,Vehicle Loan,Low
+37,Male,3,4,222,N,TX,CA,4,New York,Borough-29,602,618,AZ,584,Credit Card,Low
+19,Male,5,2,138,Y,TX,CA,4,Houston,Borough-26,602,688,CA,457,Mortgage Loan,High
+45,Female,7,1,239,Y,NY,AZ,1,Philadelphia,Borough-7,213,156,AZ,889,Vehicle Loan,Low
+23,Female,5,4,81,N,CA,IL,5,Philadelphia,Borough-45,713,961,TX,965,Mortgage Loan,High
+60,Male,5,3,173,Y,PA,CA,2,San Antonio,Borough-12,213,234,IL,884,Consumer Credit,Medium
+26,Female,1,3,167,N,TX,PA,4,New York,Borough-23,602,856,TX,514,Consumer Credit,High
+43,Male,2,5,85,N,TX,NY,3,San Diego,Borough-2,213,420,PA,647,Credit Card,Medium
+78,Male,5,4,200,Y,AZ,CA,3,New York,Borough-73,602,445,IL,169,Credit Card,Medium
+55,Male,7,3,106,Y,CA,NY,4,Chicago,Borough-22,213,376,NY,569,Consumer Credit,Low
+52,Female,4,1,12,N,TX,PA,2,San Diego,Borough-40,602,464,AZ,237,Vehicle Loan,High
+76,Female,3,2,31,Y,NY,TX,4,New York,Borough-93,713,576,TX,911,Vehicle Loan,Low
+63,Male,5,4,72,Y,TX,NY,5,Houston,Borough-27,213,927,CA,608,Credit Card,High
+24,Male,4,4,157,Y,PA,AZ,3,Chicago,Borough-1,212,784,NY,714,Vehicle Loan,Low
+31,Male,6,4,6,N,NY,CA,3,New York,Borough-44,213,487,PA,883,Mortgage Loan,Low
+18,Male,1,2,117,N,AZ,PA,1,Phoenix,Borough-55,602,106,AZ,692,Consumer Credit,Low
+39,Female,3,1,239,Y,AZ,IL,1,Los Angeles,Borough-23,312,885,PA,577,Vehicle Loan,High
+42,Female,1,4,166,N,AZ,CA,4,San Antonio,Borough-28,713,522,NY,579,Vehicle Loan,High
+68,Female,6,4,156,Y,CA,PA,4,San Diego,Borough-14,713,186,AZ,504,Credit Card,High
+28,Male,5,1,61,N,IL,IL,2,San Antonio,Borough-52,312,746,NY,994,Mortgage Loan,High
+35,Female,3,3,49,N,PA,NY,2,Phoenix,Borough-51,602,991,NY,370,Mortgage Loan,Low
+43,Female,7,3,57,N,IL,CA,2,Houston,Borough-63,212,310,CA,607,Mortgage Loan,High
+52,Female,1,5,140,N,PA,PA,3,Philadelphia,Borough-69,215,457,PA,292,Vehicle Loan,High
+36,Female,2,2,171,N,NY,AZ,2,San Diego,Borough-33,602,715,CA,892,Credit Card,Medium
+64,Male,6,2,134,N,CA,PA,1,Los Angeles,Borough-75,215,714,PA,876,Mortgage Loan,High
+64,Female,3,3,28,Y,CA,PA,1,San Antonio,Borough-73,213,572,CA,440,Mortgage Loan,Low
+38,Female,3,4,228,N,PA,AZ,4,Los Angeles,Borough-17,713,104,CA,946,Vehicle Loan,High
+42,Male,4,2,19,N,TX,NY,4,Chicago,Borough-50,713,818,TX,784,Vehicle Loan,Medium
+31,Male,6,3,133,N,IL,NY,2,New York,Borough-26,215,627,NY,787,Mortgage Loan,Low
+57,Male,2,2,225,N,CA,TX,4,San Antonio,Borough-71,215,524,NY,983,Mortgage Loan,High
+61,Female,2,5,13,N,AZ,AZ,1,Chicago,Borough-26,215,760,PA,363,Consumer Credit,Medium
+23,Male,5,1,216,N,CA,TX,1,New York,Borough-13,713,316,NY,587,Mortgage Loan,High
+42,Male,1,5,220,Y,IL,PA,2,Chicago,Borough-88,713,975,CA,784,Consumer Credit,Medium
+48,Female,6,4,170,Y,PA,CA,2,Chicago,Borough-94,212,786,CA,368,Mortgage Loan,High
+51,Female,4,1,154,Y,AZ,AZ,2,San Antonio,Borough-32,215,186,AZ,503,Mortgage Loan,Medium
+42,Female,5,3,85,N,IL,PA,2,Phoenix,Borough-46,213,318,PA,123,Vehicle Loan,High
+69,Female,3,5,26,Y,NY,CA,5,Phoenix,Borough-33,212,494,TX,359,Vehicle Loan,High
+33,Male,2,4,184,N,AZ,CA,4,New York,Borough-88,215,738,CA,551,Consumer Credit,Medium
+32,Male,2,2,16,N,AZ,AZ,1,Houston,Borough-52,212,767,PA,401,Mortgage Loan,Low
