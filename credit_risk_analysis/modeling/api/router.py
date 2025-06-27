@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from credit_risk_analysis.db.prediction_orm import get_all_predictions, get_db
 from credit_risk_analysis.modeling.schema import PredictRequest, PredictResponse, PredictionRecord
+from credit_risk_analysis.modeling.services.prediction_job_producer import model_predict
 
 app = FastAPI(
     title="Credit Risk Analysis API",
@@ -74,10 +75,10 @@ async def predict(predict_request: PredictRequest):
         risk_percentage=1
     )
 
-    # response.success, response.score = await model_predict(predict_request, model_name)
-    #
-    # return response
+    response.risk_percentage = await model_predict(predict_request, model_name)
+
     return response
+
 
 @model_router.get("/predictions", response_model=List[PredictionRecord])
 def get_predictions(db: Session = Depends(get_db)):

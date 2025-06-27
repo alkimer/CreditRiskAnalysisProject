@@ -64,8 +64,8 @@ async def consume_predictions():
                 continue
 
             # Call Real model
-            success, score = await predict_credit_risk(job_data)
-            response = PredictResponse(success=success, score=score)
+            score = await predict_credit_risk(job_data)
+            response = PredictResponse(risk_percentage=score)
 
             try:
                 await db.setex(job_id, 300, json.dumps(response.model_dump()))  # TTL de 5 minutos

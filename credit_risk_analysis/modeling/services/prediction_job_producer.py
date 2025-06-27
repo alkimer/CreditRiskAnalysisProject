@@ -75,9 +75,11 @@ async def model_predict(predict_request, model_name):
                 logger.info(f"[{job_id}] ✅ Job result received")
                 try:
                     output = json.loads(output_raw)
-                    score = output.get("score", None)
+                    logger.info(f"[{job_id}] ✅ Job result received")
+
+                    score = output.get("risk_percentage", None)
                     if score is None:
-                        raise ValueError("Missing 'score' field in result")
+                        raise ValueError("Missing 'risk_percentage' field in result")
                 except Exception as e:
                     logger.exception(f"[{job_id}] ❌ Error decoding result: {e}")
                     raise

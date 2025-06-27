@@ -1,22 +1,19 @@
 
+import json
+import logging
 import os
 import sys
+from typing import Tuple
 
 import joblib
-import numpy as np
+import pandas as pd
 import typer
 
 sys.path.append(os.path.abspath('../'))
-from credit_risk_analysis.processing import process_all_features_v2
 
 app = typer.Typer()
 
 MODELS_DIR = "../../models"
-
-import logging
-import sys
-import pandas as pd
-from typing import Tuple
 
 logging.basicConfig(
     level=logging.INFO,
@@ -84,24 +81,6 @@ DEFAULTS = {
     'FLAG_INCOME_PROOF': 0,
     'FLAG_ACSP_RECORD': "N",
 }
-#
-# async def model_predict(data) -> Tuple[bool, float]:
-#     logger.info(f"📦 prediciendo: {data}")
-#     df = build_input_dataframe(data)
-#
-#     print("📄 Primera fila del DataFrame:")
-#     for col, val in df.iloc[0].items():
-#         print(f"{col}: {val}")
-#
-#     # Simulamos procesamiento asíncrono
-#     await asyncio.sleep(0.1)
-#
-#     # Resultado random
-#     success = True
-#     score = round(random.uniform(0, 1), 4)  # un float entre 0 y 1 con 4 decimales
-#
-#     logger.info(f"✅ resultado: success={success}, score={score}")
-#     return success, score
 
 
 def build_input_dataframe(job_data: dict) -> pd.DataFrame:
@@ -126,15 +105,16 @@ provided via de UI
 async def predict_credit_risk(ui_data, model_name="stacking_model.pkl", )-> Tuple[bool, float]:
     print(f"✅ Modelo {model_name} realizando predicción...")
 
-    # model_path = os.path.join(MODELS_DIR, model_name)
-    #Json to Dataframe and adding needed columns
     X_new = build_input_dataframe(ui_data)
-    X_n = process_all_features_v2.process_features_json(X_new)
-    model = joblib.load(os.path.join("credit_risk_analysis", "models", model_name))
-    predictions = model.predict(X_n)
-    probabilities = model.predict_proba(X_n)[:, 1]
-    X_n["TARGET_LABEL_BAD=1"] = predictions
-    X_n["PROBABILITY_BAD=1"] = probabilities
-    print("✅ Predicciones de riesgo crediticio completadas.")
+    preprocessor = joblib.load('credit_risk_analysis/models/preprocessor.pkl')
 
-    return True,predictions
+    df = preprocessor.transform(X_new)
+
+    with open('data/interim/final_columns.json', 'r') as file:
+        final_columns = json.load(file)
+
+    df = pd.DataFrame(df, columns=final_columns)
+
+    pipeline = joblib.load('credit_risk_analysis/models/stacking_model.pkl')
+
+    return pipeline.predict_proba(df)[:, 1][0]
