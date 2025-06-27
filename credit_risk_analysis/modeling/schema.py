@@ -17,9 +17,9 @@ class PredictRequest(BaseModel):
     PRODUCT: str
     RESIDENCIAL_CITY: str
     RESIDENCIAL_BOROUGH: str
-    RESIDENCIAL_PHONE_AREA_CODE: str
-    RESIDENCIAL_ZIP_3: str
-    PROFESSIONAL_ZIP_3: str
+    RESIDENCIAL_PHONE_AREA_CODE: int
+    RESIDENCIAL_ZIP_3: int
+    PROFESSIONAL_ZIP_3: int
 
 
 class PredictResponse(BaseModel):

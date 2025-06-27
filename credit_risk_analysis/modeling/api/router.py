@@ -1,51 +1,23 @@
+import json
 import logging
 import sys
-from fastapi import APIRouter, FastAPI, Depends
 from typing import List
+
+from fastapi import Depends
+from fastapi import FastAPI
+from fastapi import Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi.routing import APIRouter
 from sqlalchemy.orm import Session
 
-from credit_risk_analysis.modeling.schema import PredictRequest, PredictResponse, PredictionRecord
 from credit_risk_analysis.db.prediction_orm import get_all_predictions, get_db
-from credit_risk_analysis.modeling.services.prediction_job_producer import model_predict
-from fastapi import Request, HTTPException
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
-from fastapi.routing import APIRouter
-from pydantic import BaseModel, ValidationError
-from typing import Any
-import logging
+from credit_risk_analysis.modeling.schema import PredictRequest, PredictResponse, PredictionRecord
 
-logger = logging.getLogger(__name__)
-# Inicializar la app FastAPI
 app = FastAPI(
     title="Credit Risk Analysis API",
     version="1.0.0"
 )
-
-from fastapi import FastAPI, Request
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-import logging
-
-logger = logging.getLogger(__name__)
-
-app = FastAPI()
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    error_report = []
-    print(request)
-    for error in exc.errors():
-        loc = ".".join(str(e) for e in error["loc"])
-        msg = error["msg"]
-        error_type = error["type"]
-        error_report.append({"field": loc, "error": msg, "type": error_type})
-        logger.warning(f"[VALIDATION ERROR] field={loc} → {msg} (type: {error_type})")
-
-    return JSONResponse(
-        status_code=412,
-        content={"detail": "Validation failed", "errors": error_report},
-    )
 
 # Configuración de logs
 logging.basicConfig(
@@ -55,8 +27,40 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),
     ]
 )
-model_name = "stacking_model.pkl"
+logger = logging.getLogger(__name__)
 logger.info("----INIT CREDIT RISK ANALYSIS ROUTER API SERVICE----")
+
+model_name = "stacking_model.pkl"
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # Leemos el body como bytes
+    body_bytes = await request.body()
+
+    try:
+        body_data = json.loads(body_bytes)
+    except Exception:
+        body_data = body_bytes.decode(errors='ignore')
+
+    logger.info(f"[VALIDATION ERROR] Request body received: {body_data}")
+
+    error_report = []
+    for error in exc.errors():
+        loc = ".".join(str(e) for e in error["loc"])
+        msg = error["msg"]
+        error_type = error["type"]
+        error_report.append({"field": loc, "error": msg, "type": error_type})
+        logger.warning(f"[VALIDATION ERROR] field={loc} → {msg} (type: {error_type})")
+
+    return JSONResponse(
+        status_code=412,
+        content={
+            "detail": "Validation failed",
+            "errors": error_report,
+            "body_received": body_data,  # opcional, podés incluirlo en el response
+        },
+    )
+
 
 # Router para endpoints relacionados al modelo
 model_router = APIRouter(tags=["Model"], prefix="/model")
