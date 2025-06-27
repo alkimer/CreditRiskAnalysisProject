@@ -1,4 +1,3 @@
-# Using pydantic for static type validation in FASTAPI
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -34,4 +33,4 @@ class PredictionRecord(BaseModel):
     model: str
 
     class Config:
-        orm_mode = True  # 🔑 Esto permite que funcione con SQLAlchemy
+        orm_mode = True

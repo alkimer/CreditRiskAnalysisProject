@@ -9,7 +9,8 @@ from credit_risk_analysis.modeling.model.predict import predict_credit_risk
 from credit_risk_analysis.modeling.schema import PredictResponse
 from settings import Settings
 
-##Workaround for falla intermitente credit-risk-worker  | 2025-06-27 14:20:10,205 | ERROR | 🔥 Error inesperado en el loop principal: No module named 'processing.process_all_features_v2'
+##Workaround for falla intermitente credit-risk-worker
+# | 2025-06-27 14:20:10,205 | ERROR | 🔥 Error inesperado en el loop principal: No module named 'processing.process_all_features_v2'
 
 import credit_risk_analysis.processing.process_all_features_v2 as actual_module
 
