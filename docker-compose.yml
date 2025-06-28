@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: credit-risk-redis
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - backend
+
+  worker:
+    build:
+      context: .
+    container_name: credit-risk-worker
+    command: python credit_risk_analysis/modeling/services/prediction_job_consumer.py
+    environment:
+      REDIS_IP: redis
+      REDIS_PORT: 6000
+      REDIS_DB_ID: 0
+      REDIS_PASSWORD: redis
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+    networks:
+      - backend
+
+  api:
+    build:
+      context: .
+    container_name: credit-risk-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_IP: redis
+      REDIS_PORT: 6000
+      REDIS_DB_ID: 0
+      REDIS_PASSWORD: redis
+    volumes:
+      - ./data:/app/data
+    networks:
+      - backend
+
+  ui:
+    image: python:3.10-slim
+    container_name: credit-risk-ui
+    working_dir: /app
+    volumes:
+      - ./credit_risk_analysis/UI:/app
+    ports:
+      - "8501:8501"
+    command: bash -c "pip install -r requirements.txt && streamlit run app.py --server.address=0.0.0.0"
+    depends_on:
+      - api
+    networks:
+      - backend
+
+
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  pgdata:

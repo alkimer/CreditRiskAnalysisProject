@@ -1,0 +1,11 @@
+/.venv/
+/data/external/
+/credit_risk_analysis/db/volume/
+venv/
+paoenv/
+__pycache__/
+.env
+*.pyc
+.idea/
+.DS_Store
+/aws
