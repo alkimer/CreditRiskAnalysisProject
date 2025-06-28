@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import joblib
 import pandas as pd
+import joblib
 
-# 📦 Cargar modelo
-model = joblib.load("model.pkl")
-
-# 🚀 Instancia de FastAPI
 app = FastAPI()
 
-# ✅ Estructura del input (ya codificado)
-class Applicant(BaseModel):
+try:
+    model = joblib.load("model.pkl")
+    print("✅ Modelo cargado")
+except Exception as e:
+    print("❌ Error cargando modelo:", e)
+
+class ApplicantData(BaseModel):
     AGE: int
     SEX: str
     MARITAL_STATUS: int
@@ -26,30 +27,35 @@ class Applicant(BaseModel):
     RESIDENCIAL_ZIP_3: int
     PROFESSIONAL_STATE: str
     PROFESSIONAL_ZIP_3: int
-    PRODUCT: str
+    PRODUCT: int
 
-# 🧠 Clasificación de riesgo
-def classify(score: float) -> str:
-    if score < 35:
-        return "Low"
-    elif score < 70:
-        return "Medium"
-    else:
-        return "High"
-
-# 🔮 Endpoint de predicción
 @app.post("/predict")
-def predict(data: Applicant):
-    input_df = pd.DataFrame([data.dict()])
+def predict(data: ApplicantData):
+    try:
+        payload = data.dict()
+        print("📥 Payload recibido:", payload)
 
-    # Seleccionar solo variables numéricas si fue entrenado así
-    numeric_cols = input_df.select_dtypes(include=["int64", "float64"]).columns
-    input_numeric = input_df[numeric_cols]
+        df = pd.DataFrame([payload])
+        numeric_cols = [
+            "AGE", "MARITAL_STATUS", "OCCUPATION_TYPE", "MONTHS_IN_RESIDENCE",
+            "RESIDENCIAL_PHONE_AREA_CODE", "RESIDENCIAL_ZIP_3",
+            "PROFESSIONAL_ZIP_3", "RESIDENCE_TYPE", "PRODUCT"
+        ]
+        input_numeric = df[numeric_cols]
+        print("🔢 Input numérico:", input_numeric)
 
-    proba = model.predict_proba(input_numeric)[0][1] * 100
-    label = classify(proba)
+        score = model.predict_proba(input_numeric)[0][1] * 100
 
-    return {
-        "risk_percentage": round(proba, 1),
-        "risk_class": label
-    }
+        def classify(s):
+            return "Low" if s < 35 else "Medium" if s < 70 else "High"
+
+        result = {
+            "risk_percentage": round(score, 1),
+            "risk_class": classify(score)
+        }
+        print("✅ Resultado:", result)
+        return result
+
+    except Exception as e:
+        print("❌ Error durante la predicción:", e)
+        return {"error": str(e)}

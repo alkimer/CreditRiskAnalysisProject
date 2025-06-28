@@ -18,18 +18,20 @@
   filter: drop-shadow(0 0 6px rgba(255,255,255,0.08));
 }
 
-/* 🚀 Splash button style */
+/* 🚀 Splash button style — protegido de herencias */
 #intro-logo-container button {
-  margin-top: 20px;
+  all: unset;
+  display: inline-block;
   font-size: 1.1em;
   padding: 0.5em 1.5em;
   border-radius: 8px;
   background-color: #C0392B;
   color: white;
-  border: none;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-align: center;
+  margin-top: 20px;
 }
 
 #intro-logo-container button:hover {
@@ -41,4 +43,56 @@
   0%   { transform: scale(1); }
   50%  { transform: scale(1.08); }
   100% { transform: scale(1); }
+}
+
+.breathing-risk-number {
+  font-weight: bold;
+  font-size: 52px;
+  background: linear-gradient(90deg, #1D8348, #F4D03F, #C0392B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 2.5s ease-in-out infinite;
+  text-align: center;
+  margin-top: -70px;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); opacity: 0.9; }
+  50%  { transform: scale(1.07); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* 🫥 Botón invisible de formulario */
+button:disabled {
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+  margin: 0;
+}
+
+/* 🎯 Centrado del botón principal */
+.center-button {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* 🟥 Botón principal redimensionado (fuera del splash) */
+button[kind="primary"] {
+  font-size: 2.2rem;
+  padding: 1.2rem 2.8rem;
+  font-weight: bold;
+  border-radius: 12px;
+  background-color: #0072C6;
+  color: white;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+button[kind="primary"]:hover {
+  background-color: #005EA2;
+  transform: scale(1.03);
 }
