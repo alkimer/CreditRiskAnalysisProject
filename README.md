@@ -1,27 +1,42 @@
-# Credit Risk AnalysisProject
+# 🧠 Credit Risk Analysis Project
 
-Este proyecto implementa un sistema completo de análisis de riesgo crediticio. 
-Incluye una API REST construida con FastAPI, un motor de predicción asincrónico basado en Redis, 
-una base de datos ligera en SQLite, y una interfaz de usuario desarrollada con Streamlit. 
-Toda la infraestructura es fácilmente desplegable mediante `Docker Compose`.
+Este proyecto implementa un sistema completo de **análisis de riesgo crediticio**, combinando:
 
-## How to Run the project
+- 🔌 Una **API REST** construida con **FastAPI**
+- 🧵 Un motor de predicción asincrónico usando **Redis**
+- 🗃 Una base de datos ligera basada en **SQLite**
+- 🖥 Una interfaz de usuario intuitiva desarrollada en **Streamlit**
+- 🐳 Todo completamente orquestado mediante **Docker Compose**
 
-```docker compose up --build ```
+---
 
-## UI
+## 🚀 ¿Cómo ejecutar el proyecto?
 
-http://localhost:8051
+Cloná el repositorio y ejecutá:
 
-## UI Docs
-
-http://localhost:8051/docs
-
-## Samples Api Request
-
-### get a prediction
-
+```bash
+docker compose up --build
 ```
+
+Esto levantará todos los servicios necesarios: API, worker, Redis, base de datos y la UI.
+
+---
+
+## 🌐 Accesos
+
+- **🧑‍💻 Interfaz de Usuario (UI)**:  
+  👉 [http://localhost:8051](http://localhost:8051)
+
+- **📚 Documentación Interactiva de la API** (Swagger):  
+  👉 [http://localhost:8051/docs](http://localhost:8051/docs)
+
+---
+
+## 📬 Ejemplos de uso vía API
+
+### 🔍 Obtener una predicción
+
+```bash
 curl -X POST http://localhost:8000/model/predict \
   -H "Content-Type: application/json" \
   -d '{
@@ -43,12 +58,27 @@ curl -X POST http://localhost:8000/model/predict \
     "PROFESSIONAL_ZIP_3": "800"
   }'
 ```
-### get historic of predictions
 
-```
-curl -X GET http://localhost:8000/model/predictions 
+---
 
+### 🕓 Consultar historial de predicciones
+
+```bash
+curl -X GET http://localhost:8000/model/predictions
 ```
+
+---
+
+## 📦 Estructura de servicios (Docker Compose)
+
+| Servicio             | Descripción                                  |
+|----------------------|----------------------------------------------|
+| `credit-risk-api`    | API REST con FastAPI                         |
+| `credit-risk-worker` | Worker asincrónico con Redis                 |
+| `credit-risk-redis`  | Servicio de cola de trabajos                 |
+| `credit-risk-ui`     | Interfaz de usuario con Streamlit            |
+| `sqlite`             | Base de datos ligera embebida                |
+
 
 
 ## Estructura del Proyecto
