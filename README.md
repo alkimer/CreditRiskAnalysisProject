@@ -137,6 +137,8 @@ Scripts de automatización y configuración para despliegue del sistema en una i
 - `setup_env_aws.sh`: Configura el entorno en la instancia EC2 (Docker, dependencias, etc.).
 - `subir_proyecto_aws.sh`: Sincroniza el proyecto local con la instancia EC2.
 
+- `deploy_and_run_aws.sh`: Es el All-in-one, hace todo lo que hacen los anteriores.
+
 ---
 
 ## Despliegue

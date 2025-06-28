@@ -3,6 +3,7 @@ import requests
 import plotly.graph_objects as go
 import base64
 import time
+import pandas as pd
 
 # Diccionarios codificados
 marital_map = {
@@ -38,7 +39,7 @@ product_map = {
 # Gauge animado
 def animated_gauge(final_value, risk_class):
     ph = st.empty()
-    bar_color = "#7BA6B9"
+    bar_color = "#00FF99"
     for val in range(0, int(final_value), 2):
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -218,3 +219,48 @@ if submitted:
             except Exception as e:
                 st.error("❌ Error connecting to the API.")
                 st.code(str(e), language="bash")
+
+import json
+
+with st.container():
+    st.markdown("""
+        <style>
+        .hist-button {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        .hist-button:hover {
+            color: #000;
+        }
+        .hist-icon {
+            margin-right: 6px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    with st.expander("🕒 Histórico de predicciones", expanded=False):
+        try:
+            response = requests.get("http://credit-risk-api:8000/model/predictions")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, dict):
+                    data = [data]
+                rows = []
+                for item in data:
+                    parsed_json = json.loads(item["request_json"])
+                    parsed_json["prediction_date"] = f"**{item['prediction_date']}**"
+                    parsed_json["score"] = item["score"]
+                    parsed_json["model"] = item["model"]
+                    rows.append(parsed_json)
+                df = pd.DataFrame(rows)
+                st.dataframe(df, use_container_width=True)
+            else:
+                st.warning("No se pudo obtener el histórico de predicciones.")
+        except Exception as e:
+            st.error("❌ Error al obtener el histórico.")
+            st.code(str(e), language="bash")
