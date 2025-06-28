@@ -58,7 +58,7 @@ def animated_gauge(final_value, risk_class):
         ph.plotly_chart(fig, use_container_width=True)
         time.sleep(0.05)
 
-    final_color = "#F0E68C" if final_value < 35 else "#F4D03F" if final_value < 70 else "#C0392B"
+    final_color = "#1D8348" if final_value < 35 else "#F4D03F" if final_value < 70 else "#C0392B"
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=final_value,
