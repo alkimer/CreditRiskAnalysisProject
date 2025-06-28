@@ -98,7 +98,7 @@ with col_inputs:
         c1, c2 = st.columns(2)
         with c1:
             age = st.number_input("Age", 18, 80, 30)
-            sex = st.selectbox("Sex", ["Male", "Female"])
+            sex = st.selectbox("Sex", ["M", "F"])
             marital = st.selectbox("Marital Status", list(marital_map.keys()))
             occupation = st.selectbox("Occupation", list(occupation_map.keys()))
             months_res = st.number_input("Months at Current Residence", 0, 240, 36)
