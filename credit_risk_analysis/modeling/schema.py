@@ -13,7 +13,7 @@ class PredictRequest(BaseModel):
     RESIDENCIAL_STATE: str
     RESIDENCE_TYPE: int
     PROFESSIONAL_STATE: str
-    PRODUCT: str
+    PRODUCT: int
     RESIDENCIAL_CITY: str
     RESIDENCIAL_BOROUGH: str
     RESIDENCIAL_PHONE_AREA_CODE: int
@@ -23,6 +23,7 @@ class PredictRequest(BaseModel):
 
 class PredictResponse(BaseModel):
     risk_percentage: float
+    risk_class: str
 
 
 class PredictionRecord(BaseModel):

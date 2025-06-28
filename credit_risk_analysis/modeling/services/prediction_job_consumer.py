@@ -14,6 +14,8 @@ from settings import Settings
 
 import credit_risk_analysis.processing.process_all_features_v2 as actual_module
 
+scale_factor = 100
+
 sys.modules['processing.process_all_features_v2'] = actual_module
 
 # ----------------------
@@ -66,11 +68,14 @@ async def consume_predictions():
 
             # Call Real model
             score = await predict_credit_risk(job_data)
-            response = PredictResponse(risk_percentage=score)
 
+            response = PredictResponse(
+                risk_percentage=up_scale(score),
+                risk_class=classify(score)
+            )
             try:
                 await db.setex(job_id, 300, json.dumps(response.model_dump()))  # TTL de 5 minutos
-                logger.info(f"✅ Predicción generada y almacenada: job_id={job_id}, score={score}")
+                logger.info(f"✅ Predicción generada y almacenada: job_id={job_id}, risk_percentaje={score}")
             except Exception as e:
                 logger.error(f"❌ Error guardando resultado en Redis: {e}")
                 continue
@@ -80,6 +85,14 @@ async def consume_predictions():
         except Exception as e:
             logger.exception(f"🔥 Error inesperado en el loop principal: {e}")
             await asyncio.sleep(5)  # backoff
+
+def classify(score):
+    logger.info(f"classifing risk {scale_factor}")
+    return "Low" if score < 0.35 else "Medium" if score < 0.70 else "High"
+
+def up_scale(score):
+    logger.info(f"Scaling prediction percentage by a factor of {scale_factor}")
+    return score*scale_factor
 
 # ----------------------
 # Entry point

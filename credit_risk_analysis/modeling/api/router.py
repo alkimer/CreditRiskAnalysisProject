@@ -71,13 +71,13 @@ async def predict(predict_request: PredictRequest):
     logger.debug("→ /predict() invoked: predict_request=%s , model_name:%s", predict_request, model_name)
     logger.info("→ /predict() invoked: payload:%s", predict_request)
 
-    response = PredictResponse(
-        risk_percentage=1
-    )
+    # response = PredictResponse(
+    #     risk_percentage=1
+    # )
+    #
+    # response.risk_percentage = await model_predict(predict_request, model_name)
 
-    response.risk_percentage = await model_predict(predict_request, model_name)
-
-    return response
+    return await model_predict(predict_request, model_name)
 
 
 @model_router.get("/predictions", response_model=List[PredictionRecord])

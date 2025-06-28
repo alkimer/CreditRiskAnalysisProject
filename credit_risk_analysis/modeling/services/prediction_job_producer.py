@@ -4,6 +4,7 @@ import redis.asyncio as redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from credit_risk_analysis.db.prediction_orm import insert_prediction, Base
+from credit_risk_analysis.modeling.schema import PredictResponse
 from settings import Settings
 import json
 import asyncio
@@ -27,7 +28,6 @@ db_redis = redis.Redis(
     password=Settings.REDIS_PASSWORD,
     decode_responses=True
 )
-
 # Cambiar a SQLite
 db_url = "sqlite:///data/predictions.db"
 
@@ -74,12 +74,12 @@ async def model_predict(predict_request, model_name):
             if output_raw:
                 logger.info(f"[{job_id}] ✅ Job result received")
                 try:
-                    output = json.loads(output_raw)
+                    response = json.loads(output_raw)
                     logger.info(f"[{job_id}] ✅ Job result received")
 
-                    score = output.get("risk_percentage", None)
-                    if score is None:
-                        raise ValueError("Missing 'risk_percentage' field in result")
+                    # score = output.get("risk_percentage", None)
+                    if response is None:
+                        raise ValueError("Prediction response is None")
                 except Exception as e:
                     logger.exception(f"[{job_id}] ❌ Error decoding result: {e}")
                     raise
@@ -87,7 +87,7 @@ async def model_predict(predict_request, model_name):
                 insert_prediction(
                     session=session,
                     request_data=predict_request.model_dump(),
-                    score=score,
+                    score=response["risk_percentage"],
                     model_name=model_name
                 )
 
@@ -97,7 +97,7 @@ async def model_predict(predict_request, model_name):
             await asyncio.sleep(sleep_interval)
             total_wait += sleep_interval
 
-        if score is None:
+        if response is None:
             logger.warning(f"[{job_id}] ⏰ Timeout after {timeout} seconds waiting for result")
             raise TimeoutError("No prediction result returned in time")
 
@@ -106,6 +106,9 @@ async def model_predict(predict_request, model_name):
         raise
 
     elapsed = (datetime.utcnow() - start_time).total_seconds()
-    logger.info(f"[{job_id}] 🏁 Prediction finished in {elapsed:.2f}s — Score: {score}")
+    risk_percentage = response["risk_percentage"]
+    logger.info(f"[{job_id}] 🏁 Prediction finished in {elapsed:.2f}s — risk_percentaje: {risk_percentage}")
 
-    return True, score
+    return response
+
+
