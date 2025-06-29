@@ -8,18 +8,20 @@ from imblearn.over_sampling import SMOTENC
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split
 from typing import Tuple
+import gdown
 import boto3
 import os
 
 
 
-def start(access_id, secret_access):
+def start():
     
     col_names = ['ID_CLIENT', 'CLERK_TYPE', 'PAYMENT_DAY', 'APPLICATION_SUBMISSION_TYPE', 'QUANT_ADDITIONAL_CARDS', 'POSTAL_ADDRESS_TYPE', 'SEX', 'MARITAL_STATUS', 'QUANT_DEPENDANTS', 'EDUCATION_LEVEL', 'STATE_OF_BIRTH', 'CITY_OF_BIRTH', 'NACIONALITY', 'RESIDENCIAL_STATE', 'RESIDENCIAL_CITY', 'RESIDENCIAL_BOROUGH', 'FLAG_RESIDENCIAL_PHONE', 'RESIDENCIAL_PHONE_AREA_CODE', 'RESIDENCE_TYPE', 'MONTHS_IN_RESIDENCE', 'FLAG_MOBILE_PHONE', 'FLAG_EMAIL', 'PERSONAL_MONTHLY_INCOME', 'OTHER_INCOMES', 'FLAG_VISA', 'FLAG_MASTERCARD', 'FLAG_DINERS', 'FLAG_AMERICAN_EXPRESS', 'FLAG_OTHER_CARDS', 'QUANT_BANKING_ACCOUNTS', 'QUANT_SPECIAL_BANKING_ACCOUNTS', 'PERSONAL_ASSETS_VALUE', 'QUANT_CARS', 'COMPANY', 'PROFESSIONAL_STATE', 'PROFESSIONAL_CITY', 'PROFESSIONAL_BOROUGH', 'FLAG_PROFESSIONAL_PHONE', 'PROFESSIONAL_PHONE_AREA_CODE', 'MONTHS_IN_THE_JOB', 'PROFESSION_CODE', 'OCCUPATION_TYPE', 'MATE_PROFESSION_CODE', 'EDUCATION_LEVEL', 'FLAG_HOME_ADDRESS_DOCUMENT', 'FLAG_RG', 'FLAG_CPF', 'FLAG_INCOME_PROOF', 'PRODUCT', 'FLAG_ACSP_RECORD', 'AGE', 'RESIDENCIAL_ZIP_3', 'PROFESSIONAL_ZIP_3', 'TARGET_LABEL_BAD=1']
     modeling_data_path = './dataset/external/PAKDD2010_Modeling_Data.txt'
     
     if not os.path.exists(modeling_data_path):
-        download_credit_data(access_id, secret_access)
+        download_risk_data_raw()
+        #download_credit_data(access_id, secret_access)
         
     tagger('./dataset/external/PAKDD2010_Modeling_Data.txt',
            "./dataset/data_with_columns.csv", col_names)
@@ -51,6 +53,18 @@ def start2():
     
     return X_train, y_train, X_val, y_val
         
+
+def download_risk_data_raw():
+    
+    os.makedirs("./dataset/external", exist_ok=True)
+    file_id = "1_eq1xz_0xOEBGehlqDFJwdlZfac21kpY"    
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output_path = "./dataset/external/PAKDD2010_Modeling_Data.txt"
+
+    gdown.download(url, output_path, quiet=False)
+    print("\nDownload complete.\n")
+    return
+    
 
 def download_credit_data(aws_access_key_id, aws_secret_access_key):
     bucket_name = "anyoneai-datasets"
