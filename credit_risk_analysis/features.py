@@ -74,11 +74,13 @@ def process_features(X_new_path=None,new_data=False, return_data=False):
         X_val = pd.read_csv("data/interim/X_val.csv")
         y_train = pd.read_csv("data/interim/y_train.csv").select_dtypes(include='number').iloc[:, 0].astype(int)
         y_val = pd.read_csv("data/interim/y_val.csv").select_dtypes(include='number').iloc[:, 0].astype(int)
+        print("Datos cargados desde 'data/interim/X_train.csv', 'X_val.csv', 'y_train.csv' y 'y_val.csv'.")
 
         
         # Eliminar columnas
         X_train.drop(columns=vars_to_drop, inplace=True, errors='ignore')
         X_val.drop(columns=vars_to_drop, inplace=True, errors='ignore')
+        print("Columnas eliminadas de X_train y X_val.")
 
         # Separar multicategóricas
         multi_high_card = [col for col in cat_multi if X_train[col].nunique() > 30]
@@ -116,6 +118,7 @@ def process_features(X_new_path=None,new_data=False, return_data=False):
         # Procesamiento
         X_train_processed = preprocessor.fit_transform(X_train)
         X_val_processed = preprocessor.transform(X_val)
+        print("Datos procesados con el preprocessor (pipeline -> imputer + scaler/encoder).")
 
         # Columnas finales
         bin_names = preprocessor.named_transformers_['bin']['encode'].get_feature_names_out(cat_bin)
@@ -125,6 +128,7 @@ def process_features(X_new_path=None,new_data=False, return_data=False):
 
         with open('data/interim/final_columns.json', 'w') as file:
             json.dump(final_columns, file)
+        print("Columnas finales guardadas en 'data/interim/final_columns.json'.")
 
         X_train_final = pd.DataFrame(X_train_processed, columns=final_columns, index=X_train.index)
         X_val_final = pd.DataFrame(X_val_processed, columns=final_columns, index=X_val.index)
@@ -132,12 +136,14 @@ def process_features(X_new_path=None,new_data=False, return_data=False):
         #os.makedirs("data/processed/balanced", exist_ok=True)
         # Guardar preprocessor
         joblib.dump(preprocessor, 'models/preprocessor.pkl', compress=True)
+        print("✅ Preprocessor guardado como 'models/preprocessor.pkl'.")
 
         # Guardar data procesada
         X_train_final.to_csv("data/processed/X_train_processed.csv", index=False)
         X_val_final.to_csv("data/processed/X_val_processed.csv", index=False)
         y_train.to_csv("data/processed/y_train.csv", index=False)
         y_val.to_csv("data/processed/y_val.csv", index=False)
+        print("Archivos procesados guardados en 'data/processed/'.")
 
         # Aplicar SMOTE
         smote = SMOTE(random_state=42)
@@ -156,13 +162,17 @@ def process_features(X_new_path=None,new_data=False, return_data=False):
 
         # cargar preprocessor previamente ajustado
         preprocessor = joblib.load('models/preprocessor.pkl')
+        print("✅ Preprocessor cargado desde 'models/preprocessor.pkl'.")
         # Procesamiento
         X_new_processed = preprocessor.transform(X_new)
+        print("Datos nuevos procesados con el preprocessor cargado.")
         # Columnas finales
         with open('data/interim/final_columns.json', 'r') as file:
             final_columns = json.load(file)
+        print("Columnas finales cargadas desde 'data/interim/final_columns.json'.")
 
         X_new_final = pd.DataFrame(X_new_processed, columns=final_columns, index=X_new.index)
+        print("DataFrame de datos nuevos creado con las columnas finales.")
         #os.makedirs("data/processed/balanced", exist_ok=True)
 
         # Guardar data procesada

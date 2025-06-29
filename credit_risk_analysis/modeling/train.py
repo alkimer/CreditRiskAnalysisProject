@@ -411,7 +411,7 @@ def train_model(model_name="xgb_model",
             ("model", base_mlp_model)
         ])
 
-        # --- Hiperparâmetros para MLP ---
+        # --- Hyperparameter tuning for MLP ---
         param_grid = {
             'pca__n_components': [0.95],
             'model__hidden_layer_sizes': [(100,), (64, 32), (128, 64)],
@@ -431,7 +431,7 @@ def train_model(model_name="xgb_model",
             n_jobs=-1
         )
 
-        # --- Execução do GridSearch + avaliação ---
+        # --- Execution of GridSearch + evaluation ---
         print("\nStarting Hyperparameter Tuning... (MLP)...")
         with mlflow.start_run(run_name="MLP_Hyperparameter_Tuning"):
             grid_search.fit(X_train, y_train)
@@ -440,13 +440,13 @@ def train_model(model_name="xgb_model",
             print(f"\nBest parameters found: {grid_search.best_params_}")
             print(f"Best F0.5-score (CV): {grid_search.best_score_:.4f}")
 
-            # Previsões
+            # Predictions
             y_pred = best_pipeline.predict(X_test)
             y_prob = best_pipeline.predict_proba(X_test)[:, 1]
             y_pred_val = best_pipeline.predict(X_val)
             y_prob_val = best_pipeline.predict_proba(X_val)[:, 1]
 
-            # Métricas - Teste
+            # Metrics - Test
             acc = accuracy_score(y_test, y_pred)
             report = classification_report(y_test, y_pred, output_dict=True)
             roc_auc = roc_auc_score(y_test, y_prob)
@@ -456,7 +456,7 @@ def train_model(model_name="xgb_model",
             mlflow.log_metric("test_roc_auc", roc_auc)
             mlflow.log_metric("test_pr_auc", pr_auc)
 
-            # Métricas - Validação
+            # Metrics - Validation
             acc_val = accuracy_score(y_val, y_pred_val)
             report_val = classification_report(y_val, y_pred_val, output_dict=True)
             roc_auc_val = roc_auc_score(y_val, y_prob_val)
@@ -466,7 +466,7 @@ def train_model(model_name="xgb_model",
             mlflow.log_metric("val_roc_auc", roc_auc_val)
             mlflow.log_metric("val_pr_auc", pr_auc_val)
 
-            # Logging detalhado de métricas
+            # Logging detailed metrics
             for label, metrics in report.items():
                 if isinstance(metrics, dict):
                     for k, v in metrics.items():

@@ -21,6 +21,11 @@ MODELS_DIR = PROJ_ROOT / "models"
 REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 
+AWS_ACCESS_KEY_ID = "AKIA2JHUK4EGBVSQ5RUW"
+AWS_SECRET_ACCESS_KEY = "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"
+BUCKET_NAME = "anyoneai-datasets"
+PREFIX = "credit-data-2010"
+
 # If tqdm is installed, configure loguru with tqdm.write
 # https://github.com/Delgan/loguru/issues/135
 try:
